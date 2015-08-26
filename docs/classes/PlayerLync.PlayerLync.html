@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/PlayerLync.html">\PlayerLync</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">1</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-855316329"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-855316329" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1982618285"></a>
+                                <a href="../namespaces/PlayerLync.html" style="margin-left: 30px; padding-left: 0">PlayerLync</a>
+            </div>
+            <div id="namespace-1982618285" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1695067696"></a>
+                                <a href="../namespaces/PlayerLync.Authentication.html" style="margin-left: 30px; padding-left: 0">Authentication</a>
+            </div>
+            <div id="namespace-1695067696" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1734897642"></a>
+                                <a href="../namespaces/PlayerLync.Authentication.Oauth2.html" style="margin-left: 30px; padding-left: 0">Oauth2</a>
+            </div>
+            <div id="namespace-1734897642" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Authentication.Oauth2.AccessToken.html">AccessToken</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Authentication.Oauth2.OAuth2Client.html">OAuth2Client</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1502676910"></a>
+                                <a href="../namespaces/PlayerLync.Exceptions.html" style="margin-left: 30px; padding-left: 0">Exceptions</a>
+            </div>
+            <div id="namespace-1502676910" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncAuthenticationException.html">PlayerLyncAuthenticationException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncClientException.html">PlayerLyncClientException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncOtherException.html">PlayerLyncOtherException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncResponseException.html">PlayerLyncResponseException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncSDKException.html">PlayerLyncSDKException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncServerException.html">PlayerLyncServerException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1091587890"></a>
+                                <a href="../namespaces/PlayerLync.FileUpload.html" style="margin-left: 30px; padding-left: 0">FileUpload</a>
+            </div>
+            <div id="namespace-1091587890" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.Mimetypes.html">Mimetypes</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.PlayerLyncFile.html">PlayerLyncFile</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.PlayerLyncVideo.html">PlayerLyncVideo</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-679150589"></a>
+                                <a href="../namespaces/PlayerLync.Http.html" style="margin-left: 30px; padding-left: 0">Http</a>
+            </div>
+            <div id="namespace-679150589" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlayerLync.Http.RequestBodyInterface.html">RequestBodyInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Http.PLAPIRawResponse.html">PLAPIRawResponse</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Http.RequestBodyMultipart.html">RequestBodyMultipart</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Http.RequestBodyUrlEncoded.html">RequestBodyUrlEncoded</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-342997762"></a>
+                                <a href="../namespaces/PlayerLync.HttpClients.html" style="margin-left: 30px; padding-left: 0">HttpClients</a>
+            </div>
+            <div id="namespace-342997762" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlayerLync.HttpClients.PlayerLyncHttpClientInterface.html">PlayerLyncHttpClientInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.HttpClients.PlayerLyncCurl.html">PlayerLyncCurl</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.HttpClients.PlayerLyncCurlHttpClient.html">PlayerLyncCurlHttpClient</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1503779473"></a>
+                                <a href="../namespaces/PlayerLync.Url.html" style="margin-left: 30px; padding-left: 0">Url</a>
+            </div>
+            <div id="namespace-1503779473" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Url.PlayerLyncUrlManipulator.html">PlayerLyncUrlManipulator</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLync.html">PlayerLync</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncApp.html">PlayerLyncApp</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncClient.html">PlayerLyncClient</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncRequest.html">PlayerLyncRequest</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncResponse.html">PlayerLyncResponse</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/PlayerLync.html">\PlayerLync</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\PlayerLync</small>PlayerLync</h1>
+                    <p><em>Class PlayerLync</em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_getApiHost" class="">getApiHost()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_getApp" class="">getApp()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_getClient" class="">getClient()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_getOAuth2Client" class="">getOAuth2Client()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_getLastResponse" class="">getLastResponse()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_getAccessToken" class="">getAccessToken()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_setAccessToken" class="">setAccessToken()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_getDefaultApiVersion" class="">getDefaultApiVersion()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_get" class="">get()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_post" class="">post()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_put" class="">put()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_delete" class="">delete()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_sendRequest" class="">sendRequest()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_request" class="">request()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#method_fileToUpload" class="">fileToUpload()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#constant_VERSION" class="">VERSION</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#constant_DEFAULT_API_VERSION" class="">DEFAULT_API_VERSION</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#constant_OAUTH_GRANT_TYPE" class="">OAUTH_GRANT_TYPE</a><br />
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <em>No protected methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#property_app" class="">$app</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#property_client" class="">$client</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#property_oAuth2Client" class="">$oAuth2Client</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#property_apiHost" class="">$apiHost</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#property_accessToken" class="">$accessToken</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLync.html#property_lastResponse" class="">$lastResponse</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <em>No private methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No private properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/PlayerLync.html"><div class="path-wrapper">PlayerLync.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">PlayerLync</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\PlayerLync\PlayerLync</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                                    <a id="constants" name="constants"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Constants</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_VERSION" name="constant_VERSION" class="anchor"></a>
+            <article id="constant_VERSION" class="constant">
+                <h3 class="">VERSION</h3>
+                <pre class="signature">VERSION</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>string Version number of the PlayerLync PHP SDK.</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DEFAULT_API_VERSION" name="constant_DEFAULT_API_VERSION" class="anchor"></a>
+            <article id="constant_DEFAULT_API_VERSION" class="constant">
+                <h3 class="">DEFAULT_API_VERSION</h3>
+                <pre class="signature">DEFAULT_API_VERSION</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>string Default PlayerLync API version for requests.</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_OAUTH_GRANT_TYPE" name="constant_OAUTH_GRANT_TYPE" class="anchor"></a>
+            <article id="constant_OAUTH_GRANT_TYPE" class="constant">
+                <h3 class="">OAUTH_GRANT_TYPE</h3>
+                <pre class="signature">OAUTH_GRANT_TYPE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            const
+                        </th>
+                        <td>
+                                                            <p>string The default grant type for OAuth.</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_app" name="property_app" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$app</h3>
+                <pre class="signature">$app : \PlayerLync\PlayerLyncApp</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/PlayerLync.PlayerLyncApp.html">\PlayerLync\PlayerLyncApp</a>
+                &mdash; The PlayerLyncApp entity.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_client" name="property_client" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$client</h3>
+                <pre class="signature">$client : \PlayerLync\PlayerLyncClient</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/PlayerLync.PlayerLyncClient.html">\PlayerLync\PlayerLyncClient</a>
+                &mdash; The PlayerLync client service.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_oAuth2Client" name="property_oAuth2Client" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$oAuth2Client</h3>
+                <pre class="signature">$oAuth2Client : \PlayerLync\Authentication\Oauth2\OAuth2Client</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/PlayerLync.Authentication.Oauth2.OAuth2Client.html">\PlayerLync\Authentication\Oauth2\OAuth2Client</a>
+                &mdash; The OAuth 2.0 client service.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_apiHost" name="property_apiHost" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$apiHost</h3>
+                <pre class="signature">$apiHost : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; The host url for the PlayerLync API                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_accessToken" name="property_accessToken" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$accessToken</h3>
+                <pre class="signature">$accessToken : \PlayerLync\Authentication\Oauth2\AccessToken</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/PlayerLync.Authentication.Oauth2.AccessToken.html">\PlayerLync\Authentication\Oauth2\AccessToken</a>
+                &mdash; The AccessToken returned from the OAuth2 client                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_lastResponse" name="property_lastResponse" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$lastResponse</h3>
+                <pre class="signature">$lastResponse : \PlayerLync\PlayerLyncResponse</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/PlayerLync.PlayerLyncResponse.html">\PlayerLync\PlayerLyncResponse</a>
+                &mdash; The last response returned from the API                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(array  <span class="argument">$config = array()</span>) </pre>
+                <p><em>Instantiates a new PlayerLync super-class object.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$config </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlayerLync\Exceptions\PlayerLyncSDKException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getApiHost" name="method_getApiHost" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getApiHost()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getApiHost() : mixed</pre>
+                <p><em>Returns the host url for the PlayerLync API</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getApp" name="method_getApp" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getApp()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getApp() : \PlayerLync\PlayerLyncApp</pre>
+                <p><em>Returns the PlayerLyncApp entity.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.PlayerLyncApp.html">\PlayerLync\PlayerLyncApp</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getClient" name="method_getClient" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getClient()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getClient() : \PlayerLync\PlayerLyncClient</pre>
+                <p><em>Returns the PlayerLyncClient service.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.PlayerLyncClient.html">\PlayerLync\PlayerLyncClient</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOAuth2Client" name="method_getOAuth2Client" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOAuth2Client()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOAuth2Client() : \PlayerLync\Authentication\Oauth2\OAuth2Client</pre>
+                <p><em>Returns the OAuth 2.0 client service.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.Authentication.Oauth2.OAuth2Client.html">\PlayerLync\Authentication\Oauth2\OAuth2Client</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getLastResponse" name="method_getLastResponse" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getLastResponse()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getLastResponse() : \PlayerLync\PlayerLyncResponse|null</pre>
+                <p><em>Returns the last response returned from API.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.PlayerLyncResponse.html">\PlayerLync\PlayerLyncResponse</a>|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getAccessToken" name="method_getAccessToken" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getAccessToken()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getAccessToken() : \PlayerLync\Authentication\Oauth2\AccessToken|null</pre>
+                <p><em>Returns the default AccessToken entity.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.Authentication.Oauth2.AccessToken.html">\PlayerLync\Authentication\Oauth2\AccessToken</a>|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setAccessToken" name="method_setAccessToken" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setAccessToken()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setAccessToken(\PlayerLync\Authentication\Oauth2\AccessToken|string  <span class="argument">$accessToken</span>) </pre>
+                <p><em>Sets the default access token to use with requests.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/PlayerLync.Authentication.Oauth2.AccessToken.html">\PlayerLync\Authentication\Oauth2\AccessToken</a>|string</td>
+                                <td>$accessToken </td>
+                                <td><p>The access token to save.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getDefaultApiVersion" name="method_getDefaultApiVersion" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getDefaultApiVersion()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getDefaultApiVersion() : string</pre>
+                <p><em>Returns the default API version.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_get" name="method_get" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">get()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">get(string  <span class="argument">$endpoint</span>, array|null  <span class="argument">$params = array()</span>, string|null  <span class="argument">$apiVersion = null</span>) : \PlayerLync\PlayerLyncResponse</pre>
+                <p><em>Sends a GET request to API and returns the result.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$endpoint </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>array|null</td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|null</td>
+                                <td>$apiVersion </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlayerLync\Exceptions\PlayerLyncSDKException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.PlayerLyncResponse.html">\PlayerLync\PlayerLyncResponse</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_post" name="method_post" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">post()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">post(string  <span class="argument">$endpoint</span>, array  <span class="argument">$params = array()</span>, null  <span class="argument">$apiVersion = null</span>) : \PlayerLync\PlayerLyncResponse</pre>
+                <p><em>Sends a POST request to API and returns the result.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$endpoint </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>null</td>
+                                <td>$apiVersion </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlayerLync\Exceptions\PlayerLyncSDKException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.PlayerLyncResponse.html">\PlayerLync\PlayerLyncResponse</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_put" name="method_put" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">put()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">put(string  <span class="argument">$endpoint</span>, array  <span class="argument">$params = array()</span>, string|null  <span class="argument">$apiVersion = null</span>) : \PlayerLync\PlayerLyncResponse</pre>
+                <p><em>Sends a PUT request to API and returns the result.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$endpoint </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|null</td>
+                                <td>$apiVersion </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlayerLync\Exceptions\PlayerLyncSDKException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.PlayerLyncResponse.html">\PlayerLync\PlayerLyncResponse</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_delete" name="method_delete" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">delete()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">delete(string  <span class="argument">$endpoint</span>, array  <span class="argument">$params = array()</span>, string|null  <span class="argument">$apiVersion = null</span>) : \PlayerLync\PlayerLyncResponse</pre>
+                <p><em>Sends a DELETE request to API and returns the result.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$endpoint </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|null</td>
+                                <td>$apiVersion </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlayerLync\Exceptions\PlayerLyncSDKException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.PlayerLyncResponse.html">\PlayerLync\PlayerLyncResponse</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_sendRequest" name="method_sendRequest" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">sendRequest()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">sendRequest(string  <span class="argument">$method</span>, string  <span class="argument">$endpoint</span>, array  <span class="argument">$params = array()</span>, \PlayerLync\Authentication\Oauth2\AccessToken|string|null  <span class="argument">$accessToken = null</span>, string|null  <span class="argument">$apiVersion = null</span>) : \PlayerLync\PlayerLyncResponse</pre>
+                <p><em>Sends a request to API and returns the result.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$method </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$endpoint </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/PlayerLync.Authentication.Oauth2.AccessToken.html">\PlayerLync\Authentication\Oauth2\AccessToken</a>|string|null</td>
+                                <td>$accessToken </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|null</td>
+                                <td>$apiVersion </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlayerLync\Exceptions\PlayerLyncSDKException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.PlayerLyncResponse.html">\PlayerLync\PlayerLyncResponse</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_request" name="method_request" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">request()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">request(string  <span class="argument">$method</span>, string  <span class="argument">$endpoint</span>, array  <span class="argument">$params = array()</span>, \PlayerLync\Authentication\Oauth2\AccessToken|string|null  <span class="argument">$accessToken = null</span>, string|null  <span class="argument">$apiVersion = null</span>) : \PlayerLync\PlayerLyncRequest</pre>
+                <p><em>Instantiates a new PlayerLyncRequest entity.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$method </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$endpoint </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$params </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/PlayerLync.Authentication.Oauth2.AccessToken.html">\PlayerLync\Authentication\Oauth2\AccessToken</a>|string|null</td>
+                                <td>$accessToken </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|null</td>
+                                <td>$apiVersion </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlayerLync\Exceptions\PlayerLyncSDKException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.PlayerLyncRequest.html">\PlayerLync\PlayerLyncRequest</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_fileToUpload" name="method_fileToUpload" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">fileToUpload()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">fileToUpload(string  <span class="argument">$pathToFile</span>) : \PlayerLync\FileUpload\PlayerLyncFile</pre>
+                <p><em>Factory to create PlayerLyncFiles&#039;s.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$pathToFile </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlayerLync\Exceptions\PlayerLyncSDKException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.FileUpload.PlayerLyncFile.html">\PlayerLync\FileUpload\PlayerLyncFile</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">PlayerLync.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/PlayerLync.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/PlayerLync.html">\PlayerLync</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on August 26th, 2015 at 16:25.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

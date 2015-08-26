@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/PlayerLync.html">\PlayerLync</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">1</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-68561351"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-68561351" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1438043868"></a>
+                                <a href="../namespaces/PlayerLync.html" style="margin-left: 30px; padding-left: 0">PlayerLync</a>
+            </div>
+            <div id="namespace-1438043868" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1004578529"></a>
+                                <a href="../namespaces/PlayerLync.Authentication.html" style="margin-left: 30px; padding-left: 0">Authentication</a>
+            </div>
+            <div id="namespace-1004578529" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1093400574"></a>
+                                <a href="../namespaces/PlayerLync.Authentication.Oauth2.html" style="margin-left: 30px; padding-left: 0">Oauth2</a>
+            </div>
+            <div id="namespace-1093400574" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Authentication.Oauth2.AccessToken.html">AccessToken</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Authentication.Oauth2.OAuth2Client.html">OAuth2Client</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-278527817"></a>
+                                <a href="../namespaces/PlayerLync.Exceptions.html" style="margin-left: 30px; padding-left: 0">Exceptions</a>
+            </div>
+            <div id="namespace-278527817" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncAuthenticationException.html">PlayerLyncAuthenticationException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncClientException.html">PlayerLyncClientException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncOtherException.html">PlayerLyncOtherException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncResponseException.html">PlayerLyncResponseException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncSDKException.html">PlayerLyncSDKException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncServerException.html">PlayerLyncServerException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-870893880"></a>
+                                <a href="../namespaces/PlayerLync.FileUpload.html" style="margin-left: 30px; padding-left: 0">FileUpload</a>
+            </div>
+            <div id="namespace-870893880" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.Mimetypes.html">Mimetypes</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.PlayerLyncFile.html">PlayerLyncFile</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.PlayerLyncVideo.html">PlayerLyncVideo</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-170988718"></a>
+                                <a href="../namespaces/PlayerLync.Http.html" style="margin-left: 30px; padding-left: 0">Http</a>
+            </div>
+            <div id="namespace-170988718" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlayerLync.Http.RequestBodyInterface.html">RequestBodyInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Http.PLAPIRawResponse.html">PLAPIRawResponse</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Http.RequestBodyMultipart.html">RequestBodyMultipart</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Http.RequestBodyUrlEncoded.html">RequestBodyUrlEncoded</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2128540751"></a>
+                                <a href="../namespaces/PlayerLync.HttpClients.html" style="margin-left: 30px; padding-left: 0">HttpClients</a>
+            </div>
+            <div id="namespace-2128540751" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlayerLync.HttpClients.PlayerLyncHttpClientInterface.html">PlayerLyncHttpClientInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.HttpClients.PlayerLyncCurl.html">PlayerLyncCurl</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.HttpClients.PlayerLyncCurlHttpClient.html">PlayerLyncCurlHttpClient</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-579836688"></a>
+                                <a href="../namespaces/PlayerLync.Url.html" style="margin-left: 30px; padding-left: 0">Url</a>
+            </div>
+            <div id="namespace-579836688" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Url.PlayerLyncUrlManipulator.html">PlayerLyncUrlManipulator</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLync.html">PlayerLync</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncApp.html">PlayerLyncApp</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncClient.html">PlayerLyncClient</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncRequest.html">PlayerLyncRequest</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncResponse.html">PlayerLyncResponse</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/PlayerLync.html">\PlayerLync</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\PlayerLync</small>PlayerLyncResponse</h1>
+                    <p><em>Class PlayerLyncResponse</em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_decodeBody" class="">decodeBody()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_makeException" class="">makeException()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getRequest" class="">getRequest()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getApp" class="">getApp()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getAccessToken" class="">getAccessToken()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getHttpStatusCode" class="">getHttpStatusCode()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getHeaders" class="">getHeaders()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getBody" class="">getBody()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getDecodedBody" class="">getDecodedBody()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getStatus" class="">getStatus()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getApiAction" class="">getApiAction()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getPage" class="">getPage()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getTotalPages" class="">getTotalPages()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getLimit" class="">getLimit()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getItems" class="">getItems()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getTotalItems" class="">getTotalItems()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getApiVersion" class="">getApiVersion()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getResponseTime" class="">getResponseTime()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getData" class="">getData()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getErrors" class="">getErrors()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_isError" class="">isError()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_throwException" class="">throwException()</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_getThrownException" class="">getThrownException()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <em>No protected methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_httpStatusCode" class="">$httpStatusCode</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_headers" class="">$headers</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_body" class="">$body</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_decodedBody" class="">$decodedBody</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_status" class="">$status</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_apiAction" class="">$apiAction</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_page" class="">$page</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_totalPages" class="">$totalPages</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_limit" class="">$limit</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_items" class="">$items</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_totalItems" class="">$totalItems</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_apiVersion" class="">$apiVersion</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_responseTime" class="">$responseTime</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_data" class="">$data</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_errors" class="">$errors</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_request" class="">$request</a><br />
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#property_thrownException" class="">$thrownException</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/PlayerLync.PlayerLyncResponse.html#method_processDecodedBody" class="">processDecodedBody()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No private properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/PlayerLyncResponse.html"><div class="path-wrapper">PlayerLyncResponse.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">PlayerLync</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\PlayerLync\PlayerLyncResponse</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_httpStatusCode" name="property_httpStatusCode" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$httpStatusCode</h3>
+                <pre class="signature">$httpStatusCode : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; The HTTP status code response from API.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_headers" name="property_headers" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$headers</h3>
+                <pre class="signature">$headers : array</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                &mdash; The headers returned from API.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_body" name="property_body" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$body</h3>
+                <pre class="signature">$body : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; The raw body of the response from API.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_decodedBody" name="property_decodedBody" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$decodedBody</h3>
+                <pre class="signature">$decodedBody : array</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                &mdash; The decoded body of the API response.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_status" name="property_status" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$status</h3>
+                <pre class="signature">$status : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; The status of the API response                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_apiAction" name="property_apiAction" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$apiAction</h3>
+                <pre class="signature">$apiAction : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; The API action called within the API service                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_page" name="property_page" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$page</h3>
+                <pre class="signature">$page : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; The page number of the current response                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_totalPages" name="property_totalPages" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$totalPages</h3>
+                <pre class="signature">$totalPages : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; The total number of pages available for the requested resource                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_limit" name="property_limit" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$limit</h3>
+                <pre class="signature">$limit : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; The max number of records to the response would return                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_items" name="property_items" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$items</h3>
+                <pre class="signature">$items : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; The number of records returned in the response                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_totalItems" name="property_totalItems" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$totalItems</h3>
+                <pre class="signature">$totalItems : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                &mdash; The total number of records available for the requested resource                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_apiVersion" name="property_apiVersion" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$apiVersion</h3>
+                <pre class="signature">$apiVersion : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; The API version of the endpoint                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_responseTime" name="property_responseTime" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$responseTime</h3>
+                <pre class="signature">$responseTime : float</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                float
+                &mdash; The number of milliseconds it took to process the request                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_data" name="property_data" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$data</h3>
+                <pre class="signature">$data : array</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                &mdash; The response data                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_errors" name="property_errors" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$errors</h3>
+                <pre class="signature">$errors : array|null</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array|null
+                &mdash; The errors generated processing the request                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_request" name="property_request" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$request</h3>
+                <pre class="signature">$request : \PlayerLync\PlayerLyncRequest</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/PlayerLync.PlayerLyncRequest.html">\PlayerLync\PlayerLyncRequest</a>
+                &mdash; The original request that returned this response.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_thrownException" name="property_thrownException" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$thrownException</h3>
+                <pre class="signature">$thrownException : \PlayerLync\Exceptions\PlayerLyncSDKException</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/PlayerLync.Exceptions.PlayerLyncSDKException.html">\PlayerLync\Exceptions\PlayerLyncSDKException</a>
+                &mdash; The exception thrown by this request.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(\PlayerLync\PlayerLyncRequest  <span class="argument">$request</span>, string|null  <span class="argument">$body = null</span>, integer|null  <span class="argument">$httpStatusCode = null</span>, array|null  <span class="argument">$headers = array()</span>) </pre>
+                <p><em>Creates a new Response entity.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/PlayerLync.PlayerLyncRequest.html">\PlayerLync\PlayerLyncRequest</a></td>
+                                <td>$request </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|null</td>
+                                <td>$body </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer|null</td>
+                                <td>$httpStatusCode </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>array|null</td>
+                                <td>$headers </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_decodeBody" name="method_decodeBody" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">decodeBody()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">decodeBody() </pre>
+                <p><em>Convert the raw response into an array if possible.</em></p>
+                <p>PlayerLync will return standard JSON responses, or nothing (but that would be a bug)</p>
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_makeException" name="method_makeException" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">makeException()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">makeException() </pre>
+                <p><em>Instantiates an exception to be thrown later.</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRequest" name="method_getRequest" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRequest()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRequest() : \PlayerLync\PlayerLyncRequest</pre>
+                <p><em>Return the original request that returned this response.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.PlayerLyncRequest.html">\PlayerLync\PlayerLyncRequest</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getApp" name="method_getApp" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getApp()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getApp() : \PlayerLync\PlayerLyncApp</pre>
+                <p><em>Return the PlayerLyncApp entity used for this response.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.PlayerLyncApp.html">\PlayerLync\PlayerLyncApp</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getAccessToken" name="method_getAccessToken" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getAccessToken()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getAccessToken() : string|null</pre>
+                <p><em>Return the access token that was used for this response.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getHttpStatusCode" name="method_getHttpStatusCode" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getHttpStatusCode()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getHttpStatusCode() : integer</pre>
+                <p><em>Return the HTTP status code for this response.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getHeaders" name="method_getHeaders" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getHeaders()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getHeaders() : array</pre>
+                <p><em>Return the HTTP headers for this response.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getBody" name="method_getBody" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getBody()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getBody() : string</pre>
+                <p><em>Return the raw body response.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getDecodedBody" name="method_getDecodedBody" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getDecodedBody()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getDecodedBody() : array</pre>
+                <p><em>Return the decoded body response.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getStatus" name="method_getStatus" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getStatus()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getStatus() : string</pre>
+                <p><em>Return the status of the API response</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getApiAction" name="method_getApiAction" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getApiAction()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getApiAction() : string</pre>
+                <p><em>Return the API action called within the API service</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getPage" name="method_getPage" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getPage()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getPage() : integer</pre>
+                <p><em>Return the page number of the current response</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTotalPages" name="method_getTotalPages" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTotalPages()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTotalPages() : integer</pre>
+                <p><em>Return the total number of pages available for the requested resource</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getLimit" name="method_getLimit" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getLimit()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getLimit() : integer</pre>
+                <p><em>Return the max number of records to the response would return</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getItems" name="method_getItems" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getItems()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getItems() : integer</pre>
+                <p><em>Return the number of records returned in the response</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTotalItems" name="method_getTotalItems" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTotalItems()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTotalItems() : integer</pre>
+                <p><em>Return the total number of records available for the requested resource</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getApiVersion" name="method_getApiVersion" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getApiVersion()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getApiVersion() : string</pre>
+                <p><em>Return the version of the PlayerLync API that returned this response.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getResponseTime" name="method_getResponseTime" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getResponseTime()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getResponseTime() : float</pre>
+                <p><em>Return the number of milliseconds it took to process the request</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    float
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getData" name="method_getData" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getData()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getData() : array</pre>
+                <p><em>Return the response data</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getErrors" name="method_getErrors" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getErrors()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getErrors() : array|null</pre>
+                <p><em>Return the errors generated processing the request</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isError" name="method_isError" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">isError()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isError() : boolean</pre>
+                <p><em>Returns true if API returned an error message.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_throwException" name="method_throwException" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">throwException()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">throwException() </pre>
+                <p><em>Throws the exception.</em></p>
+                
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlayerLync\Exceptions\PlayerLyncSDKException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getThrownException" name="method_getThrownException" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getThrownException()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getThrownException() : \PlayerLync\Exceptions\PlayerLyncSDKException|null</pre>
+                <p><em>Returns the exception that was thrown for this request.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlayerLync.Exceptions.PlayerLyncSDKException.html">\PlayerLync\Exceptions\PlayerLyncSDKException</a>|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_processDecodedBody" name="method_processDecodedBody" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">processDecodedBody()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">processDecodedBody() </pre>
+                <p><em>Sets the properties of the PlayerLyncRepsonse from the standard PlayerLync API JSON response body</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">PlayerLyncResponse.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/PlayerLyncResponse.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/PlayerLync.html">\PlayerLync</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on August 26th, 2015 at 16:25.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>
