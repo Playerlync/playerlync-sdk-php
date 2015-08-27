@@ -1,5 +1,5 @@
 {
   "require": {
-    "playerlync/playerlync-sdk-php": "1.0.*"
+    "playerlync/playerlync-sdk-php": "4000.1.*"
   }
 }

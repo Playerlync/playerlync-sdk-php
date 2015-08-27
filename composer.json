@@ -1,7 +1,10 @@
 {
   "name": "playerlync/playerlync-sdk-php",
   "description": "PlayerLync SDK for PHP",
-  "keywords": ["playerlync","sdk"],
+  "keywords": [
+    "playerlync",
+    "sdk"
+  ],
   "homepage": "https://github.com/playerlync/playerlync-sdk-php",
   "license": "MIT",
   "authors": [
