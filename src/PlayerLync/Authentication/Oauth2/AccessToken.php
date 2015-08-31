@@ -150,4 +150,17 @@ class AccessToken
         return $this->tokenType;
     }
 
+    /**
+     * Returns the memberID associated with the access token
+     * 
+     * @return string
+     */
+    public function getMemberId()
+    {
+        return $this->memberId;
+    }
+
+
+
+
 }
