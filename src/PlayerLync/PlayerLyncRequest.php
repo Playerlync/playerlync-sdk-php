@@ -29,6 +29,7 @@ use PlayerLync\Authentication\OAuth2\AccessToken;
 use PlayerLync\Exceptions\PlayerLyncSDKException;
 use PlayerLync\FileUpload\PlayerLyncFile;
 use PlayerLync\FileUpload\PlayerLyncVideo;
+use PlayerLync\Http\RequestBodyJsonEncoded;
 use PlayerLync\Http\RequestBodyMultipart;
 use PlayerLync\Http\RequestBodyUrlEncoded;
 use PlayerLync\Url\PlayerLyncUrlManipulator;
@@ -394,8 +395,18 @@ class PlayerLyncRequest
     public function getUrlEncodedBody()
     {
         $params = $this->getPostParams();
-
         return new RequestBodyUrlEncoded($params);
+    }
+
+    /**
+     * Returns the body of the request as Url-encoded.
+     *
+     * @return RequestBodyUrlEncoded
+     */
+    public function getJsonEncodedBody()
+    {
+        $params = $this->getPostParams();
+        return new RequestBodyJsonEncoded($params);
     }
 
     /**

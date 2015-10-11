@@ -73,7 +73,7 @@ class AccessToken
         $this->expiresIn = $data['expires_in'];
         $this->tokenType = $data['token_type'];
         $this->refreshToken = $data['refresh_token'];
-        $this->memberId = $data['memberid'];
+
 
         if (isset($data['expires_in']))
         {
@@ -149,18 +149,5 @@ class AccessToken
     {
         return $this->tokenType;
     }
-
-    /**
-     * Returns the memberID associated with the access token
-     *
-     * @return string
-     */
-    public function getMemberId()
-    {
-        return $this->memberId;
-    }
-
-
-
 
 }

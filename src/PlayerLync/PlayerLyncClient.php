@@ -162,10 +162,23 @@ class PlayerLyncClient
         }
         else
         {
-            $requestBody = $request->getUrlEncodedBody();
-            $request->setHeaders([
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ]);
+            //if ($this->apiVersion)
+            if (preg_match('/\/plapi\//',$url))
+            {
+                $requestBody = $request->getJsonEncodedBody();
+                $request->setHeaders([
+                    'Content-Type' =>  "application/json; charset=utf-8",
+                ]);
+            }
+            else
+            {
+                $requestBody = $request->getUrlEncodedBody();
+                $request->setHeaders([
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ]);
+
+            }
+
         }
 
         return [
