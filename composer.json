@@ -19,7 +19,8 @@
   },
   "require": {
     "php": ">=5.5",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "keboola/csv": "^2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0",
@@ -27,7 +28,8 @@
   },
   "autoload": {
     "psr-4": {
-      "PlayerLync\\": "src/PlayerLync/"
+      "PlayerLync\\": "src/PlayerLync/",
+      "PlMigration\\": "src/PlMigration/"
     }
   },
   "autoload-dev": {
