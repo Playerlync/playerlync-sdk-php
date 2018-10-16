@@ -18,122 +18,56 @@ use PlMigration\Writer\CsvWriter;
 
 class APIExportBuilder
 {
+    use ApiBuilderTrait;
+    use CsvBuilderTrait;
+    use TransferTrait;
+
     /**
+     * Full path to the output file created
      * @var string
      */
     private $outputFile;
 
     /**
-     * Delimiter used by the csv writer with a default value of a comma
-     * @var string
-     */
-    private $delimiter = ',';
-
-    /**
-     * Enclosure used by the csv write with a default value of a double quote
-     * @var string
-     */
-    private $enclosure = '"';
-
-    /**
-     * @var string
-     */
-    private $service;
-
-    /**
+     * Specific format to be used in the output file (ie. time)
      * @var array
      */
-    private $queryParams;
+    private $format = [];
 
     /**
-     * boolean to decide whether to include the headers names for the records in the output file. By default, the
-     * headers will not be printed into the file.
-     *
+     * array holding additional settings that will be used by the export
      * @var bool
      */
-    private $includeHeaders = false;
-
-    /**
-     * Fields to be retrieved from the data provider
-     * @var array
-     */
-    private $fields = [];
-
-    /**
-     * Array has holds the host settings
-     * @var array
-     */
-    private $hostSettings = [];
-
-    private $format;
+    private $options = [];
 
     /**
      * ExportBuilder constructor.
-     * @param $destination
-     * @param $host
      */
-    public function __construct($destination, $host)
+    public function __construct()
     {
-        $this->outputFile = $destination;
-        $this->hostSettings['host'] = $host;
+        $this->apiVersion('v3');
     }
 
-    public function delimiter($delimiter)
+    public function outputFilename($file)
     {
-        $this->delimiter = $delimiter;
-        return $this;
-    }
-
-    public function enclosure($enclosure)
-    {
-        $this->enclosure = $enclosure;
-        return $this;
-    }
-
-    public function clientId($clientId)
-    {
-        $this->hostSettings['client_id'] = $clientId;
-        return $this;
-    }
-
-    public function clientSecret($clientSecret)
-    {
-        $this->hostSettings['client_secret'] = $clientSecret;
-        return $this;
-    }
-
-    public function username($username)
-    {
-        $this->hostSettings['username'] = $username;
-        return $this;
-    }
-    public function password($password)
-    {
-        $this->hostSettings['password'] = $password;
+        $this->outputFile = $file;
         return $this;
     }
 
     /**
-     * @param string $servicePath
+     * Set the date format to be output on the exported file
+     * @param mixed ...$format
      * @return $this
      */
-    public function serviceEndpoint($servicePath)
+    public function timeFormat(...$format)
     {
-        if('/' !== substr($servicePath,0,1))
-            $servicePath = '/'.$servicePath;
-        $this->service = $servicePath;
+        $this->format['time'] = implode('', $format);
         return $this;
     }
 
-    public function filter($filter)
+    public function includeHeaders()
     {
-        $this->queryParams['filter'] = $filter;
-        return $this;
-    }
-
-    public function orderBy($order)
-    {
-        $this->queryParams['orderBy'] = $order;
+        $this->options['include_headers'] = true;
         return $this;
     }
 
@@ -157,22 +91,6 @@ class APIExportBuilder
             throw new BuilderException('Attempted to insert duplicate header: '.$headerName);
         }
         $this->fields[$headerName] = new Field($apiField, $fieldType);
-        return $this;
-    }
-
-    public function includeHeaders()
-    {
-        $this->includeHeaders = true;
-        return $this;
-    }
-
-    /**
-     * @param mixed ...$format
-     * @return $this
-     */
-    public function timeFormat(...$format)
-    {
-        $this->format['time'] = implode('', $format);
         return $this;
     }
 
@@ -203,6 +121,6 @@ class APIExportBuilder
             throw new BuilderException($e->getMessage());
         }
 
-        return new PlayerlyncExport($api, $writer, $model, $this->includeHeaders);
+        return new PlayerlyncExport($api, $writer, $model, $this->options);
     }
 }

@@ -19,4 +19,6 @@ interface IConnector
      * @return bool
      */
     public function hasNext();
+
+    public function insertRecord($data);
 }

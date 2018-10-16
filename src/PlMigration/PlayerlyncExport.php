@@ -9,8 +9,10 @@ namespace PlMigration;
 
 use PlMigration\Connectors\IConnector;
 use PlMigration\Exceptions\ExportException;
+use PlMigration\Exceptions\TransferException;
 use PlMigration\Model\ExportModel;
 use PlMigration\Transfer\ITransfer;
+use PlMigration\Transfer\LocalTransfer;
 use PlMigration\Writer\IWriter;
 
 class PlayerlyncExport
@@ -40,28 +42,38 @@ class PlayerlyncExport
     private $transfer;
 
     /**
+     *
+     * @var string
+     */
+    private $remoteFileLocation;
+
+    /**
      * Instantiate a new exporter.
      * @param IConnector $api
      * @param IWriter $writer
      * @param ExportModel $model
-     * @param bool $writeHeaders
-     * @param ITransfer|null $transfer
+     * @param array $options
      */
-    public function __construct(IConnector $api, IWriter $writer, ExportModel $model, $writeHeaders = false, ITransfer $transfer = null)
+    public function __construct(IConnector $api, IWriter $writer, ExportModel $model, array $options = [])
     {
         $this->api = $api;
         $this->writer = $writer;
         $this->model = $model;
-        $this->transfer = $transfer;
-        if($writeHeaders)
+
+        $this->transfer = isset($options['transfer']) ? $options['transfer'] : new LocalTransfer();
+        $this->remoteFileLocation = $options['remoteFileLocation'];
+
+        if(isset($options['include_headers']) && $options['include_headers'] === true)
         {
             $this->writer->writeRecord($model->getHeaders());
         }
     }
 
+    /**
+     * @throws ExportException
+     */
     public function export()
     {
-        $hasNext = true;
         do
         {
             $records = $this->get($hasNext);
@@ -72,6 +84,8 @@ class PlayerlyncExport
             }
         }
         while($hasNext);
+
+        $this->send();
     }
 
     /**
@@ -101,10 +115,18 @@ class PlayerlyncExport
     {
         if($this->transfer === null)
         {
-            throw new ExportException('Transfer protocol has not been configured');
+            return;
         }
-        $file = $this->writer->getFile();
 
-        $this->transfer->send($file);
+        try
+        {
+            $this->transfer->connect();
+            $this->transfer->put($this->writer->getFile(), $this->remoteFileLocation);
+            $this->transfer->close();
+        }
+        catch(TransferException $e)
+        {
+            throw new ExportException('file transfer failed, '.$e->getMessage());
+        }
     }
 }

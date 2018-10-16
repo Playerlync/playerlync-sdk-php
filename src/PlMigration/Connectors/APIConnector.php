@@ -35,14 +35,7 @@ class APIConnector implements IConnector
     {
         try
         {
-            $this->api = new PlayerLync([
-                'host' => $config['host'],
-                'client_id' => $config['client_id'],
-                'client_secret' => $config['client_secret'],
-                'username' => $config['username'],
-                'password' => $config['password'],
-                'default_api_version' => 'v3'
-            ]);
+            $this->api = new PlayerLync($config);
         }
         catch (PlayerLyncSDKException $e)
         {
@@ -79,18 +72,10 @@ class APIConnector implements IConnector
     public function getTimeFields()
     {
         $timeFields = [];
-        try
-        {
-            $response = $this->api->get($this->service, ['structure' => 1]);
-        }
-        catch (PlayerLyncSDKException $e)
-        {
-            throw new ConnectorException($e->getMessage());
-        }
 
-        $fields = $response->getData();
+        $fields = $this->getStructure();
 
-        foreach($fields['structure'] as $field => $struct)
+        foreach($fields as $field => $struct)
         {
             if(strpos($struct['type'], 'timestamp') !== false)
                 $timeFields[] = $field;
@@ -109,10 +94,43 @@ class APIConnector implements IConnector
     }
 
     /**
+     * @throws ConnectorException
+     */
+    private function getStructure()
+    {
+        try
+        {
+            $response = $this->api->get($this->service, ['structure' => 1]);
+        }
+        catch (PlayerLyncSDKException $e)
+        {
+            throw new ConnectorException($e->getMessage());
+        }
+
+        return $response->getData()['structure'];
+    }
+
+    /**
      * @return bool
      */
     public function hasNext()
     {
         return $this->hasNext;
+    }
+
+    /**
+     * @param $data
+     * @throws ConnectorException
+     */
+    public function insertRecord($data)
+    {
+        try
+        {
+            $this->api->post($this->service, ['upsert' => 1, 'body' => $data]);
+        }
+        catch (PlayerLyncSDKException $e)
+        {
+            throw new ConnectorException($e->getMessage());
+        }
     }
 }

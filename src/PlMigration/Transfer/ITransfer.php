@@ -10,5 +10,11 @@ namespace PlMigration\Transfer;
 
 interface ITransfer
 {
-    public function send($file);
+    public function put($localFile, $remoteDestination);
+
+    public function get($remoteFile, $localDestination);
+
+    public function connect();
+
+    public function close();
 }
