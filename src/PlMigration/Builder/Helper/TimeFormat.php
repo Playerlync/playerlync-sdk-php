@@ -5,7 +5,7 @@
  * Date: 10/9/18
  */
 
-namespace PlMigration\Builder;
+namespace PlMigration\Builder\Helper;
 
 class TimeFormat
 {
@@ -14,17 +14,9 @@ class TimeFormat
      */
     const DAY = 'd';
     /**
-     *  A full textual representation of the day of the week (Sunday to Saturday)
-     */
-    const DAY_NAME = 'l';
-    /**
      *  Numeric representation of a month, with leading zeros (01 to 12)
      */
     const MONTH = 'm';
-    /**
-     *  A full textual representation of a month (January through December)
-     */
-    const MONTH_NAME = 'F';
     /**
      *  A full numeric representation of a year, 4 digits (Examples: 1999 or 2003)
      */

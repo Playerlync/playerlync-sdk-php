@@ -24,6 +24,8 @@ class APIConnector implements IConnector
 
     private $queryParams;
 
+    private $structure;
+
     /**
      * APIConnector constructor.
      * @param array $config
@@ -53,14 +55,9 @@ class APIConnector implements IConnector
     public function getRecords()
     {
         $this->queryParams['page'] = $this->page;
-        try
-        {
-            $response = $this->api->get($this->service, $this->queryParams);
-        }
-        catch (PlayerLyncSDKException $e)
-        {
-            throw new ConnectorException($e->getMessage());
-        }
+
+        $response = $this->get($this->service, $this->queryParams);
+
         $this->hasNext = $this->moreRecordsExist($response);
         $this->page++;
         return ($response->getData() !== null) ? $response->getData() : [];
@@ -96,18 +93,15 @@ class APIConnector implements IConnector
     /**
      * @throws ConnectorException
      */
-    private function getStructure()
+    public function getStructure()
     {
-        try
+        if(!$this->structure)
         {
-            $response = $this->api->get($this->service, ['structure' => 1]);
-        }
-        catch (PlayerLyncSDKException $e)
-        {
-            throw new ConnectorException($e->getMessage());
-        }
+            $response = $this->get($this->service, ['structure'=> 1]);
 
-        return $response->getData()['structure'];
+            $this->structure = $response->getData()['structure'];
+        }
+        return $this->structure;
     }
 
     /**
@@ -132,5 +126,35 @@ class APIConnector implements IConnector
         {
             throw new ConnectorException($e->getMessage());
         }
+    }
+
+    /**
+     * @param $path
+     * @param $params
+     * @return PlayerLyncResponse
+     * @throws ConnectorException
+     */
+    private function get($path,$params)
+    {
+        try
+        {
+            return $this->api->get($path, $params);
+        }
+        catch (PlayerLyncSDKException $e)
+        {
+            if(method_exists($e, 'getResponseData'))
+            {
+                throw new ConnectorException('API returned error: '.$e->getResponseData()['errors'][0]['message']);
+            }
+            else
+            {
+                throw new ConnectorException('API returned error: '.$e->getMessage());
+            }
+        }
+    }
+
+    public function setQueryParams($params)
+    {
+        return $this->queryParams = $params;
     }
 }

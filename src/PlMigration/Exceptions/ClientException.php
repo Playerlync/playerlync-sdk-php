@@ -7,7 +7,7 @@
 
 namespace PlMigration\Exceptions;
 
-class TransferException extends \Exception
+class ClientException extends \Exception
 {
 
 }

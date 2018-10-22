@@ -15,11 +15,13 @@ class Field
 
     private $field;
     private $type;
+    private $header;
 
-    public function __construct($field, $type = self::VARIABLE)
+    public function __construct($field, $header, $type = self::VARIABLE)
     {
         $this->field = $field;
         $this->type = $type;
+        $this->header = $header;
     }
 
     public function getType()
@@ -30,5 +32,10 @@ class Field
     public function getField()
     {
         return $this->field;
+    }
+
+    public function getHeader()
+    {
+        return $this->header;
     }
 }

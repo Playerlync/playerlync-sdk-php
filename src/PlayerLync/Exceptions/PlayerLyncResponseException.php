@@ -98,13 +98,13 @@ class PlayerLyncResponseException extends PlayerLyncSDKException
 //            $code = 148002;
 //            return new static($response, new PlayerLyncAuthenticationException($data['error_description'], $code));
 //        }
-        if ($data['errors']['code'] >= 148000 && $data['errors']['code'] <= 148010)
+        if (isset($data['errors']['code']) && $data['errors']['code'] >= 148000 && $data['errors']['code'] <= 148010)
         {
             return new static($response, new PlayerLyncAuthenticationException($data['errors']['message'], $data['errors']['code']));
         }
         else
         {
-            return new static($response, new PlayerLyncSDKException($data['errors']['message'], $data['errors']['code']));
+            return new static($response, new PlayerLyncSDKException($data['errors'][0]['message'], $data['errors'][0]['code']));
         }
     }
 

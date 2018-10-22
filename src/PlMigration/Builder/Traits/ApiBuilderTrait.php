@@ -5,7 +5,7 @@
  * Date: 10/11/18
  */
 
-namespace PlMigration\Builder;
+namespace PlMigration\Builder\Traits;
 
 trait ApiBuilderTrait
 {
@@ -54,7 +54,7 @@ trait ApiBuilderTrait
         return $this;
     }
 
-    protected function apiVersion($version)
+    public function apiVersion($version)
     {
         $this->hostSettings['default_api_version'] = $version;
         return $this;

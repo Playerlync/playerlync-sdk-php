@@ -5,7 +5,7 @@
  * Date: 10/11/18
  */
 
-namespace PlMigration\Builder;
+namespace PlMigration\Builder\Traits;
 
 trait CsvBuilderTrait
 {

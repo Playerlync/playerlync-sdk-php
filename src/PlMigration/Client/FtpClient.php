@@ -5,15 +5,14 @@
  * Date: 10/9/18
  */
 
-namespace PlMigration\Transfer;
+namespace PlMigration\Client;
 
-use FtpClient\FtpClient;
 use FtpClient\FtpException;
-use PlMigration\Exceptions\TransferException;
+use PlMigration\Exceptions\ClientException;
 
-class FtpTransfer implements ITransfer
+class FtpClient implements IClient
 {
-    /** @var FtpClient */
+    /** @var \FtpClient\FtpClient */
     private $protocol;
     /** @var string */
     private $host;
@@ -27,10 +26,10 @@ class FtpTransfer implements ITransfer
     protected $ssl = false;
 
     /**
-     * FtpTransfer constructor.
-     * @param $host - name to connect ftp to
-     * @param $username - login username for the ftp connection
-     * @param $password - login password for the ftp connection
+     * FtpConstructor constructor.
+     * @param string $host - host name of the ftp server
+     * @param string $username - login username for the ftp connection
+     * @param string $password - login password for the ftp connection
      * @param int $port - port number that the ftp is connected to (default port 21)
      */
     public function __construct($host, $username, $password, $port = 21)
@@ -43,19 +42,19 @@ class FtpTransfer implements ITransfer
 
     /**
      * Attempt to connect to the host and login
-     * @throws TransferException
+     * @throws ClientException
      */
     public function connect()
     {
         try
         {
-            $this->protocol = new FtpClient();
+            $this->protocol = new \FtpClient\FtpClient();
             $this->protocol->connect($this->host, $this->ssl, $this->port);
             $this->protocol->login($this->username, $this->password);
         }
         catch(FtpException $e)
         {
-            throw new TransferException($e->getMessage());
+            throw new ClientException($e->getMessage());
         }
     }
 
@@ -68,11 +67,12 @@ class FtpTransfer implements ITransfer
     }
 
     /**
-     * Upload a local file into a remote location in the server
+     * Upload a local file into a remote location in the server. If the file already exists, it will not be allowed to be
+     * overwritten
      * @param $localFile
      * @param $remoteLocation
      * @return bool
-     * @throws TransferException
+     * @throws ClientException
      */
     public function put($localFile, $remoteLocation)
     {
@@ -80,12 +80,14 @@ class FtpTransfer implements ITransfer
         {
             $remoteLocation .= '/';
         }
-        if(!$this->directoryExists($remoteLocation))
-        {
-            throw new TransferException('"'.$remoteLocation.'" is not a directory');
-        }
 
         $remoteLocation .= pathinfo($localFile, PATHINFO_BASENAME);
+
+        if($this->remoteFileExists($remoteLocation))
+        {
+            throw new ClientException('File already exists in the server');
+        }
+
         return $this->protocol->put($remoteLocation, $localFile, FTP_BINARY);
     }
 
@@ -100,15 +102,31 @@ class FtpTransfer implements ITransfer
         return $this->protocol->get($localDestination, $remoteFile, FTP_BINARY);
     }
 
-    private function directoryExists($location)
+    /**
+     * @param $file
+     * @return bool
+     * @throws ClientException
+     */
+    private function remoteFileExists($file)
     {
         try
         {
-            return $this->protocol->isDir($location);
+            $list = $this->protocol->nlist(pathinfo($file,PATHINFO_DIRNAME));
         }
-        catch (FtpException $e)
+        catch(FtpException $e)
         {
-            return false;
+            throw new ClientException($e->getMessage());
         }
+
+        $found = false;
+        foreach($list as $item)
+        {
+            if(strpos($item,$file) !== false)
+            {
+                $found = true;
+                break;
+            }
+        }
+        return $found;
     }
 }

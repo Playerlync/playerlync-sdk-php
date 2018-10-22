@@ -7,12 +7,9 @@
 
 namespace PlMigration;
 
+use Monolog\Logger;
 use PlMigration\Connectors\IConnector;
-use PlMigration\Exceptions\ExportException;
-use PlMigration\Exceptions\TransferException;
 use PlMigration\Model\ExportModel;
-use PlMigration\Transfer\ITransfer;
-use PlMigration\Transfer\LocalTransfer;
 use PlMigration\Writer\IWriter;
 
 class PlayerlyncExport
@@ -35,17 +32,8 @@ class PlayerlyncExport
      */
     private $model;
 
-    /**
-     * Transfer object to send information to another destination after exporting the data
-     * @var ITransfer
-     */
-    private $transfer;
-
-    /**
-     *
-     * @var string
-     */
-    private $remoteFileLocation;
+    /** @var Logger */
+    private $logger;
 
     /**
      * Instantiate a new exporter.
@@ -60,32 +48,42 @@ class PlayerlyncExport
         $this->writer = $writer;
         $this->model = $model;
 
-        $this->transfer = isset($options['transfer']) ? $options['transfer'] : new LocalTransfer();
-        $this->remoteFileLocation = $options['remoteFileLocation'];
-
         if(isset($options['include_headers']) && $options['include_headers'] === true)
         {
             $this->writer->writeRecord($model->getHeaders());
         }
+
+        if(isset($options['logger']))
+        {
+            $this->setLogger($options['logger']);
+        }
     }
 
     /**
-     * @throws ExportException
+     * @throws \Exception
      */
     public function export()
     {
-        do
+        try
         {
-            $records = $this->get($hasNext);
-
-            foreach($records as $record)
+            do
             {
-                $this->writeRow($record);
-            }
-        }
-        while($hasNext);
+                $records = $this->get($hasNext);
 
-        $this->send();
+                foreach($records as $record)
+                {
+                    $this->writeRow($record);
+                }
+            }
+            while($hasNext);
+        }
+        catch(\Exception $e)
+        {
+            $this->writeError($e->getMessage());
+            throw $e;
+        }
+
+        return $this->writer->getFile();
     }
 
     /**
@@ -108,25 +106,14 @@ class PlayerlyncExport
         $this->writer->writeRecord($row);
     }
 
-    /**
-     * @throws ExportException
-     */
-    public function send()
+    public function setLogger($logger)
     {
-        if($this->transfer === null)
-        {
-            return;
-        }
+        $this->logger = $logger;
+    }
 
-        try
-        {
-            $this->transfer->connect();
-            $this->transfer->put($this->writer->getFile(), $this->remoteFileLocation);
-            $this->transfer->close();
-        }
-        catch(TransferException $e)
-        {
-            throw new ExportException('file transfer failed, '.$e->getMessage());
-        }
+    public function writeError($message)
+    {
+        if($this->logger !== null)
+            $this->logger->error($message);
     }
 }

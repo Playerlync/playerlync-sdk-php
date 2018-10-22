@@ -21,6 +21,7 @@
     "php": ">=5.5",
     "ext-curl": "*",
     "ext-ftp":"*",
+    "ext-json":"*",
     "keboola/csv": "^2.0",
     "nicolab/php-ftp-client": "^1.4"
   },

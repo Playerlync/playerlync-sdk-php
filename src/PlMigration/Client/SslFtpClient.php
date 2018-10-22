@@ -5,9 +5,9 @@
  * Date: 10/12/18
  */
 
-namespace PlMigration\Transfer;
+namespace PlMigration\Client;
 
-class SslFtpTransfer extends FtpTransfer
+class SslFtpClient extends FtpClient
 {
 
     public function __construct($host, $username, $password, $port = 21)

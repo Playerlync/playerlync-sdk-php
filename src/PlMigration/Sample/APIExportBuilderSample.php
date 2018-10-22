@@ -6,55 +6,45 @@
  */
 
 use PlMigration\Builder\APIExportBuilder;
-use PlMigration\Builder\TimeFormat;
-use PlMigration\Exceptions\BuilderException;
-use PlMigration\Exceptions\ExportException;
+use PlMigration\Builder\FtpBuilder;
+use PlMigration\Builder\Helper\TimeFormat;
 use PlMigration\Model\Field;
 
 require __DIR__.'/../../../vendor/autoload.php';
 
-$builder = new APIExportBuilder();
+$ftpBuilder = new FtpBuilder();
+$ftp = $ftpBuilder->host('ftp.server.com')
+    ->username('username')
+    ->password('password')
+    ->port(21)
+    ->build();
 
-try
-{
-    $builder
-        //Set output file settings
-        ->outputFilename('output.csv')
-        ->enclosure('"')
-        ->delimiter(',')
-        //Set API configurations
-        ->host('https://localhost-services.playerlync.com')
-        ->clientId('41f88b60-2e16-11e5-a049-0ad2ffa299ae')
-        ->clientSecret('41f88bbc-2e16-11e5-a049-0ad2ffa299ae')
-        ->username('localhostadmin')
-        ->password('ef21ad83-2e15-11e5-a049-0ad2ffa299ae')
-        ->serviceEndpoint('/members') //service path to get information from starting after the api version (v3/members, v3/
-        ->filter('delete_date|isnull')
-        ->orderBy('member')
-        ->timeFormat(TimeFormat::YEAR,'/',TimeFormat::MONTH,'/',TimeFormat::DAY,' ',
-            TimeFormat::HOUR_12,':',TimeFormat::MINUTES,' ',TimeFormat::MERIDIAN) //Creates the following date format (2018/10/02 03:17 PM)
-        //Set protocol to use to transfer the file to another location
-        ->ftpConnect('localhost', 'miguel', 'miguel', 25)
-        //Select final destination directory.
-        ->sendTo('/test folder')
-        //Enabled header row to be written in output file
-        ->includeHeaders()
-        //Add fields to be filled into the output file
-        ->addField('member', 'username')
-        ->addField('first_name') //The header name and api_field
-        ->addField('last_name')
-        ->addField(null, 'Salary') //The field will not be filled by anything.
-        ->addField('create_date', 'StartDate')
-        ->addField('constant', 'Header', Field::CONSTANT) //All records in this field will hold the value 'constant'
-        ->build()
-        ->export();
-}
-catch (BuilderException $e)
-{
-    echo 'ERROR:'.$e->getMessage();
-}
-catch(ExportException $e)
-{
-    echo 'export Failed:'.$e->getMessage();
-}
+$exportBuilder = new APIExportBuilder();
+$exportedFile = $exportBuilder
+    //Set output file settings
+    ->outputFile('outputSample.csv')
+    ->enclosure('"')
+    ->delimiter(',')
+    //Set API configurations
+    ->host('https://domain.com')
+    ->clientId('client_id')
+    ->clientSecret('client_secret')
+    ->username('username')
+    ->password('password')
+    ->serviceEndpoint('/service/path')//service path to get information from starting after the api version (/members,/groups)
+    ->filter('delete_date|isnull')
+    ->orderBy('order')
+    //Creates the following date format (2018/10/02 03:17 PM)
+    ->timeFormat(TimeFormat::YEAR, '/', TimeFormat::MONTH, '/', TimeFormat::DAY, ' ', TimeFormat::HOUR_12, ':', TimeFormat::MINUTES, ' ', TimeFormat::MERIDIAN)
+    ->runHistoryFile('history.cfg') //keeps track of the history file
+    ->errorLog('error.log') //write errors into the error log in a desired location
+    ->includeHeaders() //optional inclusion of headers in output file
+    ->addField('field_1', 'login')
+    ->addField('field_2', 'first name')//The header name and api_field
+    ->addField('field_3', 'second name')
+    ->addField(null, 'Salary')//The field will not be filled by anything.
+    ->addField('constant_value', 'Constant Header', Field::CONSTANT)//All records in this field will hold the value 'constant'
+    ->sendTo('/test folder', $ftp) //assign remote location if desired
+    ->export();
+
 exit(0);

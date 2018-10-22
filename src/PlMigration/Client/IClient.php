@@ -5,11 +5,19 @@
  * Date: 10/9/18
  */
 
-namespace PlMigration\Transfer;
+namespace PlMigration\Client;
 
 
-interface ITransfer
+use PlMigration\Exceptions\ClientException;
+
+interface IClient
 {
+    /**
+     * @param $localFile
+     * @param $remoteDestination
+     * @return mixed
+     * @throws ClientException
+     */
     public function put($localFile, $remoteDestination);
 
     public function get($remoteFile, $localDestination);
