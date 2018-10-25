@@ -137,7 +137,7 @@ class PlayerLync
             $this->defaultApiVersion = static::DEFAULT_API_VERSION;
         }
 
-        $this->app = new PlayerLyncApp($config['client_id'], $config['client_secret'], $config['username'], $config['password']);
+        $this->app = new PlayerLyncApp($config['client_id'], $config['client_secret'], $config['username'], $config['password'], $config['primary_org_id']);
 
         $httpClientHandler = new PlayerLyncCurlHttpClient();
 
