@@ -1,11 +1,5 @@
 {
-  "repositories": [
-    {
-      "type": "vcs",
-      "url":  "https://github.com/Playerlync/playerlync-sdk-php"
-    }
-  ],
   "require": {
-    "playerlync/playerlync-sdk-php": "dev-develop"
+    "playerlync/playerlync-sdk-php": "4000.1.*"
   }
 }
