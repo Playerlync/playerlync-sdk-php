@@ -55,11 +55,6 @@ class PlayerLyncApp
     protected $password;
 
     /**
-     * @var string The primary org ID.
-     */
-    protected $primaryOrgId;
-
-    /**
      * @var AccessToken The AccessToken
      */
     protected $accessToken;
@@ -73,13 +68,12 @@ class PlayerLyncApp
      * @param $username
      * @param $password
      */
-    public function __construct($clientId, $clientSecret, $username, $password, $primaryOrgId)
+    public function __construct($clientId, $clientSecret, $username, $password)
     {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->username = $username;
         $this->password = $password;
-        $this->primaryOrgId = $primaryOrgId;
     }
 
     /**
@@ -120,16 +114,6 @@ class PlayerLyncApp
     public function getPassword()
     {
         return $this->password;
-    }
-
-    /**
-     * Returns the primary org ID.
-     *
-     * @return string
-     */
-    public function getPrimaryOrgId()
-    {
-        return $this->primaryOrgId;
     }
 
     /**

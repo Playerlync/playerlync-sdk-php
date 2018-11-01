@@ -103,7 +103,6 @@ class PlayerLyncRequest
         if ($accessToken)
         {
             $this->setHeaders(['Authorization' => 'Bearer ' . $accessToken->getAccessToken()]);
-            $this->setHeaders(['Primary-Org-Id' => $app->getPrimaryOrgId()]);
         }
     }
 
