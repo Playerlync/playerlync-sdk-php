@@ -14,7 +14,7 @@ interface IReader
 
     public function getRecord();
 
-    public function hasNext();
+    public function valid();
 
     public function next();
 }

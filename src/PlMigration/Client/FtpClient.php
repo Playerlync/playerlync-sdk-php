@@ -10,7 +10,7 @@ namespace PlMigration\Client;
 use FtpClient\FtpException;
 use PlMigration\Exceptions\ClientException;
 
-class FtpClient implements IClient
+class FtpClient extends Client
 {
     /** @var \FtpClient\FtpClient */
     private $protocol;
@@ -63,43 +63,8 @@ class FtpClient implements IClient
      */
     public function close()
     {
-        $this->protocol->close();
-    }
-
-    /**
-     * Upload a local file into a remote location in the server. If the file already exists, it will not be allowed to be
-     * overwritten
-     * @param $localFile
-     * @param $remoteLocation
-     * @return bool
-     * @throws ClientException
-     */
-    public function put($localFile, $remoteLocation)
-    {
-        if(substr($remoteLocation,-1) !== '/')
-        {
-            $remoteLocation .= '/';
-        }
-
-        $remoteLocation .= pathinfo($localFile, PATHINFO_BASENAME);
-
-        if($this->remoteFileExists($remoteLocation))
-        {
-            throw new ClientException('File already exists in the server');
-        }
-
-        return $this->protocol->put($remoteLocation, $localFile, FTP_BINARY);
-    }
-
-    /**
-     * Download a remote file from the server into a local destination
-     * @param $remoteFile
-     * @param $localDestination
-     * @return bool
-     */
-    public function get($remoteFile, $localDestination)
-    {
-        return $this->protocol->get($localDestination, $remoteFile, FTP_BINARY);
+        if($this->protocol !== null)
+            $this->protocol->close();
     }
 
     /**
@@ -107,7 +72,7 @@ class FtpClient implements IClient
      * @return bool
      * @throws ClientException
      */
-    private function remoteFileExists($file)
+    protected function remoteFileExists($file)
     {
         try
         {
@@ -128,5 +93,25 @@ class FtpClient implements IClient
             }
         }
         return $found;
+    }
+
+    /**
+     * @param $localDestination
+     * @param $remoteFile
+     * @return mixed
+     */
+    protected function downloadFile($localDestination, $remoteFile)
+    {
+        return $this->protocol->get($localDestination, $remoteFile, FTP_BINARY);
+    }
+
+    /**
+     * @param $remoteLocation
+     * @param $localFile
+     * @return mixed
+     */
+    protected function uploadFile($remoteLocation, $localFile)
+    {
+        return $this->protocol->put($remoteLocation, $localFile, FTP_BINARY);
     }
 }

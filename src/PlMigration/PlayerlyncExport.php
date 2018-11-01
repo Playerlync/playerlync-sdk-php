@@ -7,13 +7,16 @@
 
 namespace PlMigration;
 
-use Monolog\Logger;
 use PlMigration\Connectors\IConnector;
+use PlMigration\Exceptions\ConnectorException;
+use PlMigration\Exceptions\ExportException;
 use PlMigration\Model\ExportModel;
 use PlMigration\Writer\IWriter;
+use PlMigration\Helper\LoggerTrait;
 
 class PlayerlyncExport
 {
+    use LoggerTrait;
     /**
      * connection object to be used
      * @var IConnector
@@ -31,9 +34,6 @@ class PlayerlyncExport
      * @var ExportModel
      */
     private $model;
-
-    /** @var Logger */
-    private $logger;
 
     /**
      * Instantiate a new exporter.
@@ -60,7 +60,7 @@ class PlayerlyncExport
     }
 
     /**
-     * @throws \Exception
+     * @throws ExportException
      */
     public function export()
     {
@@ -72,15 +72,15 @@ class PlayerlyncExport
 
                 foreach($records as $record)
                 {
-                    $this->writeRow($record);
+                    $this->writeRow((array)$record);
                 }
             }
             while($hasNext);
         }
         catch(\Exception $e)
         {
-            $this->writeError($e->getMessage());
-            throw $e;
+            $this->error($e->getMessage());
+            throw new ExportException($e->getMessage());
         }
 
         return $this->writer->getFile();
@@ -89,6 +89,7 @@ class PlayerlyncExport
     /**
      * @param bool $hasNext
      * @return array
+     * @throws ConnectorException
      */
     public function get(&$hasNext = false)
     {
@@ -104,16 +105,5 @@ class PlayerlyncExport
         $row = $this->model->fillModel($record);
 
         $this->writer->writeRecord($row);
-    }
-
-    public function setLogger($logger)
-    {
-        $this->logger = $logger;
-    }
-
-    public function writeError($message)
-    {
-        if($this->logger !== null)
-            $this->logger->error($message);
     }
 }

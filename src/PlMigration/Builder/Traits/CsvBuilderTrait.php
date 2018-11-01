@@ -7,6 +7,13 @@
 
 namespace PlMigration\Builder\Traits;
 
+use PlMigration\Exceptions\BuilderException;
+use PlMigration\Exceptions\ReaderException;
+use PlMigration\Exceptions\WriterException;
+use PlMigration\Model\Field;
+use PlMigration\Reader\CsvReader;
+use PlMigration\Writer\CsvWriter;
+
 trait CsvBuilderTrait
 {
     /**
@@ -23,7 +30,7 @@ trait CsvBuilderTrait
 
     /**
      * Fields to be retrieved from the data provider
-     * @var array
+     * @var Field[]
      */
     private $fields = [];
 
@@ -37,5 +44,39 @@ trait CsvBuilderTrait
     {
         $this->enclosure = $enclosure;
         return $this;
+    }
+
+    /**
+     * @param $file
+     * @return CsvWriter
+     * @throws BuilderException
+     */
+    private function buildWriter($file)
+    {
+        try
+        {
+            return new CsvWriter($file, $this->delimiter, $this->enclosure);
+        }
+        catch (WriterException $e)
+        {
+            throw new BuilderException($e->getMessage());
+        }
+    }
+
+    /**
+     * @param $file
+     * @return CsvReader
+     * @throws BuilderException
+     */
+    private function buildReader($file)
+    {
+        try
+        {
+            return new CsvReader($file, $this->delimiter, $this->enclosure);
+        }
+        catch (ReaderException $e)
+        {
+            throw new BuilderException($e->getMessage());
+        }
     }
 }

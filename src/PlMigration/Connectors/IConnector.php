@@ -7,11 +7,13 @@
 
 namespace PlMigration\Connectors;
 
+use PlMigration\Exceptions\ConnectorException;
 
 interface IConnector
 {
     /**
      * @return array
+     * @throws ConnectorException
      */
     public function getRecords();
 
@@ -20,5 +22,29 @@ interface IConnector
      */
     public function hasNext();
 
+    /**
+     * @param $data
+     * @return mixed
+     * @throws ConnectorException
+     */
     public function insertRecord($data);
+
+    /**
+     * @param $requests
+     * @param bool $force
+     * @return mixed
+     */
+    public function insertRecords($requests, $force = false);
+
+    /**
+     * @param $data
+     * @return mixed
+     * @throws ConnectorException
+     */
+    public function insertActivityRecord($data);
+
+    /**
+     * @return bool
+     */
+    public function supportBatch();
 }

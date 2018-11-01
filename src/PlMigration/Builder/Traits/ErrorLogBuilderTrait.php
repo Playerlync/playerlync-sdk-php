@@ -9,6 +9,7 @@ namespace PlMigration\Builder\Traits;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use PlMigration\Exceptions\BuilderException;
 
 trait ErrorLogBuilderTrait
 {
@@ -18,26 +19,56 @@ trait ErrorLogBuilderTrait
      */
     private $errorLog;
 
-    private function writeError($message)
+    /**
+     * Path to the location of the error log created
+     */
+    private $errorLogFile;
+
+    private function addError($message)
     {
-        echo $message.PHP_EOL;
+        //echo $message.PHP_EOL;
         if($this->errorLog !== null)
         {
             $this->errorLog->error($message);
         }
     }
 
-    private function setupErrorLog($logFile,$logName)
+    private function addDebug($message)
     {
+        //echo $message.PHP_EOL;
+        if($this->errorLog !== null)
+        {
+            $this->errorLog->debug($message);
+        }
+    }
+
+    public function errorLog($file)
+    {
+        $this->errorLogFile = $file;
+        return $this;
+    }
+
+    /**
+     * @param $logName
+     * @throws BuilderException
+     */
+    private function buildErrorLog($logName)
+    {
+        if(!$this->errorLogFile === null)
+        {
+            return;
+        }
+
         try
         {
-            $handler = new StreamHandler($logFile, Logger::ERROR);
+            $handler = new StreamHandler($this->errorLogFile, Logger::ERROR);
             $this->errorLog = new Logger($logName);
             $this->errorLog->pushHandler($handler);
         }
         catch (\Exception $e)
         {
-            echo 'Failed to create error log'.PHP_EOL;
+            echo $e->getMessage();
+            throw new BuilderException('Failed to create error log file. '.$e->getMessage());
         }
     }
 }

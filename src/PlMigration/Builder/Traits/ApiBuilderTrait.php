@@ -7,6 +7,10 @@
 
 namespace PlMigration\Builder\Traits;
 
+use PlMigration\Connectors\APIConnector;
+use PlMigration\Exceptions\BuilderException;
+use PlMigration\Exceptions\ConnectorException;
+
 trait ApiBuilderTrait
 {
     /**
@@ -60,6 +64,12 @@ trait ApiBuilderTrait
         return $this;
     }
 
+    public function primaryOrgId($primaryOrgId)
+    {
+        $this->hostSettings['primary_org_id'] = $primaryOrgId;
+        return $this;
+    }
+
     /**
      * @param string $servicePath
      * @return $this
@@ -82,5 +92,20 @@ trait ApiBuilderTrait
     {
         $this->queryParams['orderBy'] = $order;
         return $this;
+    }
+
+    /**
+     * @throws BuilderException
+     */
+    private function buildApi()
+    {
+        try
+        {
+            return new APIConnector($this->service, $this->queryParams, $this->hostSettings);
+        }
+        catch (ConnectorException $e)
+        {
+            throw new BuilderException($e->getMessage());
+        }
     }
 }

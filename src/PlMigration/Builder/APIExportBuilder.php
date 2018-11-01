@@ -7,19 +7,17 @@
 
 namespace PlMigration\Builder;
 
-use Keboola\Csv\Exception;
 use PlMigration\Builder\Traits\ApiBuilderTrait;
 use PlMigration\Builder\Traits\CsvBuilderTrait;
 use PlMigration\Builder\Traits\ErrorLogBuilderTrait;
 use PlMigration\Client\IClient;
-use PlMigration\Connectors\APIConnector;
 use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
 use PlMigration\Exceptions\BuilderException;
+use PlMigration\Exceptions\ExportException;
 use PlMigration\Model\ExportModel;
 use PlMigration\Model\Field;
 use PlMigration\PlayerlyncExport;
-use PlMigration\Writer\CsvWriter;
 
 class APIExportBuilder
 {
@@ -117,17 +115,6 @@ class APIExportBuilder
     }
 
     /**
-     * Point to a file to log errors
-     * @param $logFile
-     * @return $this
-     */
-    public function errorLog($logFile)
-    {
-        $this->setupErrorLog($logFile, 'ExportLog');
-        return $this;
-    }
-
-    /**
      * @param $apiField
      * @param null $headerName
      * @param string $fieldType
@@ -150,18 +137,22 @@ class APIExportBuilder
     /**
      * @return mixed
      * @throws BuilderException
+     * @throws ExportException
      */
     public function export()
     {
-        $exporter = $this->build();
         try
         {
-            $output = $exporter->export();
+            $output = $this->build()->export(); //export from the API into a local file destination
         }
-        catch (\Exception $e)
+        catch(BuilderException $e)
         {
-            $this->writeError('Failed to send file: '.$e->getMessage());
-            throw new BuilderException($e->getMessage());
+            $this->addError($e);
+            throw $e;
+        }
+        catch (ExportException $e)
+        {
+            throw $e;
         }
 
         if($this->protocol)
@@ -174,7 +165,7 @@ class APIExportBuilder
             }
             catch (ClientException $e)
             {
-                $this->writeError('Failed to send file: '.$e->getMessage());
+                $this->addError('Failed to send file: '.$e->getMessage());
                 throw new BuilderException($e->getMessage());
             }
         }
@@ -190,30 +181,29 @@ class APIExportBuilder
      */
     protected function build()
     {
-        $this->historyFileData = $this->verifyHistoryFile();
-        $fields = $this->buildFields();
-        $model = new ExportModel($fields, $this->format);
+        try
+        {
+            $this->buildErrorLog('ExportLog');
+            $this->historyFileData = $this->verifyHistoryFile();
+            $model = new ExportModel($this->buildFields(), $this->format);
+            $writer = $this->buildWriter($this->outputFile);
+            $api = $this->buildApi();
+        }
+        catch(BuilderException $e)
+        {
+            $this->addError($e->getMessage());
+            throw $e;
+        }
 
         try
         {
-            $writer = new CsvWriter($this->outputFile, $this->delimiter, $this->enclosure);
-        }
-        catch (Exception $e)
-        {
-            $this->writeError($e->getMessage());
-            throw new BuilderException($e->getMessage());
-        }
-
-        try
-        {
-            $api = new APIConnector($this->service, $this->queryParams, $this->hostSettings);
             $model->setTimeFields($api->getTimeFields());
             $this->addLastRunTimeFilter($this->historyFileData, pathinfo($this->outputFile,PATHINFO_BASENAME), $api->getStructure());
             $api->setQueryParams($this->queryParams);
         }
         catch (ConnectorException $e)
         {
-            $this->writeError($e->getMessage());
+            $this->addError($e->getMessage());
             throw new BuilderException($e->getMessage());
         }
 
@@ -250,19 +240,18 @@ class APIExportBuilder
         /** @var Field $field */
         foreach($this->fields as $field)
         {
-            if($field->getField() === null && $field->getHeader() === null)
+            if($field->getField() === null && $field->getAlias() === null)
             {
-                $this->writeError('Field and header cannot both be null');
                 throw new BuilderException('Field and header cannot both be null');
             }
-            if(array_key_exists($field->getHeader(), $fields))
+            if(array_key_exists($field->getAlias(), $fields))
             {
-                $this->writeError('Attempted to insert duplicate header: '.$field->getHeader());
-                throw new BuilderException('Attempted to insert duplicate header: '.$field->getHeader());
+                throw new BuilderException('Attempted to insert duplicate header: '.$field->getAlias());
             }
 
-            $fields[$field->getHeader()] = $field;
+            $fields[$field->getAlias()] = $field;
         }
+        $this->fields = [];
         return $fields;
     }
 

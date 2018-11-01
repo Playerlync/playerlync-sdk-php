@@ -7,13 +7,17 @@
 
 namespace PlMigration\Connectors;
 
-use PlayerLync\Exceptions\PlayerLyncSDKException;
-use PlayerLync\PlayerLync;
-use PlayerLync\PlayerLyncResponse;
+use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
+use PlMigration\Helper\PlapiClient;
+use Psr\Http\Message\ResponseInterface;
 
 class APIConnector implements IConnector
 {
+    /**
+     *
+     * @var PlapiClient
+     */
     private $api;
 
     private $service;
@@ -37,9 +41,10 @@ class APIConnector implements IConnector
     {
         try
         {
-            $this->api = new PlayerLync($config);
+            $this->api = new PlapiClient($config);
+
         }
-        catch (PlayerLyncSDKException $e)
+        catch (ClientException $e)
         {
             throw new ConnectorException($e->getMessage());
         }
@@ -60,7 +65,7 @@ class APIConnector implements IConnector
 
         $this->hasNext = $this->moreRecordsExist($response);
         $this->page++;
-        return ($response->getData() !== null) ? $response->getData() : [];
+        return ($response->data !== null) ? $response->data : [];
     }
 
     /**
@@ -74,20 +79,22 @@ class APIConnector implements IConnector
 
         foreach($fields as $field => $struct)
         {
-            if(strpos($struct['type'], 'timestamp') !== false)
+            if(strpos($struct->type, 'timestamp') !== false)
+            {
                 $timeFields[] = $field;
+            }
         }
 
         return $timeFields;
     }
 
     /**
-     * @param PlayerLyncResponse $response
+     * @param object $response
      * @return bool
      */
-    private function moreRecordsExist(PlayerLyncResponse $response)
+    private function moreRecordsExist($response)
     {
-        return $response->getPage() < $response->getTotalPages();
+        return $response->page < $response->totalpages;
     }
 
     /**
@@ -99,7 +106,7 @@ class APIConnector implements IConnector
         {
             $response = $this->get($this->service, ['structure'=> 1]);
 
-            $this->structure = $response->getData()['structure'];
+            $this->structure = $response->data->structure;
         }
         return $this->structure;
     }
@@ -114,47 +121,165 @@ class APIConnector implements IConnector
 
     /**
      * @param $data
+     * @return object
      * @throws ConnectorException
      */
     public function insertRecord($data)
     {
-        try
-        {
-            $this->api->post($this->service, ['upsert' => 1, 'body' => $data]);
-        }
-        catch (PlayerLyncSDKException $e)
-        {
-            throw new ConnectorException($e->getMessage());
-        }
-    }
-
-    /**
-     * @param $path
-     * @param $params
-     * @return PlayerLyncResponse
-     * @throws ConnectorException
-     */
-    private function get($path,$params)
-    {
-        try
-        {
-            return $this->api->get($path, $params);
-        }
-        catch (PlayerLyncSDKException $e)
-        {
-            if(method_exists($e, 'getResponseData'))
-            {
-                throw new ConnectorException('API returned error: '.$e->getResponseData()['errors'][0]['message']);
-            }
-            else
-            {
-                throw new ConnectorException('API returned error: '.$e->getMessage());
-            }
-        }
+        $query = ['upsert' => 1];
+        return $this->post($this->service, $query, $data);
     }
 
     public function setQueryParams($params)
     {
         return $this->queryParams = $params;
+    }
+
+    /**
+     * @param array $data
+     * @return object
+     * @throws ConnectorException
+     */
+    public function insertActivityRecord($data)
+    {
+        $data['activity_id'] = self::createGUID();
+        $data['primary_org_id'] = $this->api->getPrimaryOrgId();
+        $data['member_id'] = $this->api->getMemberId();
+        return $this->post('/log/activities', [], $data);
+    }
+
+    /**
+     * @param $records
+     * @param bool $force
+     * @return mixed|null
+     */
+    public function insertRecords($records, $force = false)
+    {
+        if(!$force && count($records) < 30)
+        {
+            return null;
+        }
+
+        $requests = [];
+        foreach($records as $i => $record)
+        {
+            $requests[$i] = [
+                'method' => 'POST',
+                'path' => $this->service,
+                'body' => $record
+            ];
+        }
+
+        $responses = $this->api->poolRequests($requests);
+
+        $recordIndexes = array_keys($records);
+        /**
+         * @var int $index
+         * @var ResponseInterface $response
+         */
+        foreach($responses as $index => $response)
+        {
+            $requestIndex = $recordIndexes[$index];
+            if($response->getStatusCode() !== 200)
+            {
+                $records[$requestIndex] = new ClientException('Response returned invalid status code ' .$response->getStatusCode());
+            }
+            else
+            {
+                $responseBody = json_decode($response->getBody());
+                if($responseBody === null && json_last_error())
+                {
+                    $records[$requestIndex] = new ClientException('Malformed JSON response '.json_last_error_msg());
+                }
+                elseif ($responseBody->status === 'INVALID_REQUEST')
+                {
+                    $records[$requestIndex] = new ClientException($responseBody->errors[0]->message);
+                }
+                else
+                {
+                    $records[$requestIndex] = true;
+                }
+            }
+        }
+
+        return $records;
+    }
+
+    /**
+     * @return string
+     */
+    private static function createGUID()
+    {
+        $guid = null;
+        if (function_exists('com_create_guid'))
+        {
+            $guid = str_replace(array('}', '{'), '', com_create_guid());
+        }
+        else
+        {
+            mt_srand((double)microtime() * 10000);
+            $charid = strtoupper(md5(uniqid(mt_rand(), true)));
+            $hyphen = chr(45); // "-"
+            $guid = substr($charid, 0, 8) . $hyphen
+                . substr($charid, 8, 4) . $hyphen
+                . substr($charid, 12, 4) . $hyphen . '4'
+                . substr($charid, 16, 3) . $hyphen
+                . substr($charid, 20, 12);
+        }
+        return strtolower($guid);
+    }
+
+    /**
+     * @param $path
+     * @param $query
+     * @param $body
+     * @return object
+     * @throws ConnectorException
+     */
+    private function post($path, $query, $body)
+    {
+        $params = [
+            'query' => $query,
+            'json' => $body
+        ];
+        return $this->request('post', $path, $params);
+    }
+
+    /**
+     * @param $path
+     * @param $params
+     * @return object
+     * @throws ConnectorException
+     */
+    private function get($path,$params)
+    {
+        return $this->request('get', $path, $params);
+    }
+
+    /**
+     * @param $method
+     * @param $path
+     * @param $params
+     * @return mixed
+     * @throws ConnectorException
+     */
+    private function request($method, $path, $params)
+    {
+        try
+        {
+            return $this->api->$method($path, $params);
+        }
+        catch (ClientException $e)
+        {
+            throw new ConnectorException('API returned error: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function supportBatch()
+    {
+        return true;
     }
 }

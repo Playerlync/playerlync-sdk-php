@@ -8,6 +8,7 @@
 namespace PlMigration\Writer;
 
 use Keboola\Csv\Exception;
+use PlMigration\Exceptions\WriterException;
 
 class CsvWriter implements IWriter
 {
@@ -20,12 +21,19 @@ class CsvWriter implements IWriter
      * @param $file
      * @param $delimiter
      * @param $enclosure
-     * @throws Exception
+     * @throws WriterException
      */
     public function __construct($file, $delimiter, $enclosure)
     {
         $this->file = $file;
-        $this->writer = new \Keboola\Csv\CsvWriter($file, $delimiter, $enclosure);
+        try
+        {
+            $this->writer = new \Keboola\Csv\CsvWriter($file, $delimiter, $enclosure);
+        }
+        catch (\Exception $e)
+        {
+            throw new WriterException($e->getMessage());
+        }
     }
 
     /**

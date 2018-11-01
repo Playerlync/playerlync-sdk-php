@@ -47,9 +47,9 @@ class CsvReader implements IReader
         return $this->reader->current();
     }
 
-    public function hasNext()
+    public function valid()
     {
-        $this->reader->valid();
+        return $this->reader->valid();
     }
 
     public function next()
