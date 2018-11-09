@@ -13,4 +13,6 @@ interface IWriter
     public function writeRecord($record);
 
     public function getFile();
+
+    public function isAppend();
 }

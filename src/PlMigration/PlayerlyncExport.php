@@ -48,7 +48,7 @@ class PlayerlyncExport
         $this->writer = $writer;
         $this->model = $model;
 
-        if(isset($options['include_headers']) && $options['include_headers'] === true)
+        if(isset($options['include_headers']) && $options['include_headers'] === true && !$this->writer->isAppend())
         {
             $this->writer->writeRecord($model->getHeaders());
         }

@@ -76,8 +76,14 @@ trait ApiBuilderTrait
      */
     public function serviceEndpoint($servicePath)
     {
-        if('/' !== substr($servicePath,0,1))
-            $servicePath = '/'.$servicePath;
+        if(substr($servicePath,0,1) !== '/') {
+            $servicePath = '/' . $servicePath;
+        }
+
+        if(strpos($servicePath, '/'.$this->hostSettings['default_api_version'].'/') === 0) {
+            $servicePath = substr($servicePath, 3);
+        }
+
         $this->service = $servicePath;
         return $this;
     }
@@ -95,17 +101,31 @@ trait ApiBuilderTrait
     }
 
     /**
+     * Toggle to turn off async bulk requests, if applicable. (This only affects importing)
+     * @param $supportBatch
+     * @return $this
+     */
+    public function supportBatch($supportBatch = true)
+    {
+        $this->hostSettings['support_batch'] = $supportBatch;
+        return $this;
+    }
+
+    /**
+     * @param null $logger
+     * @return APIConnector
      * @throws BuilderException
      */
-    private function buildApi()
+    private function buildApi($logger = null)
     {
+        $this->hostSettings['logger'] = $logger;
         try
         {
             return new APIConnector($this->service, $this->queryParams, $this->hostSettings);
         }
         catch (ConnectorException $e)
         {
-            throw new BuilderException($e->getMessage());
+            throw new BuilderException('Unable to connect to the API: '. $e->getMessage());
         }
     }
 }

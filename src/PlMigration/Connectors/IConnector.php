@@ -44,6 +44,7 @@ interface IConnector
     public function insertActivityRecord($data);
 
     /**
+     * Return boolean whether this implementation supports bulk data insertions.
      * @return bool
      */
     public function supportBatch();

@@ -12,6 +12,8 @@ class Field
 {
     const CONSTANT = 'constant';
     const VARIABLE = 'default';
+    const PRIMARY_KEY = 'primary_key';
+    const SECONDARY_KEY = 'secondary_key';
 
     private $field;
     private $type;

@@ -7,6 +7,7 @@
 
 namespace PlMigration\Builder\Traits;
 
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use PlMigration\Exceptions\BuilderException;
@@ -26,7 +27,6 @@ trait ErrorLogBuilderTrait
 
     private function addError($message)
     {
-        //echo $message.PHP_EOL;
         if($this->errorLog !== null)
         {
             $this->errorLog->error($message);
@@ -35,7 +35,6 @@ trait ErrorLogBuilderTrait
 
     private function addDebug($message)
     {
-        //echo $message.PHP_EOL;
         if($this->errorLog !== null)
         {
             $this->errorLog->debug($message);
@@ -54,14 +53,15 @@ trait ErrorLogBuilderTrait
      */
     private function buildErrorLog($logName)
     {
-        if(!$this->errorLogFile === null)
+        if($this->errorLogFile === null)
         {
             return;
         }
 
         try
         {
-            $handler = new StreamHandler($this->errorLogFile, Logger::ERROR);
+            $handler = new StreamHandler($this->errorLogFile, Logger::DEBUG);
+            $handler->setFormatter(new LineFormatter("[%datetime%] %channel%.%level_name%: %message% %context%\n"));
             $this->errorLog = new Logger($logName);
             $this->errorLog->pushHandler($handler);
         }

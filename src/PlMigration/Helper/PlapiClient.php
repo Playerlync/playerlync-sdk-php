@@ -149,7 +149,7 @@ class PlapiClient
 
         if(isset($response->error_description))
         {
-            throw new ClientException('Could not authenticate with Oauth: ' . $response->error_description);
+            throw new ClientException('Could not authenticate: ' . $response->error_description);
         }
 
         if($this->primaryOrgId === null)
@@ -198,7 +198,7 @@ class PlapiClient
 
         if($response->getStatusCode() !== 200)
         {
-            throw new ClientException('Response returned invalid status code '.$response->getStatusCode());
+            throw new ClientException('Invalid status code response: '.$response->getStatusCode());
         }
 
         $json = json_decode($response->getBody());
@@ -217,7 +217,7 @@ class PlapiClient
     {
         if($response->status === 'INVALID_REQUEST')
         {
-            throw new ClientException('Api returned the following error: '.$response->errors[0]->message);
+            throw new ClientException($response->errors[0]->message);
         }
     }
 }

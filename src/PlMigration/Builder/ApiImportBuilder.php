@@ -38,7 +38,18 @@ class ApiImportBuilder
      */
     private $protocol;
 
+    /**
+     * Options that will be held by the importer
+     *
+     * @var array
+     */
     private $options = [];
+
+    /**
+     * Fields to be used in the import
+     * @var array
+     */
+    private $fields = [];
 
     /**
      *
@@ -134,6 +145,14 @@ class ApiImportBuilder
 
             $reader = $this->buildReader($this->getInputFile());
 
+            $record = $reader->getRecord();
+            foreach($model->getFields() as $field)
+            {
+                if($field->getType() !== Field::CONSTANT && !array_key_exists($field->getAlias(), $record))
+                {
+                    throw new BuilderException($field->getField().' is mapped to an invalid column number '.$field->getAlias());
+                }
+            }
             $api = $this->buildApi();
 
             return new PlayerlyncImport($api, $reader, $model, $options);

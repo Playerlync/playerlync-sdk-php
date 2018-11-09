@@ -9,26 +9,54 @@ namespace PlMigration\Connectors;
 
 use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
+use PlMigration\Helper\LoggerTrait;
 use PlMigration\Helper\PlapiClient;
 use Psr\Http\Message\ResponseInterface;
 
 class APIConnector implements IConnector
 {
+    use LoggerTrait;
     /**
      *
      * @var PlapiClient
      */
     private $api;
 
+    /**
+     *
+     * @var string
+     */
     private $service;
 
+    /**
+     *
+     * @var integer
+     */
     private $page = 1;
 
+    /**
+     *
+     * @var bool
+     */
     private $hasNext = true;
 
+    /**
+     *
+     * @var string
+     */
     private $queryParams;
 
+    /**
+     *
+     * @var object
+     */
     private $structure;
+
+    /**
+     *
+     * @var bool
+     */
+    private $supportBatch = true;
 
     /**
      * APIConnector constructor.
@@ -51,6 +79,15 @@ class APIConnector implements IConnector
 
         $this->service = $service;
         $this->queryParams = $query;
+        if(isset($config['support_batch']) && is_bool($config['support_batch']))
+        {
+            $this->supportBatch = $config['support_batch'];
+        }
+
+        if(isset($config['logger']))
+        {
+            $this->setLogger($config['logger']);
+        }
     }
 
     /**
@@ -62,6 +99,9 @@ class APIConnector implements IConnector
         $this->queryParams['page'] = $this->page;
 
         $response = $this->get($this->service, $this->queryParams);
+
+        if($this->page === 1)
+            $this->debug($response->totalitems. ' records returned');
 
         $this->hasNext = $this->moreRecordsExist($response);
         $this->page++;
@@ -280,6 +320,6 @@ class APIConnector implements IConnector
      */
     public function supportBatch()
     {
-        return true;
+        return $this->supportBatch;
     }
 }

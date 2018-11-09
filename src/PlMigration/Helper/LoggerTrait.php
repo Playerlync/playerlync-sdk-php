@@ -23,27 +23,27 @@ trait LoggerTrait
         $this->logger = $logger;
     }
 
-    public function error($message)
+    public function error($message, $context = [])
     {
         if($this->logger !== null)
         {
-            $this->logger->error($message);
+            $this->logger->error($message, $context);
         }
     }
 
-    public function warning($message)
+    public function warning($message, $context = [])
     {
         if($this->logger !== null)
         {
-            $this->logger->warning($message);
+            $this->logger->warning($message, $context);
         }
     }
 
-    public function debug($message)
+    public function debug($message, $context = [])
     {
         if($this->logger !== null)
         {
-            $this->logger->debug($message);
+            $this->logger->debug($message, $context);
         }
     }
 }

@@ -10,12 +10,17 @@ namespace PlMigration\Builder\Traits;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ReaderException;
 use PlMigration\Exceptions\WriterException;
-use PlMigration\Model\Field;
 use PlMigration\Reader\CsvReader;
 use PlMigration\Writer\CsvWriter;
 
 trait CsvBuilderTrait
 {
+    /**
+     * array of options allowed on the data file writer/reader
+     *
+     * @var array
+     */
+    private $csvOptions = [];
     /**
      * Delimiter used by the csv writer with a default value of a comma
      * @var string
@@ -27,12 +32,6 @@ trait CsvBuilderTrait
      * @var string
      */
     private $enclosure = '"';
-
-    /**
-     * Fields to be retrieved from the data provider
-     * @var Field[]
-     */
-    private $fields = [];
 
     public function delimiter($delimiter)
     {
@@ -47,6 +46,17 @@ trait CsvBuilderTrait
     }
 
     /**
+     * Toggle to allow export to use the export for the
+     * @param bool $append
+     * @return $this
+     */
+    public function writeFileAppend($append)
+    {
+        $this->csvOptions['file_append'] = $append;
+        return $this;
+    }
+
+    /**
      * @param $file
      * @return CsvWriter
      * @throws BuilderException
@@ -55,7 +65,7 @@ trait CsvBuilderTrait
     {
         try
         {
-            return new CsvWriter($file, $this->delimiter, $this->enclosure);
+            return new CsvWriter($file, $this->delimiter, $this->enclosure, $this->csvOptions);
         }
         catch (WriterException $e)
         {

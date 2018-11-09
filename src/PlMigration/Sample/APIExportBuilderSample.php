@@ -20,7 +20,7 @@ $ftp = $ftpBuilder->host('ftp.server.com')
     ->build();
 
 $exportBuilder = new APIExportBuilder();
-$exportedFile = $exportBuilder
+$exportBuilder
     //Set output file settings
     ->outputFile('outputSample.csv')
     ->enclosure('"')
@@ -37,8 +37,10 @@ $exportedFile = $exportBuilder
     //Creates the following date format (2018/10/02 03:17 PM)
     ->timeFormat(TimeFormat::YEAR, '/', TimeFormat::MONTH, '/', TimeFormat::DAY, ' ', TimeFormat::HOUR_12, ':', TimeFormat::MINUTES, ' ', TimeFormat::MERIDIAN)
     ->runHistoryFile('history.cfg') //keeps track of the history file
-    ->errorLog('error.log') //write errors into the error log in a desired location
-    ->includeHeaders() //optional inclusion of headers in output file
+    ->writeFileAppend(false) //Option to use to add multiple exports into one file. On true, file will append
+    ->errorLog('error.log'); //write errors into the error log in a desired location
+
+$exportBuilder->includeHeaders() //optional inclusion of headers in output file
     ->addField('field_1', 'login')
     ->addField('field_2', 'first name')//The header name and api_field
     ->addField('field_3', 'second name')

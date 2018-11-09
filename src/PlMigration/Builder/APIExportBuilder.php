@@ -68,6 +68,12 @@ class APIExportBuilder
     private $destination;
 
     /**
+     * Fields to be retrieved from the data provider
+     * @var Field[]
+     */
+    private $fields = [];
+
+    /**
      * ExportBuilder constructor.
      */
     public function __construct()
@@ -187,7 +193,7 @@ class APIExportBuilder
             $this->historyFileData = $this->verifyHistoryFile();
             $model = new ExportModel($this->buildFields(), $this->format);
             $writer = $this->buildWriter($this->outputFile);
-            $api = $this->buildApi();
+            $api = $this->buildApi($this->errorLog);
         }
         catch(BuilderException $e)
         {

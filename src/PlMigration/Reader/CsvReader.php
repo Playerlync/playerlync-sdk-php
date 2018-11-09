@@ -7,7 +7,6 @@
 
 namespace PlMigration\Reader;
 
-
 use Keboola\Csv\Exception;
 use PlMigration\Exceptions\ReaderException;
 
