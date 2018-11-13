@@ -56,13 +56,13 @@ class APIExportBuilder
     private $options = [];
 
     /**
-     *
+     * Protocol to use when sending the file to an outside server location
      * @var IClient
      */
     private $protocol;
 
     /**
-     *
+     * String holding the directory to send the created data file
      * @var string
      */
     private $destination;
@@ -82,7 +82,7 @@ class APIExportBuilder
     }
 
     /**
-     * Full path of where the exported file should be located
+     * Full path to where the created exported file should be located
      * @param $file
      * @return $this
      */
@@ -103,6 +103,11 @@ class APIExportBuilder
         return $this;
     }
 
+    /**
+     * Toggle to enable the exported file to include a header row with the names of the associated data.
+     *
+     * @return $this
+     */
     public function includeHeaders()
     {
         $this->options['include_headers'] = true;
@@ -121,6 +126,7 @@ class APIExportBuilder
     }
 
     /**
+     * Add a field to be added to the output file. The order of the output files is determined by the order of the function calls
      * @param $apiField
      * @param null $headerName
      * @param string $fieldType
@@ -133,6 +139,12 @@ class APIExportBuilder
         return $this;
     }
 
+    /**
+     * Select a directory to send the exported file to via a selected protocol client (ftp, sftp, etc)
+     * @param $destination
+     * @param IClient $protocol
+     * @return $this
+     */
     public function sendTo($destination, IClient $protocol)
     {
         $this->protocol = $protocol;
@@ -141,6 +153,7 @@ class APIExportBuilder
     }
 
     /**
+     * Function that will export the api data to an output file and then send the file to another server if configured
      * @return mixed
      * @throws BuilderException
      * @throws ExportException
@@ -237,6 +250,7 @@ class APIExportBuilder
     }
 
     /**
+     * Validate fields the are added to the output file are valid
      * @return array
      * @throws BuilderException
      */
@@ -282,6 +296,7 @@ class APIExportBuilder
     }
 
     /**
+     *
      * @throws BuilderException
      */
     private function saveRunTime()

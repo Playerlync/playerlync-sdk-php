@@ -21,6 +21,7 @@ use PlMigration\Writer\TransactionLogger;
 
 class ApiImportBuilder
 {
+    /** sub classes that are also used to create the import */
     use CsvBuilderTrait;
     use ApiBuilderTrait;
     use ErrorLogBuilderTrait;
@@ -66,8 +67,8 @@ class ApiImportBuilder
     }
 
     /**
-     * Get file to use for importing. If the protocol is set, it will grab from the server specified (ftp, http, etc).
-     * Otherwise it will try to retrieve the file locally.
+     * Get file to use for importing. If the protocol is set, it will grab from the server specified (ftp, sftp, etc).
+     * Otherwise it will try to find the file locally.
      *
      * @param $file
      * @param null $protocol
@@ -81,6 +82,10 @@ class ApiImportBuilder
     }
 
     /**
+     * Toggle to determine if the input file provided contains a header row.
+     * By enabling this toggle, the import will ignore the first row of the data file to prevent an unnecessary insertion
+     * error into the Playerlync system.
+     *
      * @return $this
      */
     public function hasHeaders()
@@ -89,6 +94,13 @@ class ApiImportBuilder
         return $this;
     }
 
+    /**
+     * Set the directory where the transaction files will be created.
+     * This will also automatically enable the transaction log functionality.
+     *
+     * @param $transactionLogDir
+     * @return $this
+     */
     public function transactionLog($transactionLogDir)
     {
         if($transactionLogDir === '')
@@ -99,29 +111,35 @@ class ApiImportBuilder
     }
 
     /**
+     * field will be mapped the selected api field from the call
+     *
      * @param string $apiField
      * @param string $type
      * @return $this
      */
     public function addField($apiField, $type = Field::VARIABLE)
     {
-        $this->mapField($apiField, count($this->fields), $type);
+        $this->fields[] = new Field($apiField, count($this->fields), $type);
+        //$this->mapField($apiField, count($this->fields), $type);
         return $this;
     }
 
     /**
+     * Field will be mapped the selected alias. By default the alias represents a column number and not
      * @param $apiField
-     * @param $columnNumber
+     * @param $alias
      * @param string $type
      * @return $this
      */
-    public function mapField($apiField, $columnNumber, $type = Field::VARIABLE)
+    public function mapField($apiField, $alias, $type = Field::VARIABLE)
     {
-        $this->fields[$columnNumber][] = new Field($apiField, $columnNumber, $type);
+        $this->fields[] = new Field($apiField, $alias, $type);
         return $this;
     }
 
     /**
+     * Build all objects and execute the import import process
+     *
      * @throws BuilderException
      */
     public function import()
@@ -130,6 +148,7 @@ class ApiImportBuilder
     }
 
     /**
+     * Verify the data provided by the builder functions and create all objects needed for the import
      * @return PlayerlyncImport
      * @throws BuilderException
      */
@@ -165,6 +184,7 @@ class ApiImportBuilder
     }
 
     /**
+     * Find and verify the input file provided. If a protocol was set, the file will be downloaded.
      * @return string
      * @throws BuilderException
      */
@@ -195,7 +215,7 @@ class ApiImportBuilder
     }
 
     /**
-     * Verify there are no duplicate fields
+     * Verify and re-organize the field data for the model
      * @return array
      * @throws BuilderException
      */
@@ -203,23 +223,21 @@ class ApiImportBuilder
     {
         $fields = [];
 
-        foreach($this->fields as $columnIndex => $mappedFields)
+        foreach($this->fields as $fieldInfo)
         {
-            /** @var Field $fieldInfo */
-            foreach($mappedFields as $fieldInfo)
+            if(array_key_exists($fieldInfo->getField(), $fields))
             {
-                if(array_key_exists($fieldInfo->getField(), $fields))
-                {
-                    throw new BuilderException('Attempting to add duplicate field: '. $fieldInfo->getField());
-                }
-                $fields[$fieldInfo->getField()] = $fieldInfo;
+                throw new BuilderException('Attempting to add duplicate field: '. $fieldInfo->getField());
             }
+            $fields[$fieldInfo->getField()] = $fieldInfo;
         }
         $this->fields = [];
         return $fields;
     }
 
     /**
+     * Set the import extra options including the transaction log and the logging capability
+     *
      * @return array
      * @throws BuilderException
      */

@@ -15,16 +15,20 @@ use PlMigration\Exceptions\BuilderException;
 trait ErrorLogBuilderTrait
 {
     /**
-     * Store errors into an error log file
+     * Logger object
      * @var Logger
      */
     private $errorLog;
 
     /**
-     * Path to the location of the error log created
+     * Location of the error log file
      */
     private $errorLogFile;
 
+    /**
+     * Add an error message
+     * @param $message
+     */
     private function addError($message)
     {
         if($this->errorLog !== null)
@@ -33,6 +37,10 @@ trait ErrorLogBuilderTrait
         }
     }
 
+    /**
+     * Add a debug message
+     * @param $message
+     */
     private function addDebug($message)
     {
         if($this->errorLog !== null)
@@ -41,6 +49,11 @@ trait ErrorLogBuilderTrait
         }
     }
 
+    /**
+     * Set the location of where the file error/debug log will reside
+     * @param $file
+     * @return $this
+     */
     public function errorLog($file)
     {
         $this->errorLogFile = $file;
@@ -48,6 +61,7 @@ trait ErrorLogBuilderTrait
     }
 
     /**
+     * Create the error log with the settings chosen
      * @param $logName
      * @throws BuilderException
      */

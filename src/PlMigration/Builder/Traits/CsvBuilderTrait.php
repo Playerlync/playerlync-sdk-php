@@ -33,12 +33,22 @@ trait CsvBuilderTrait
      */
     private $enclosure = '"';
 
+    /**
+     * Set the recognized delimiter character between fields.
+     * @param $delimiter
+     * @return $this
+     */
     public function delimiter($delimiter)
     {
         $this->delimiter = $delimiter;
         return $this;
     }
 
+    /**
+     * Set the recognized enclosure characted between fields.
+     * @param $enclosure
+     * @return $this
+     */
     public function enclosure($enclosure)
     {
         $this->enclosure = $enclosure;
@@ -46,7 +56,8 @@ trait CsvBuilderTrait
     }
 
     /**
-     * Toggle to allow export to use the export for the
+     * Toggle to allow export to use the export for multiple executions into a file.
+     * Used by the export application for running the same service with different filter settings into one file.
      * @param bool $append
      * @return $this
      */
@@ -57,6 +68,7 @@ trait CsvBuilderTrait
     }
 
     /**
+     * Build the csv writer object with the settings desired
      * @param $file
      * @return CsvWriter
      * @throws BuilderException
@@ -74,6 +86,7 @@ trait CsvBuilderTrait
     }
 
     /**
+     * Build the csv reader object with the settings desired
      * @param $file
      * @return CsvReader
      * @throws BuilderException
