@@ -22,12 +22,19 @@ trait ApiBuilderTrait
     /**
      * @var string
      */
-    private $service;
+    private $postService;
+
+    /**
+     * @var string
+     */
+    private $getService;
 
     /**
      * @var array
      */
-    private $queryParams;
+    protected $queryParams;
+
+    private $source;
 
     /**
      * Set the client_id to be used to connect to the playerlync API
@@ -109,22 +116,26 @@ trait ApiBuilderTrait
     }
 
     /**
-     * Set the service to be used by the API connection for gathering data or inserting data.
+     * Set the service to be used by the API connection for inserting data.
      * Refer to the API docs for information on services available
      * @param string $servicePath
      * @return $this
      */
-    public function serviceEndpoint($servicePath)
+    public function postService($servicePath)
     {
-        if(substr($servicePath,0,1) !== '/') {
-            $servicePath = '/' . $servicePath;
-        }
+        $this->postService = $servicePath;
+        return $this;
+    }
 
-        if(strpos($servicePath, '/'.$this->hostSettings['default_api_version'].'/') === 0) {
-            $servicePath = substr($servicePath, 3);
-        }
-
-        $this->service = $servicePath;
+    /**
+     * Set the service to be used by the API connection for retrieving data.
+     * Refer to the API docs for information on services available
+     * @param string $servicePath
+     * @return $this
+     */
+    public function getService($servicePath)
+    {
+        $this->getService = $servicePath;
         return $this;
     }
 
@@ -165,6 +176,12 @@ trait ApiBuilderTrait
         return $this;
     }
 
+    protected function source($source)
+    {
+        $this->source = $source;
+        return $this;
+    }
+
     /**
      * Build the playerlync api connection with the desired settings.
      * @param null $logger
@@ -176,7 +193,7 @@ trait ApiBuilderTrait
         $this->hostSettings['logger'] = $logger;
         try
         {
-            return new APIConnector($this->service, $this->queryParams, $this->hostSettings);
+            return new APIConnector($this->getService, $this->queryParams, $this->postService, $this->hostSettings, $this->source);
         }
         catch (ConnectorException $e)
         {

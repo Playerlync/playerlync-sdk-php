@@ -16,6 +16,8 @@ use Psr\Http\Message\ResponseInterface;
 class APIConnector implements IConnector
 {
     use LoggerTrait;
+
+    const DEFAULT_SOURCE = 'sdk';
     /**
      *
      * @var PlapiClient
@@ -23,10 +25,16 @@ class APIConnector implements IConnector
     private $api;
 
     /**
-     *
+     * API path of the GET service to be used
      * @var string
      */
-    private $service;
+    private $getService;
+
+    /**
+     * API path of the POST service to be used
+     * @var string
+     */
+    private $postService;
 
     /**
      *
@@ -59,26 +67,43 @@ class APIConnector implements IConnector
     private $supportBatch = true;
 
     /**
+     * Name of source for the records that will be added to the API
+     * @var string
+     */
+    private $source;
+
+    /**
      * APIConnector constructor.
-     * @param array $config
-     * @param string $service
+     * @param $getService
      * @param array $query
+     * @param $postService
+     * @param array $config
+     * @param null $source
      * @throws ConnectorException
      */
-    public function __construct($service, $query, array $config = [])
+    public function __construct($getService, $query, $postService, array $config = [], $source = null)
     {
         try
         {
             $this->api = new PlapiClient($config);
-
         }
         catch (ClientException $e)
         {
             throw new ConnectorException($e->getMessage());
         }
 
-        $this->service = $service;
+        if($getService !== null && substr($getService,0,1) !== '/') {
+            $getService = '/' . $getService;
+        }
+
+        if($postService !== null && substr($postService,0,1) !== '/') {
+            $postService = '/' . $postService;
+        }
+
+        $this->getService = $getService;
+        $this->postService = $postService;
         $this->queryParams = $query;
+
         if(isset($config['support_batch']) && is_bool($config['support_batch']))
         {
             $this->supportBatch = $config['support_batch'];
@@ -88,6 +113,8 @@ class APIConnector implements IConnector
         {
             $this->setLogger($config['logger']);
         }
+        $this->debug('Connected to '.$this->api->getServerVersion().' server version.');
+        $this->source = $source;
     }
 
     /**
@@ -96,12 +123,24 @@ class APIConnector implements IConnector
      */
     public function getRecords()
     {
-        $this->queryParams['page'] = $this->page;
+        $queryParams = $this->queryParams;
+        if($this->source !== null)
+        {
+            if(isset($queryParams['filter']))
+            {
+                $queryParams['filter'] .= ',source|eq|'.$this->source;
+            }
+            else
+            {
+                $queryParams['filter'] = 'source|eq|'.$this->source;
+            }
+        }
+        $queryParams['page'] = $this->page;
 
-        $response = $this->get($this->service, $this->queryParams);
+        $response = $this->get($this->getService, $queryParams);
 
         if($this->page === 1)
-            $this->debug($response->totalitems. ' records returned');
+            $this->debug($response->totalitems. ' records found');
 
         $this->hasNext = $this->moreRecordsExist($response);
         $this->page++;
@@ -144,7 +183,7 @@ class APIConnector implements IConnector
     {
         if(!$this->structure)
         {
-            $response = $this->get($this->service, ['structure'=> 1]);
+            $response = $this->get($this->getService, ['structure'=> 1]);
 
             $this->structure = $response->data->structure;
         }
@@ -167,7 +206,7 @@ class APIConnector implements IConnector
     public function insertRecord($data)
     {
         $query = ['upsert' => 1];
-        return $this->post($this->service, $query, $data);
+        return $this->post($this->postService, $query, $data);
     }
 
     public function setQueryParams($params)
@@ -190,22 +229,16 @@ class APIConnector implements IConnector
 
     /**
      * @param $records
-     * @param bool $force
-     * @return mixed|null
+     * @return mixed
      */
-    public function insertRecords($records, $force = false)
+    public function insertRecords($records)
     {
-        if(!$force && count($records) < 30)
-        {
-            return null;
-        }
-
         $requests = [];
         foreach($records as $i => $record)
         {
             $requests[$i] = [
                 'method' => 'POST',
-                'path' => $this->service,
+                'path' => $this->postService,
                 'body' => $record
             ];
         }
@@ -293,6 +326,7 @@ class APIConnector implements IConnector
      */
     private function get($path,$params)
     {
+        $this->debug('Running GET '.$path, $params);
         return $this->request('get', $path, $params);
     }
 
@@ -321,5 +355,27 @@ class APIConnector implements IConnector
     public function supportBatch()
     {
         return $this->supportBatch;
+    }
+
+    /**
+     * Overwrite settings needed
+     * @param array $options
+     */
+    public function setOptions(array $options)
+    {
+        if(isset($options['page']))
+        {
+            $this->page = $options['page'];
+        }
+    }
+
+    public function getGetService()
+    {
+        return $this->getService;
+    }
+
+    public function getPostService()
+    {
+        return $this->postService;
     }
 }

@@ -12,7 +12,7 @@ use PlMigration\Exceptions\ConnectorException;
 interface IConnector
 {
     /**
-     * Retrieve an array of records from the
+     * Retrieve an array of records from the playerlync system
      * @return array
      * @throws ConnectorException
      */
@@ -23,6 +23,12 @@ interface IConnector
      * @return bool
      */
     public function hasNext();
+
+    /**
+     * Overwrite settings needed
+     * @param array $options
+     */
+    public function setOptions(array $options);
 
     /**
      * Insert the data into the system
@@ -36,10 +42,9 @@ interface IConnector
     /**
      * Insert an array of records into the system
      * @param $requests
-     * @param bool $force
      * @return mixed
      */
-    public function insertRecords($requests, $force = false);
+    public function insertRecords($requests);
 
     /**
      * Create a record tracking the actions that have happened for record keeping

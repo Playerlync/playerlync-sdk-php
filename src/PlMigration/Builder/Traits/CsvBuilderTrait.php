@@ -73,7 +73,7 @@ trait CsvBuilderTrait
      * @return CsvWriter
      * @throws BuilderException
      */
-    private function buildWriter($file)
+    protected function buildWriter($file)
     {
         try
         {
@@ -91,7 +91,7 @@ trait CsvBuilderTrait
      * @return CsvReader
      * @throws BuilderException
      */
-    private function buildReader($file)
+    protected function buildReader($file)
     {
         try
         {

@@ -18,7 +18,7 @@ trait ErrorLogBuilderTrait
      * Logger object
      * @var Logger
      */
-    private $errorLog;
+    protected $errorLog;
 
     /**
      * Location of the error log file
@@ -29,7 +29,7 @@ trait ErrorLogBuilderTrait
      * Add an error message
      * @param $message
      */
-    private function addError($message)
+    protected function addError($message)
     {
         if($this->errorLog !== null)
         {
@@ -41,7 +41,7 @@ trait ErrorLogBuilderTrait
      * Add a debug message
      * @param $message
      */
-    private function addDebug($message)
+    protected function addDebug($message)
     {
         if($this->errorLog !== null)
         {
@@ -65,7 +65,7 @@ trait ErrorLogBuilderTrait
      * @param $logName
      * @throws BuilderException
      */
-    private function buildErrorLog($logName)
+    protected function buildErrorLog($logName)
     {
         if($this->errorLogFile === null)
         {

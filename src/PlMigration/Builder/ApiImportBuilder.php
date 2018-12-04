@@ -11,6 +11,7 @@ use PlMigration\Builder\Traits\ApiBuilderTrait;
 use PlMigration\Builder\Traits\CsvBuilderTrait;
 use PlMigration\Builder\Traits\ErrorLogBuilderTrait;
 use PlMigration\Client\IClient;
+use PlMigration\Connectors\APIConnector;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\WriterException;
@@ -172,9 +173,15 @@ class ApiImportBuilder
                     throw new BuilderException($field->getField().' is mapped to an invalid column number '.$field->getAlias());
                 }
             }
-            $api = $this->buildApi();
+            $this->source(APIConnector::DEFAULT_SOURCE);
+            $api = $this->buildApi($this->errorLog);
 
-            return new PlayerlyncImport($api, $reader, $model, $options);
+            if($api->getPostService() === null)
+            {
+                throw new BuilderException('postService() method needs to provide a Playerlync API path to run import');
+            }
+
+            return $this->buildImporter($model, $reader, $api, $options);
         }
         catch(BuilderException $e)
         {
@@ -188,7 +195,7 @@ class ApiImportBuilder
      * @return string
      * @throws BuilderException
      */
-    private function getInputFile()
+    protected function getInputFile()
     {
         if($this->protocol !== null) //Get input file from server location
         {
@@ -219,7 +226,7 @@ class ApiImportBuilder
      * @return array
      * @throws BuilderException
      */
-    private function buildFields()
+    protected function buildFields()
     {
         $fields = [];
 
@@ -241,7 +248,7 @@ class ApiImportBuilder
      * @return array
      * @throws BuilderException
      */
-    private function buildOptions()
+    protected function buildOptions()
     {
         $options = $this->options;
         if($this->transactionLogDir !== null)
@@ -259,5 +266,10 @@ class ApiImportBuilder
         $options['logger'] = $this->errorLog;
 
         return $options;
+    }
+
+    protected function buildImporter($model, $reader, $api, $options)
+    {
+        return new PlayerlyncImport($api, $reader, $model, $options);
     }
 }

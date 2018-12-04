@@ -31,7 +31,7 @@ $exportBuilder
     ->clientSecret('client_secret')
     ->username('username')
     ->password('password')
-    ->serviceEndpoint('/service/path')//service path to get information from starting after the api version (/members,/groups)
+    ->getService('/service/path')//service path to get information from starting after the api version (/members,/groups)
     ->filter('delete_date|isnull')
     ->orderBy('order')
     //Creates the following date format (2018/10/02 03:17 PM)

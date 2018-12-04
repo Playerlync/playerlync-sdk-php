@@ -29,7 +29,7 @@ $importer
     ->password('password')
     ->primaryOrgId('primary org id')
     //setup service
-    ->serviceEndpoint('/service/path'); //Set the service to use
+    ->postService('/service/path'); //Set the service to use
 
 //There are two ways to connect the data in the file to the api
 

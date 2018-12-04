@@ -21,17 +21,47 @@ class PlapiClient
      */
     private $client;
 
+    /**
+     * API version to make requests for
+     *
+     * @var string
+     */
     private $apiVersion = 'v3';
+
+    /**
+     * JWT access token retrieved from oauth server
+     *
+     * @var string
+     */
     private $accessToken;
+
+    /**
+     * Primary org id value to use for Primary-Org-Id header
+     *
+     * @var string
+     */
     private $primaryOrgId;
+
+    /**
+     * member Id of authenticated user used
+     *
+     * @var string
+     */
     private $memberId;
+
+    /**
+     * server info
+     *
+     * @var array
+     */
+    private $serverInfo = [];
 
     /**
      * PlapiClient constructor.
      * @param array $config
      * @throws ClientException
      */
-    public function __construct($config = [])
+    public function __construct(array $config = [])
     {
         $required = ['host', 'client_id', 'client_secret', 'username', 'password'];
 
@@ -54,6 +84,7 @@ class PlapiClient
         }
 
         $this->setupClient($config);
+        $this->ping();
         $this->authenticate($config);
     }
 
@@ -119,7 +150,7 @@ class PlapiClient
             }
         };
 
-        return Pool::batch($this->client, $requests($requestsArray), ['concurrency' => '10']);
+        return Pool::batch($this->client, $requests($requestsArray), ['concurrency' => '25']);
     }
 
     public function getMemberId()
@@ -175,6 +206,10 @@ class PlapiClient
     {
         if($path[0] !== '/')
             $path = '/'.$path;
+        if(strpos($path, '/' . $this->apiVersion . '/') === 0)
+        {
+            return '/plapi'.$path;
+        }
         return '/plapi/'.$this->apiVersion.$path;
     }
 
@@ -219,5 +254,30 @@ class PlapiClient
         {
             throw new ClientException($response->errors[0]->message);
         }
+    }
+
+    /**
+     * @throws ClientException
+     */
+    private function ping()
+    {
+        try
+        {
+            $response = $this->client->get('/plapi/v3/service/ping');
+        }
+        catch(GuzzleException $e)
+        {
+            throw new ClientException('Unable to connect to ping service');
+        }
+
+        if($header = $response->getHeader('Pl-Version'))
+        {
+            $this->serverInfo['version'] = $header[0];
+        }
+    }
+
+    public function getServerVersion()
+    {
+        return array_key_exists('version', $this->serverInfo) ? $this->serverInfo['version'] : 'Unknown';
     }
 }

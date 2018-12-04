@@ -23,49 +23,49 @@ class PlayerlyncImport
      * Connection protocol to the server
      * @var IConnector
      */
-    private $connector;
+    protected $connector;
 
     /**
      * Model holding template for mapping information into corresponding fields
      * @var ImportModel
      */
-    private $model;
+    protected $model;
 
     /**
      * Data file reader
      * @var IReader
      */
-    private $reader;
+    protected $reader;
 
     /**
      * Transaction logger that will separate successful & failed records from the data file that couldn't make it into
      * the server
      * @var TransactionLogger
      */
-    private $transactionLogger;
+    protected $transactionLogger;
 
     /**
      * Counter of successful and failed records during the import process
      * @var array
      */
-    private $counter;
+    protected $counter;
 
     /**
      * Array that holds the request data to be sent in batch.
      *
      * @var array
      */
-    private $queue = [];
+    protected $queue = [];
 
     /**
      * Array holding data of unique records already inserted
      *
      * @var array
      */
-    private $memo = [];
+    protected $memo = [];
 
     /**
-     * Instantiate a new exporter.
+     * Instantiate a new importer.
      * @param IConnector $connector
      * @param IReader $reader
      * @param ImportModel $model
@@ -111,9 +111,9 @@ class PlayerlyncImport
     /**
      * @param $record
      */
-    public function insertRecord($record)
+    protected function insertRecord($record)
     {
-        $row = $this->model->setApiFields($record);
+        $row = $this->setFieldNames($record);
         try
         {
             if($this->isDuplicate($row))
@@ -122,7 +122,7 @@ class PlayerlyncImport
                 return;
             }
             $this->connector->insertRecord($row);
-            $this->success($record);
+            $this->success($record, $row);
         }
         catch(ConnectorException $e)
         {
@@ -130,9 +130,9 @@ class PlayerlyncImport
         }
     }
 
-    public function insertRecords($record, $moreExist = true)
+    protected function insertRecords($record, $force = false)
     {
-        $row = $this->model->setApiFields($record);
+        $row = $this->setFieldNames($record);
         if($this->isDuplicate($row))
         {
             $this->failure($row, 'Prevented to insert duplicate record based on the primary key', $row);
@@ -141,9 +141,12 @@ class PlayerlyncImport
         $this->queue['raw'][] = $record;
         $this->queue['formatted'][] = $row;
 
-        $responses = $this->connector->insertRecords($this->queue['formatted'], !$moreExist);
-        if($responses === null)
-            return;
+        if(!$force && count($this->queue['formatted']) < 50)
+        {
+            return null;
+        }
+
+        $responses = $this->connector->insertRecords($this->queue['formatted']);
 
         foreach($responses as $index => $response)
         {
@@ -153,13 +156,21 @@ class PlayerlyncImport
             }
             else
             {
-                $this->success($this->queue['raw'][$index]);
+                $this->success($this->queue['raw'][$index], $this->queue['formatted'][$index]);
             }
             unset($this->queue['raw'][$index], $this->queue['formatted'][$index]);
         }
     }
 
-    private function failure($record, $errorMessage, array $context = [])
+    protected function setFieldNames($record)
+    {
+        $row = $this->model->setApiFields($record);
+        $row['source'] = 'sdk';
+        $row['sync_date'] = time();
+        return $row;
+    }
+
+    protected function failure($record, $errorMessage, array $context = [])
     {
         ++$this->counter['failed'];
         $this->error('Failed to import record: '.$errorMessage, $context);
@@ -170,13 +181,13 @@ class PlayerlyncImport
         }
     }
 
-    private function success($record)
+    protected function success($rawRecord, $apiRecord)
     {
         ++$this->counter['success'];
-        $this->addToMemo($record);
+        $this->addToMemo($apiRecord);
         if($this->transactionLogger !== null)
         {
-            $this->transactionLogger->addSuccess($record);
+            $this->transactionLogger->addSuccess($rawRecord);
         }
     }
 
@@ -192,7 +203,7 @@ class PlayerlyncImport
      * @param $startTime
      * @param $endTime
      */
-    public function sendActivityRecord($startTime, $endTime)
+    protected function sendActivityRecord($startTime, $endTime)
     {
         $message = "{$this->counter['success']} records updated, {$this->counter['failed']} records failed";
         $data = [
@@ -218,7 +229,7 @@ class PlayerlyncImport
      * @param array $data
      * @return bool
      */
-    public function isDuplicate($data)
+    protected function isDuplicate($data)
     {
         if($this->model->getPrimaryKey() !== null)
         {
@@ -231,7 +242,7 @@ class PlayerlyncImport
         return false;
     }
 
-    public function addToMemo($data)
+    protected function addToMemo($data)
     {
         if($this->model->getPrimaryKey() !== null)
         {

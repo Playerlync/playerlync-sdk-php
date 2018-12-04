@@ -207,28 +207,29 @@ class APIExportBuilder
             $model = new ExportModel($this->buildFields(), $this->format);
             $writer = $this->buildWriter($this->outputFile);
             $api = $this->buildApi($this->errorLog);
+            if($api->getGetService() === null)
+            {
+                throw new BuilderException('getService() method needs to provide a playerlync API path to run export');
+            }
+
+            $model->setTimeFields($api->getTimeFields());
+            $this->addLastRunTimeFilter($this->historyFileData, pathinfo($this->outputFile,PATHINFO_BASENAME), $api->getStructure());
+            $api->setQueryParams($this->queryParams);
+
+            $this->options['logger'] = $this->errorLog;
+
+            return new PlayerlyncExport($api, $writer, $model, $this->options);
         }
         catch(BuilderException $e)
         {
             $this->addError($e->getMessage());
             throw $e;
         }
-
-        try
-        {
-            $model->setTimeFields($api->getTimeFields());
-            $this->addLastRunTimeFilter($this->historyFileData, pathinfo($this->outputFile,PATHINFO_BASENAME), $api->getStructure());
-            $api->setQueryParams($this->queryParams);
-        }
-        catch (ConnectorException $e)
+        catch(ConnectorException $e)
         {
             $this->addError($e->getMessage());
             throw new BuilderException($e->getMessage());
         }
-
-        $this->options['logger'] = $this->errorLog;
-
-        return new PlayerlyncExport($api, $writer, $model, $this->options);
     }
 
     /**
