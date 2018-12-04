@@ -39,19 +39,20 @@ class ImportModel
         }
     }
 
-    public function setApiFields($record)
+    public function fillModel($record)
     {
         $row = [];
         foreach($this->apiFields as $field => $fieldInfo)
         {
             if($fieldInfo->getType() === Field::CONSTANT)
-            {
-                $row[$field] = $fieldInfo->getAlias();
-            }
+                $value = $fieldInfo->getAlias();
             else
             {
-                $row[$field] = trim($record[$fieldInfo->getAlias()]);
+                $value = trim($record[$fieldInfo->getAlias()]);
+                foreach($fieldInfo->getExtra() as $extraAction)
+                    $value = $extraAction->execute($value);
             }
+            $row[$field] = $value;
         }
         return $row;
     }

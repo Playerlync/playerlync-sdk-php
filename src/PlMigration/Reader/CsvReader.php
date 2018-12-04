@@ -55,4 +55,13 @@ class CsvReader implements IReader
     {
         $this->reader->next();
     }
+
+    /**
+     * Return a descriptive name for the reader being used such as filename or API name
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)pathinfo($this->file, PATHINFO_BASENAME);
+    }
 }

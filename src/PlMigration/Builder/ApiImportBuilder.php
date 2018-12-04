@@ -15,6 +15,7 @@ use PlMigration\Connectors\APIConnector;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\WriterException;
+use PlMigration\Helper\DataFunctions\IValueManipulator;
 use PlMigration\Model\Field;
 use PlMigration\Model\ImportModel;
 use PlMigration\PlayerlyncImport;
@@ -87,11 +88,12 @@ class ApiImportBuilder
      * By enabling this toggle, the import will ignore the first row of the data file to prevent an unnecessary insertion
      * error into the Playerlync system.
      *
+     * @param bool $hasHeaders
      * @return $this
      */
-    public function hasHeaders()
+    public function hasHeaders($hasHeaders)
     {
-        $this->options['include_headers'] = true;
+        $this->options['include_headers'] = $hasHeaders;
         return $this;
     }
 
@@ -116,11 +118,12 @@ class ApiImportBuilder
      *
      * @param string $apiField
      * @param string $type
+     * @param array|IValueManipulator $extra
      * @return $this
      */
-    public function addField($apiField, $type = Field::VARIABLE)
+    public function addField($apiField, $type = Field::VARIABLE, $extra = [])
     {
-        $this->fields[] = new Field($apiField, count($this->fields), $type);
+        $this->fields[] = new Field($apiField, count($this->fields), $type, $extra);
         //$this->mapField($apiField, count($this->fields), $type);
         return $this;
     }
@@ -130,11 +133,12 @@ class ApiImportBuilder
      * @param $apiField
      * @param $alias
      * @param string $type
+     * @param array|IValueManipulator $extra
      * @return $this
      */
-    public function mapField($apiField, $alias, $type = Field::VARIABLE)
+    public function mapField($apiField, $alias, $type = Field::VARIABLE, $extra = [])
     {
-        $this->fields[] = new Field($apiField, $alias, $type);
+        $this->fields[] = new Field($apiField, $alias, $type, $extra);
         return $this;
     }
 

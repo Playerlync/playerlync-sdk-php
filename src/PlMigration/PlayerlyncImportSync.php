@@ -47,6 +47,7 @@ class PlayerlyncImportSync extends PlayerlyncImport
 
     public function import()
     {
+        $this->debug('Importing '.$this->reader.' into playerlync API');
         $startTime = microtime(true);
         while($this->reader->valid())
         {

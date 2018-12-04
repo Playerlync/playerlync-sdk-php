@@ -87,10 +87,16 @@ class PlayerlyncImport
         {
             $this->setLogger($options['logger']);
         }
+
+        if(array_key_exists('include_headers', $options) && $options['include_headers'] === true)
+        {
+            $this->reader->next(); //Skip the first row of the data as it contains the header names
+        }
     }
 
     public function import()
     {
+        $this->debug('Importing '.$this->reader.' into playerlync API');
         $startTime = microtime(true);
         while($this->reader->valid())
         {
@@ -113,7 +119,7 @@ class PlayerlyncImport
      */
     protected function insertRecord($record)
     {
-        $row = $this->setFieldNames($record);
+        $row = $this->fillModelWithData($record);
         try
         {
             if($this->isDuplicate($row))
@@ -132,7 +138,7 @@ class PlayerlyncImport
 
     protected function insertRecords($record, $force = false)
     {
-        $row = $this->setFieldNames($record);
+        $row = $this->fillModelWithData($record);
         if($this->isDuplicate($row))
         {
             $this->failure($row, 'Prevented to insert duplicate record based on the primary key', $row);
@@ -162,9 +168,9 @@ class PlayerlyncImport
         }
     }
 
-    protected function setFieldNames($record)
+    protected function fillModelWithData($record)
     {
-        $row = $this->model->setApiFields($record);
+        $row = $this->model->fillModel($record);
         $row['source'] = 'sdk';
         $row['sync_date'] = time();
         return $row;
