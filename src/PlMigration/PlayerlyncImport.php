@@ -103,7 +103,7 @@ class PlayerlyncImport
             $record = $this->getRecord();
             if($this->connector->supportBatch())
             {
-                $this->insertRecords($record, $this->reader->valid());
+                $this->insertRecords($record, !$this->reader->valid());
             }
             else
             {
@@ -141,7 +141,7 @@ class PlayerlyncImport
         $row = $this->fillModelWithData($record);
         if($this->isDuplicate($row))
         {
-            $this->failure($row, 'Prevented to insert duplicate record based on the primary key', $row);
+            $this->failure($record, 'Prevented to insert duplicate record based on the primary key', $row);
             return;
         }
         $this->queue['raw'][] = $record;

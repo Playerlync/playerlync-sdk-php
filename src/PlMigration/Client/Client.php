@@ -47,12 +47,38 @@ abstract class Client implements IClient
 
         $remoteLocation .= pathinfo($localFile, PATHINFO_BASENAME);
 
-        if($this->remoteFileExists($remoteLocation) && !$this->allowOverwrite)
+        if(!$this->allowOverwrite && $this->remoteFileExists($remoteLocation))
         {
             throw new ClientException('File already exists in the server');
         }
 
         return $this->uploadFile($remoteLocation, $localFile);
+    }
+
+    /**
+     * @param $remoteFile
+     * @throws ClientException
+     */
+    public function delete($remoteFile)
+    {
+        if($this->remoteFileExists($remoteFile))
+        {
+            $this->deleteFile($remoteFile);
+        }
+    }
+
+    /**
+     * @param $remoteFile
+     * @param $remoteDestination
+     * @return mixed|void
+     * @throws ClientException
+     */
+    public function move($remoteFile, $remoteDestination)
+    {
+        if($this->remoteFileExists($remoteFile) && $this->remoteFileExists($remoteDestination))
+        {
+            $this->moveFile($remoteFile, $remoteDestination);
+        }
     }
 
     public function __destruct()
@@ -82,4 +108,17 @@ abstract class Client implements IClient
      * @return mixed
      */
     abstract protected function uploadFile($remoteLocation, $localFile);
+
+    /**
+     * @param $remoteFile
+     * @return mixed
+     */
+    abstract protected function deleteFile($remoteFile);
+
+    /**
+     * @param $remoteFile
+     * @param $remoteDestination
+     * @return mixed
+     */
+    abstract protected function moveFile($remoteFile, $remoteDestination);
 }

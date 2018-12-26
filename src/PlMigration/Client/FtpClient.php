@@ -114,4 +114,18 @@ class FtpClient extends Client
     {
         return $this->protocol->put($remoteLocation, $localFile, FTP_BINARY);
     }
+
+    /**
+     * @param $remoteFile
+     * @return mixed
+     */
+    protected function deleteFile($remoteFile)
+    {
+        return $this->protocol->delete($remoteFile);
+    }
+
+    protected function moveFile($remoteFile, $remoteDestination)
+    {
+        return $this->protocol->rename($remoteFile, $remoteDestination.'/'.pathinfo($remoteFile, PATHINFO_BASENAME));
+    }
 }

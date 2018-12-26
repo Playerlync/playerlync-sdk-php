@@ -170,7 +170,7 @@ trait ApiBuilderTrait
      * @param $supportBatch
      * @return $this
      */
-    public function supportBatch($supportBatch = true)
+    public function supportBatch($supportBatch)
     {
         $this->hostSettings['support_batch'] = $supportBatch;
         return $this;

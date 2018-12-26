@@ -50,7 +50,7 @@ class SshBuilder
     }
 
     /**
-     * Set the port of the ftp server
+     * Set the port of the ftp server. If not set, the default port 22 will be used
      * @param $port
      * @return SshBuilder
      */

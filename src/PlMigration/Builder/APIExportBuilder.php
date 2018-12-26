@@ -51,7 +51,7 @@ class APIExportBuilder
 
     /**
      * array holding additional settings that will be used by the export
-     * @var bool
+     * @var array
      */
     private $options = [];
 
@@ -166,7 +166,7 @@ class APIExportBuilder
         }
         catch(BuilderException $e)
         {
-            $this->addError($e);
+            $this->addError($e->getMessage());
             throw $e;
         }
         catch (ExportException $e)
@@ -204,9 +204,9 @@ class APIExportBuilder
         {
             $this->buildErrorLog('ExportLog');
             $this->historyFileData = $this->verifyHistoryFile();
-            $model = new ExportModel($this->buildFields(), $this->format);
             $writer = $this->buildWriter($this->outputFile);
             $api = $this->buildApi($this->errorLog);
+            $model = new ExportModel($this->buildFields($api->getStructure()), $this->format);
             if($api->getGetService() === null)
             {
                 throw new BuilderException('getService() method needs to provide a playerlync API path to run export');
@@ -220,14 +220,8 @@ class APIExportBuilder
 
             return new PlayerlyncExport($api, $writer, $model, $this->options);
         }
-        catch(BuilderException $e)
-        {
-            $this->addError($e->getMessage());
-            throw $e;
-        }
         catch(ConnectorException $e)
         {
-            $this->addError($e->getMessage());
             throw new BuilderException($e->getMessage());
         }
     }
@@ -252,11 +246,13 @@ class APIExportBuilder
 
     /**
      * Validate fields the are added to the output file are valid
+     * @param $structure
      * @return array
      * @throws BuilderException
      */
-    private function buildFields()
+    private function buildFields($structure)
     {
+        $structure = array_keys($structure);
         $fields = [];
         /** @var Field $field */
         foreach($this->fields as $field)
@@ -268,6 +264,10 @@ class APIExportBuilder
             if(array_key_exists($field->getAlias(), $fields))
             {
                 throw new BuilderException('Attempted to insert duplicate header: '.$field->getAlias());
+            }
+            if($field->getType() !== Field::CONSTANT && !\in_array($field->getField(), $structure, true))
+            {
+                throw new BuilderException("Unknown field \"{$field->getField()}\" provided that is not returned in the service");
             }
 
             $fields[$field->getAlias()] = $field;

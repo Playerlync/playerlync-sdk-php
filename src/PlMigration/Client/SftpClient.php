@@ -15,8 +15,6 @@ class SftpClient extends Client
     /** @var SFTP */
     private $protocol;
 
-    private $sftp;
-
     /** @var string */
     private $host;
     /** @var int int */
@@ -49,7 +47,6 @@ class SftpClient extends Client
      * @param $localDestination
      * @param $remoteFile
      * @return mixed
-     * @throws ClientException
      */
     protected function downloadFile($localDestination, $remoteFile)
     {
@@ -79,7 +76,6 @@ class SftpClient extends Client
      * @param $remoteFile
      * @param $localFile
      * @return mixed
-     * @throws ClientException
      */
     protected function uploadFile($remoteFile, $localFile)
     {
@@ -94,8 +90,7 @@ class SftpClient extends Client
     {
         $this->protocol = new SFTP($this->host, $this->port);
         $this->protocol->sendKEXINITLast();
-        $password = $this->getPassword();
-        $result = $this->protocol->login($this->username, $password);
+        $result = $this->protocol->login($this->username, $this->password);
 
         if(!$result)
         {
@@ -109,11 +104,13 @@ class SftpClient extends Client
             $this->protocol = null;
     }
 
-    /**
-     * @return string
-     */
-    public function getPassword()
+    protected function deleteFile($remoteFile)
     {
-        return $this->password;
+        $this->protocol->delete($remoteFile, false);
+    }
+
+    protected function moveFile($remoteFile, $remoteDestination)
+    {
+        $this->protocol->rename($remoteFile, $remoteDestination.'/'.pathinfo($remoteFile, PATHINFO_BASENAME));
     }
 }

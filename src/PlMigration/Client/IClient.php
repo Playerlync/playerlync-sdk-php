@@ -37,6 +37,22 @@ interface IClient
     public function get($remoteFile, $localDestination);
 
     /**
+     * Delete a file in the remote server
+     * @param $remoteFile
+     * @throws ClientException
+     */
+    public function delete($remoteFile);
+
+    /**
+     * Move a remote file from one spot in the server to another.
+     * @param $remoteFile
+     * @param $remoteDestination
+     * @return mixed
+     * @throws ClientException
+     */
+    public function move($remoteFile, $remoteDestination);
+
+    /**
      * Create a connection to the remote server with the information provided
      * @throws ClientException
      */

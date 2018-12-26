@@ -185,7 +185,7 @@ class APIConnector implements IConnector
         {
             $response = $this->get($this->getService, ['structure'=> 1]);
 
-            $this->structure = $response->data->structure;
+            $this->structure = (array)$response->data->structure;
         }
         return $this->structure;
     }
