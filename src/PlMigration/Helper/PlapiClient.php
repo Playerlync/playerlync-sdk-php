@@ -57,6 +57,18 @@ class PlapiClient
     private $serverInfo = [];
 
     /**
+     * Array containing the given configurations for the server connection
+     * @var array
+     */
+    private $config;
+
+    /**
+     * Unix Timestamp value of when the Oauth token will expire
+     * @var float
+     */
+    private $expireTime;
+
+    /**
      * PlapiClient constructor.
      * @param array $config
      * @throws ClientException
@@ -83,6 +95,7 @@ class PlapiClient
             $this->primaryOrgId = $config['primary_org_id'];
         }
 
+        $this->config = $config;
         $this->setupClient($config);
         $this->ping();
         $this->authenticate($config);
@@ -141,6 +154,10 @@ class PlapiClient
         return $response;
     }
 
+    /**
+     * @param $requestsArray
+     * @return array
+     */
     public function poolRequests($requestsArray)
     {
         $requests = function ($requests) {
@@ -149,7 +166,7 @@ class PlapiClient
                 yield new Request($request['method'], $this->buildPlapiPath($request['path']).'?upsert=1', $this->getHeaders(), json_encode($request['body']));
             }
         };
-
+        $this->checkToken();
         return Pool::batch($this->client, $requests($requestsArray), ['concurrency' => '25']);
     }
 
@@ -176,7 +193,7 @@ class PlapiClient
                 'client_secret' => $config['client_secret'],
                 'username' => $config['username'],
                 'password' => $config['password']
-            ]]);
+            ]], false);
 
         if(isset($response->error_description))
         {
@@ -189,6 +206,7 @@ class PlapiClient
         }
         $this->accessToken = $response->access_token;
         $this->memberId = $response->memberid;
+        $this->expireTime = time() + $response->expires_in;
     }
 
     /**
@@ -217,10 +235,11 @@ class PlapiClient
      * @param $method
      * @param $uri
      * @param $options
+     * @param bool $checkToken
      * @return object
      * @throws ClientException
      */
-    private function request($method, $uri, $options)
+    private function request($method, $uri, $options, $checkToken = true)
     {
         try
         {
@@ -240,6 +259,11 @@ class PlapiClient
         if(!$json)
         {
             throw new ClientException('Unable to decode JSON response. '.strip_tags($response->getBody()));
+        }
+
+        if($checkToken)
+        {
+            $this->checkToken();
         }
         return $json;
     }
@@ -279,5 +303,16 @@ class PlapiClient
     public function getServerVersion()
     {
         return array_key_exists('version', $this->serverInfo) ? $this->serverInfo['version'] : 'Unknown';
+    }
+
+    /**
+     * @throws ClientException
+     */
+    private function checkToken()
+    {
+        if($this->expireTime - time() < 600)
+        {
+            $this->authenticate($this->config);
+        }
     }
 }

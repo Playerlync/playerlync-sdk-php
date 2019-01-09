@@ -9,7 +9,7 @@ namespace PlMigration\Builder;
 
 use PlMigration\Client\SftpClient;
 
-class SshBuilder
+class SftpBuilder
 {
     private $host;
     private $username;
@@ -19,7 +19,7 @@ class SshBuilder
     /**
      * Set the hostname
      * @param $host
-     * @return SshBuilder
+     * @return SftpBuilder
      */
     public function host($host)
     {
@@ -30,7 +30,7 @@ class SshBuilder
     /**
      * Set the username of the ftp server
      * @param $username
-     * @return SshBuilder
+     * @return SftpBuilder
      */
     public function username($username)
     {
@@ -41,7 +41,7 @@ class SshBuilder
     /**
      * Set the password of the ftp server
      * @param $password
-     * @return SshBuilder
+     * @return SftpBuilder
      */
     public function password($password)
     {
@@ -52,7 +52,7 @@ class SshBuilder
     /**
      * Set the port of the ftp server. If not set, the default port 22 will be used
      * @param $port
-     * @return SshBuilder
+     * @return SftpBuilder
      */
     public function port($port)
     {
