@@ -129,18 +129,18 @@ catch(PlayerLync\Exceptions\PlayerLyncSDKException $e)
 }
 ```
 
-#Getting started with Migration SDK
+##Getting started with Migration SDK
 The SDK added the ability to export playerlync data into csv formatted files, and also import external data into playerlync data.
-###System Requirements
+####System Requirements
 php 5.6 or greater
-##Importing data into Playerlync
+###Importing data into Playerlync
 To import data from an outside source (file, etc) into the playerlync system, an import builder class will stream line your process and requirements.
 
 ```php
 $importer = new FileImportBuilder();
 ```
 The builder class contains all configurations needed to set the data from the service, the input file, logging, and more.
-###Setting up input file
+####Setting up input file
 In order to use the file import, a csv format file needs to be provided.
 Moreover, the file may be retrieved from a remote server Client from the supported protocols we have available [here](#Connecting-to-remote-servers)
 ```php
@@ -149,7 +149,7 @@ $importer
     ->delimiter(',')
     ->enclosure('"');
 ```
-###Setting up API connection to Playerlync
+####Setting up API connection to Playerlync
 Since records will be imported using the Playerlync API, some knowledge and familiarity with the API is recommended.
 The following fields are required to be able to connect with the API successfully.
 ```php
@@ -162,7 +162,7 @@ The following fields are required to be able to connect with the API successfull
     ->primaryOrgId('primary org id')
     ->postService('/v3/member'); //Set the POST plapi service to use
 ```
-###Setting up import data fields from a file
+####Setting up import data fields from a file
 There are two ways to connect the data from a data file to the api.
 
 When using the addField() function, first field in the data will be mapped the selected api field from the first call
@@ -196,7 +196,7 @@ $importer
 ```
 When the import() function is called, the import process will run with the data provided.
 
-##Exporting data from Playerlync
+###Exporting data from Playerlync
 To export data from the playerlync system into an external source, the export tool will be able to aid with that.
 Currently, only exporting to csv format files is supported.
 ```php
@@ -205,7 +205,7 @@ $exporter = new FileExportBuilder();
     ->timeFormat(TimeFormat::YEAR, '/', TimeFormat::MONTH, '/', TimeFormat::DAY, ' ', TimeFormat::HOUR_12, ':', TimeFormat::MINUTES, ' ', TimeFormat::MERIDIAN)
     ->runHistoryFile('history.cfg'); //keeps track of the history file
 ```
-###Setting up output file
+####Setting up output file
 When using a file exporter, the output file  configuration must be set so the data can be sent properly to it.
 ```php
 $exporter->outputFile('outputSample.csv')
@@ -213,7 +213,7 @@ $exporter->outputFile('outputSample.csv')
     ->delimiter(',')
     ->includeHeaders(true); //optional inclusion to add top row header names setup by the addField() methods in output file
 ```
-###Setting up Playerlync API connection
+####Setting up Playerlync API connection
 Since records will be exported by using the Playerlync API services, some knowledge and familiarity with the playerlync API is recommended.
 The following fields are required to be able to connect with the API successfully for exporting.
 ```php
@@ -226,7 +226,7 @@ $exporter->host('https://domain.com')
              ->filter('delete_date|isnull') //OPTIONAL: filter data retrieved by using the same syntax as the plapi v3 API filter query paramerter
              ->orderBy('order'); //OPTIONAL: set the order by with the same syntax as use by the  plapi v3 orderby query parameter
 ```
-###Setting up export data fields
+####Setting up export data fields
 When exporting data onto another location, the information is added by fields. In a file export, the order of the addField() methods
 determines the order in which the fields will be sent into the file.
 ```php
@@ -237,14 +237,14 @@ $exporter
     ->addField(null, 'Salary', Field::CONSTANT)//The field will not be filled by anything.
     ->addField('constant_value', 'Constant Header', Field::CONSTANT);//All records in this field will hold the value 'constant'
 ```
-###Send exported file to remote server
+####Send exported file to remote server
 If you want to send the created file out to a remote server location, you can send it to a remote directory with a Client object that contains the
 connection information
 ```php
 $exporter->sendTo('remote/server',$ftp);
 ```
 
-##Connecting to remote servers
+###Connecting to remote servers
 The export & import process also allow for functionality to connect to remote servers for retrieving or sending data files.
 The following protocols are supported: FTP, SFTP.
 
@@ -269,7 +269,7 @@ $ftp = (new SftpBuilder())
     ->port(22)
     ->build();
 ```
-##TroubleShooting
+###TroubleShooting
 For troubleshooting an import or export, there is an optional functionality to use enable logging.
 ```php
 $importer->errorLog('import_error.log');
