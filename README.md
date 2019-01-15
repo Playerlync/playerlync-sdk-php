@@ -214,9 +214,6 @@ To export data from the playerlync system into an external source, the export to
 Currently, only exporting to csv format files is supported.
 ```php
 $exporter = new FileExportBuilder();
-    //Creates the following date format (2018/10/02 03:17 PM)
-    ->timeFormat(TimeFormat::YEAR, '/', TimeFormat::MONTH, '/', TimeFormat::DAY, ' ', TimeFormat::HOUR_12, ':', TimeFormat::MINUTES, ' ', TimeFormat::MERIDIAN)
-    ->runHistoryFile('history.cfg'); //keeps track of the history file
 ```
 
 ### Setting up output file
@@ -229,7 +226,7 @@ $exporter->outputFile('outputSample.csv')
     ->includeHeaders(true); //optional inclusion to add top row header names setup by the addField() methods in output file
 ```
 
-###Setting up Playerlync API connection
+### Setting up Playerlync API connection
 
 Since records will be exported by using the Playerlync API services, some knowledge and familiarity with the playerlync API is recommended.
 The following fields are required to be able to connect with the API successfully for exporting.
@@ -244,7 +241,7 @@ $exporter->host('https://domain.com')
              ->orderBy('order'); //OPTIONAL: set the order by with the same syntax as use by the  plapi v3 orderby query parameter
 ```
 
-###Setting up export data fields
+### Setting up export data fields
 
 When exporting data onto another location, the information is added by fields. In a file export, the order of the addField() methods
 determines the order in which the fields will be sent into the file.
@@ -255,6 +252,18 @@ $exporter
     ->addField('field_3', 'second name')
     ->addField(null, 'Salary', Field::CONSTANT)//The field will not be filled by anything.
     ->addField('constant_value', 'Constant Header', Field::CONSTANT);//All records in this field will hold the value 'constant'
+```
+
+### Additional Configurations
+
+To add a history file to keep track of history records and only bring records that have changed since, setup the history file function.
+```php
+$exporter->runHistoryFile('history.cfg'); //keeps track of the history file
+```
+To customize time fields to a date formatting, use the timeformat() method. For different combinations, use the TimeFormat.php constant to build your date.
+```php
+ //Creates the following date format (2018/10/02 03:17 PM)
+$exporter->timeFormat(TimeFormat::YEAR, '/', TimeFormat::MONTH, '/', TimeFormat::DAY, ' ', TimeFormat::HOUR_12, ':', TimeFormat::MINUTES, ' ', TimeFormat::MERIDIAN)
 ```
 
 ### Send exported file to remote server
