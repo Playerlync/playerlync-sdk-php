@@ -13,6 +13,11 @@ use PlMigration\Exceptions\WriterException;
 use PlMigration\Reader\CsvReader;
 use PlMigration\Writer\CsvWriter;
 
+/**
+ * Trait CsvBuilderTrait
+ * Trait containing configurations for using a csv file in exporting/importing data
+ * @package PlMigration\Builder\Traits
+ */
 trait CsvBuilderTrait
 {
     /**
@@ -21,6 +26,7 @@ trait CsvBuilderTrait
      * @var array
      */
     private $csvOptions = [];
+
     /**
      * Delimiter used by the csv writer with a default value of a comma
      * @var string

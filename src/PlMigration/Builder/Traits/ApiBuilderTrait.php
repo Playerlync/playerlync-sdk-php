@@ -11,6 +11,11 @@ use PlMigration\Connectors\APIConnector;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ConnectorException;
 
+/**
+ * Trait ApiBuilderTrait
+ * Trait containing configuration and settings methods to be used to connect to the Playerlync API.
+ * @package PlMigration\Builder\Traits
+ */
 trait ApiBuilderTrait
 {
     /**
@@ -20,20 +25,27 @@ trait ApiBuilderTrait
     private $hostSettings = [];
 
     /**
+     * Playerlync API path of a POST service to use for importing records
      * @var string
      */
     private $postService;
 
     /**
+     * Playerlync API path of a GET service to use for retrieving records
      * @var string
      */
     private $getService;
 
     /**
+     * Array has holds the query parameters to be used when performing GET services
      * @var array
      */
     protected $queryParams;
 
+    /**
+     * Name of source that records are associated with
+     * @var string
+     */
     private $source;
 
     /**
@@ -176,6 +188,11 @@ trait ApiBuilderTrait
         return $this;
     }
 
+    /**
+     * the source value that records will be categorized as inside the playerlync data
+     * @param $source
+     * @return $this
+     */
     protected function source($source)
     {
         $this->source = $source;

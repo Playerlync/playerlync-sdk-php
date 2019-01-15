@@ -21,7 +21,13 @@ use PlMigration\Model\ImportModel;
 use PlMigration\PlayerlyncImport;
 use PlMigration\Writer\TransactionLogger;
 
-class ApiImportBuilder
+/**
+ * Class FileImportBuilder
+ * Builder to the FileImport class.
+ * Provides ease of setting methods and pre-data validation capability to setup import processes.
+ * @package PlMigration\Builder
+ */
+class FileImportBuilder
 {
     /** sub classes that are also used to create the import */
     use CsvBuilderTrait;
@@ -100,6 +106,7 @@ class ApiImportBuilder
     /**
      * Set the directory where the transaction files will be created.
      * This will also automatically enable the transaction log functionality.
+     * If the directory does not exist, the directory will NOT be created
      *
      * @param $transactionLogDir
      * @return $this

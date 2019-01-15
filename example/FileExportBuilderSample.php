@@ -5,12 +5,12 @@
  * Date: 10/8/18
  */
 
-use PlMigration\Builder\APIExportBuilder;
+use PlMigration\Builder\FileExportBuilder;
 use PlMigration\Builder\FtpBuilder;
 use PlMigration\Builder\Helper\TimeFormat;
 use PlMigration\Model\Field;
 
-require __DIR__.'/../../../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $ftpBuilder = new FtpBuilder();
 $ftp = $ftpBuilder->host('ftp.server.com')
@@ -19,7 +19,7 @@ $ftp = $ftpBuilder->host('ftp.server.com')
     ->port(21)
     ->build();
 
-$exportBuilder = new APIExportBuilder();
+$exportBuilder = new FileExportBuilder();
 $exportBuilder
     //Set output file settings
     ->outputFile('outputSample.csv')
@@ -40,11 +40,11 @@ $exportBuilder
     ->writeFileAppend(false) //Option to use to add multiple exports into one file. On true, file will append
     ->errorLog('error.log'); //write errors into the error log in a desired location
 
-$exportBuilder->includeHeaders() //optional inclusion of headers in output file
+$exportBuilder->includeHeaders(true) //optional inclusion of headers in output file
     ->addField('field_1', 'login')
     ->addField('field_2', 'first name')//The header name and api_field
     ->addField('field_3', 'second name')
-    ->addField(null, 'Salary')//The field will not be filled by anything.
+    ->addField(null, 'Salary', Field::CONSTANT)//The field will not be filled by anything.
     ->addField('constant_value', 'Constant Header', Field::CONSTANT)//All records in this field will hold the value 'constant'
     ->sendTo('/test folder', $ftp) //assign remote location if desired
     ->export();

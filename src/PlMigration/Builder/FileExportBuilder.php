@@ -19,7 +19,13 @@ use PlMigration\Model\ExportModel;
 use PlMigration\Model\Field;
 use PlMigration\PlayerlyncExport;
 
-class APIExportBuilder
+/**
+ * Class FileExportBuilder
+ * Builder to the FileExport class
+ * Provides clearly defined methods to setup an export process
+ * @package PlMigration\Builder
+ */
+class FileExportBuilder
 {
     use ApiBuilderTrait;
     use CsvBuilderTrait;
@@ -105,19 +111,20 @@ class APIExportBuilder
 
     /**
      * Toggle to enable the exported file to include a header row with the names of the associated data.
-     *
+     * By default, it is not included.
+     * @param bool $include
      * @return $this
      */
-    public function includeHeaders()
+    public function includeHeaders($include)
     {
-        $this->options['include_headers'] = true;
+        $this->options['include_headers'] = $include;
         return $this;
     }
 
     /**
      * File that contains run history to prevent returning of previous runs.
      * @param $file
-     * @return APIExportBuilder
+     * @return FileExportBuilder
      */
     public function runHistoryFile($file)
     {
@@ -195,6 +202,7 @@ class APIExportBuilder
     }
 
     /**
+     * Validate data provided and build the export objects to start export process
      * @return PlayerlyncExport
      * @throws BuilderException
      */
@@ -227,6 +235,7 @@ class APIExportBuilder
     }
 
     /**
+     * Verify the history file has been created correctly
      * @throws BuilderException
      */
     private function verifyHistoryFile()
@@ -276,6 +285,12 @@ class APIExportBuilder
         return $fields;
     }
 
+    /**
+     * Append the last run time query parameter to have GET service return a subset of records
+     * @param $historyFile
+     * @param $type
+     * @param $structure
+     */
     private function addLastRunTimeFilter($historyFile, $type, $structure)
     {
         if(isset($historyFile->$type))
@@ -297,7 +312,7 @@ class APIExportBuilder
     }
 
     /**
-     *
+     * Update the last execution time into the history configuration file
      * @throws BuilderException
      */
     private function saveRunTime()

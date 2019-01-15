@@ -12,9 +12,15 @@ use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ImportException;
 use PlMigration\PlayerlyncImportSync;
 
-class ApiImportSyncBuilder extends ApiImportBuilder
+/**
+ * Class FileImportSyncBuilder
+ * Builder for the FileImportSync class
+ * @package PlMigration\Builder
+ */
+class FileImportSyncBuilder extends FileImportBuilder
 {
     /**
+     * Build importer to have connection to a get service and a post service
      * @param $model
      * @param $reader
      * @param ApiConnector $api

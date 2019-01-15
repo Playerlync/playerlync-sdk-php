@@ -11,9 +11,22 @@ use PlMigration\Client\SftpClient;
 
 class SftpBuilder
 {
+    /**
+     * @var string
+     */
     private $host;
+    /**
+     * @var string
+     */
     private $username;
+    /**
+     * @var string
+     */
     private $password;
+    /**
+     * Port number. Default port 22.
+     * @var int
+     */
     private $port = 22;
 
     /**
@@ -28,7 +41,7 @@ class SftpBuilder
     }
 
     /**
-     * Set the username of the ftp server
+     * Set the username of the sftp server
      * @param $username
      * @return SftpBuilder
      */
@@ -39,7 +52,7 @@ class SftpBuilder
     }
 
     /**
-     * Set the password of the ftp server
+     * Set the password of the sftp server
      * @param $password
      * @return SftpBuilder
      */
@@ -50,7 +63,7 @@ class SftpBuilder
     }
 
     /**
-     * Set the port of the ftp server. If not set, the default port 22 will be used
+     * Set the port of the sftp server. If not set, the default port 22 will be used
      * @param $port
      * @return SftpBuilder
      */
@@ -61,7 +74,7 @@ class SftpBuilder
     }
 
     /**
-     * Build the ftp client
+     * Build the sftp client
      * @return SftpClient
      */
     public function build()

@@ -11,9 +11,25 @@ use PlMigration\Client\FtpClient;
 
 class FtpBuilder
 {
+    /**
+     * @var string
+     */
     private $host;
+
+    /**
+     * @var string
+     */
     private $username;
+
+    /**
+     * @var string
+     */
     private $password;
+
+    /**
+     * Port number. Default value 21
+     * @var int
+     */
     private $port = 21;
 
     /**

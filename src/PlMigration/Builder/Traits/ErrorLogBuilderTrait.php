@@ -12,6 +12,11 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use PlMigration\Exceptions\BuilderException;
 
+/**
+ * Trait ErrorLogBuilderTrait
+ * Trait containing settings to enable the error logging during exporting or importing
+ * @package PlMigration\Builder\Traits
+ */
 trait ErrorLogBuilderTrait
 {
     /**

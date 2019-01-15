@@ -1,9 +1,9 @@
 <?php
 
 use PlMigration\Builder\FtpBuilder;
-use PlMigration\Builder\ApiImportBuilder;
+use PlMigration\Builder\FileImportBuilder;
 
-require __DIR__.'/../../../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $ftpBuilder = new FtpBuilder();
 $ftp = $ftpBuilder->host('ftp.server.com')
@@ -12,7 +12,7 @@ $ftp = $ftpBuilder->host('ftp.server.com')
     ->port('port')
     ->build();
 
-$importer = new ApiImportBuilder();
+$importer = new FileImportBuilder();
 
 $importer
     //set the input file

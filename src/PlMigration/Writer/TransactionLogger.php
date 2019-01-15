@@ -74,6 +74,7 @@ class TransactionLogger
      * @param $record
      * @param $file
      * @param int $mode
+     * @throws WriterException
      */
     private function write($record, $file, $mode = FILE_APPEND)
     {
