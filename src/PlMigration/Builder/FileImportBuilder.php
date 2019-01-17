@@ -22,9 +22,7 @@ use PlMigration\PlayerlyncImport;
 use PlMigration\Writer\TransactionLogger;
 
 /**
- * Class FileImportBuilder
- * Builder to the FileImport class.
- * Provides ease of setting methods and pre-data validation capability to setup import processes.
+ * Builder to configure and execute the import process. Once configurations are ready, execute the process with the import() function
  * @package PlMigration\Builder
  */
 class FileImportBuilder
@@ -61,7 +59,7 @@ class FileImportBuilder
     private $fields = [];
 
     /**
-     *
+     * File path to the destination of the created transaction files
      * @var string
      */
     private $transactionLogDir;
@@ -75,11 +73,12 @@ class FileImportBuilder
     }
 
     /**
-     * Get file to use for importing. If the protocol is set, it will grab from the server specified (ftp, sftp, etc).
+     * Get file to use for importing.
+     * If the protocol parameter is set, it will grab from the server specified (ftp, sftp, etc).
      * Otherwise it will try to find the file locally.
      *
-     * @param $file
-     * @param null $protocol
+     * @param string $file file path to the file, including file name.
+     * @param IClient|null $protocol Client object to retrieve file from remote server.
      * @return $this
      */
     public function inputFile($file, $protocol = null)
@@ -108,7 +107,7 @@ class FileImportBuilder
      * This will also automatically enable the transaction log functionality.
      * If the directory does not exist, the directory will NOT be created
      *
-     * @param $transactionLogDir
+     * @param string $transactionLogDir Directory path to be used to create the transaction files
      * @return $this
      */
     public function transactionLog($transactionLogDir)
@@ -121,10 +120,19 @@ class FileImportBuilder
     }
 
     /**
-     * field will be mapped the selected api field from the call
+     * Add a field to be mapped from the outside source to the playerlync system.
+     * In a file import, the order of method calls indicates the column that will be mapped.
+     * example:
+     *  data file contents:
+     *  testlogmein,smith,denver,qwerty
+     *   $importer
+     *   ->addField('member') //testlogmein will be set to the member api field
+     *   ->addField('last_name') //smith will be set to the last_name field
+     *   ->addField('location') //denver will be set to the location api field
+     *   ->addField('password') //qwerty will be set to the password api field
      *
-     * @param string $apiField
-     * @param string $type
+     * @param string $apiField Field name recognized by the Playerlync API
+     * @param string $type Field type to be recognized. Refer to Field.php constants for types allowed
      * @param array|IValueManipulator $extra
      * @return $this
      */
@@ -136,11 +144,24 @@ class FileImportBuilder
     }
 
     /**
-     * Field will be mapped the selected alias. By default the alias represents a column number and not
-     * @param $apiField
-     * @param $alias
-     * @param string $type
-     * @param array|IValueManipulator $extra
+     * Add a field to be mapped from the outside source to the playerlync system.
+     * Unlike addField(), this function provides more flexibility by allowing multiple pieces of outside data point to a single point in Playerlync data, and vice versa.
+     * However, it causes a higher likelyhood of bad data mapping.
+     * DO NOT mix the addField() and mapField() together for an import. This will result in confusing results.
+     * example:
+     * data file contents:
+     *   testlogin,smith,denver,qwerty
+     * $importer
+     * ->mapField('first_name', 0) //first_name field will read the first column value (testlogin)
+     * ->mapField('last_name', 1) //last_name field will read the second column value (smith)
+     * ->mapField('member', 0) //member field will ALSO read the first column value (testlogin)
+     * ->mapField('password', 3) //password field will read the fourth column value (qwerty)
+     * ->mapField('location', 2) //location field will read the third column value (denver)
+     *
+     * @param string $apiField The name of the field to be recognized by the Playerlync API
+     * @param string $alias The alias point from the external data source.
+     * @param string $type The type that the field belongs to
+     * @param array|IValueManipulator $extra Additional functionality to be done on the field before being inserted into the Playerlync system.
      * @return $this
      */
     public function mapField($apiField, $alias, $type = Field::VARIABLE, $extra = [])
@@ -279,6 +300,14 @@ class FileImportBuilder
         return $options;
     }
 
+    /**
+     * Build PlayerlyncImport object
+     * @param $model
+     * @param $reader
+     * @param $api
+     * @param $options
+     * @return PlayerlyncImport
+     */
     protected function buildImporter($model, $reader, $api, $options)
     {
         return new PlayerlyncImport($api, $reader, $model, $options);

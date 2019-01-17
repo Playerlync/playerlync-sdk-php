@@ -9,17 +9,24 @@ namespace PlMigration\Builder;
 
 use PlMigration\Client\SftpClient;
 
+/**
+ * Builder to create an sftp connection object
+ * @package PlMigration\Builder
+ */
 class SftpBuilder
 {
     /**
+     * Host name url
      * @var string
      */
     private $host;
     /**
+     * username for the connection
      * @var string
      */
     private $username;
     /**
+     * password for the connection
      * @var string
      */
     private $password;

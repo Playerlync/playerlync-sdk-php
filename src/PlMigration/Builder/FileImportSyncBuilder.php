@@ -10,22 +10,24 @@ namespace PlMigration\Builder;
 use PlMigration\Connectors\APIConnector;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ImportException;
+use PlMigration\Model\ImportModel;
 use PlMigration\PlayerlyncImportSync;
+use PlMigration\Reader\CsvReader;
 
 /**
- * Class FileImportSyncBuilder
- * Builder for the FileImportSync class
+ * Builder to configure and execute the synced import process. Once configurations are ready, execute the process with the import() function
  * @package PlMigration\Builder
  */
 class FileImportSyncBuilder extends FileImportBuilder
 {
     /**
-     * Build importer to have connection to a get service and a post service
-     * @param $model
-     * @param $reader
+     * Build importer
+     *
+     * @param ImportModel $model
+     * @param CsvReader $reader
      * @param ApiConnector $api
-     * @param $options
-     * @return \PlMigration\PlayerlyncImport|PlayerlyncImportSync
+     * @param array $options
+     * @return PlayerlyncImportSync
      * @throws BuilderException
      */
     protected function buildImporter($model, $reader, $api, $options)

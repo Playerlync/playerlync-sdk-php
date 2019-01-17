@@ -14,7 +14,6 @@ use PlMigration\Reader\CsvReader;
 use PlMigration\Writer\CsvWriter;
 
 /**
- * Trait CsvBuilderTrait
  * Trait containing configurations for using a csv file in exporting/importing data
  * @package PlMigration\Builder\Traits
  */
@@ -28,20 +27,20 @@ trait CsvBuilderTrait
     private $csvOptions = [];
 
     /**
-     * Delimiter used by the csv writer with a default value of a comma
+     * Delimiter used by the csv writer/reader. Default value: ,
      * @var string
      */
     private $delimiter = ',';
 
     /**
-     * Enclosure used by the csv write with a default value of a double quote
+     * Enclosure used by the csv writer/reader. Default value: "
      * @var string
      */
     private $enclosure = '"';
 
     /**
      * Set the recognized delimiter character between fields.
-     * @param $delimiter
+     * @param string $delimiter
      * @return $this
      */
     public function delimiter($delimiter)
@@ -51,8 +50,8 @@ trait CsvBuilderTrait
     }
 
     /**
-     * Set the recognized enclosure characted between fields.
-     * @param $enclosure
+     * Set the recognized enclosure character around fields.
+     * @param string $enclosure
      * @return $this
      */
     public function enclosure($enclosure)
@@ -64,6 +63,7 @@ trait CsvBuilderTrait
     /**
      * Toggle to allow export to use the export for multiple executions into a file.
      * Used by the export application for running the same service with different filter settings into one file.
+     * Disabled by default.
      * @param bool $append
      * @return $this
      */
@@ -75,7 +75,7 @@ trait CsvBuilderTrait
 
     /**
      * Build the csv writer object with the settings desired
-     * @param $file
+     * @param string $file File path to the location of the csv file to be created
      * @return CsvWriter
      * @throws BuilderException
      */
@@ -93,7 +93,7 @@ trait CsvBuilderTrait
 
     /**
      * Build the csv reader object with the settings desired
-     * @param $file
+     * @param string $file File path to the location of the csv file to be found
      * @return CsvReader
      * @throws BuilderException
      */

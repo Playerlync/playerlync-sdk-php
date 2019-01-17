@@ -12,8 +12,7 @@ use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ConnectorException;
 
 /**
- * Trait ApiBuilderTrait
- * Trait containing configuration and settings methods to be used to connect to the Playerlync API.
+ * Trait containing configuration & settings methods to be used to connect to the Playerlync API
  * @package PlMigration\Builder\Traits
  */
 trait ApiBuilderTrait
@@ -50,7 +49,7 @@ trait ApiBuilderTrait
 
     /**
      * Set the client_id to be used to connect to the playerlync API
-     * @param $clientId
+     * @param string $clientId
      * @return $this
      */
     public function clientId($clientId)
@@ -61,7 +60,7 @@ trait ApiBuilderTrait
 
     /**
      * Set the client_secret to be used to connect to the playerlync API
-     * @param $clientSecret
+     * @param string $clientSecret
      * @return $this
      */
     public function clientSecret($clientSecret)
@@ -72,7 +71,7 @@ trait ApiBuilderTrait
 
     /**
      * Set the username to be authenticated to connect to the playerlync API
-     * @param $username
+     * @param string $username
      * @return $this
      */
     public function username($username)
@@ -83,7 +82,7 @@ trait ApiBuilderTrait
 
     /**
      * Set the password for the username provided.
-     * @param $password
+     * @param string $password
      * @return $this
      */
     public function password($password)
@@ -94,7 +93,7 @@ trait ApiBuilderTrait
 
     /**
      * Set the host to connect to. Include the port number if not 443
-     * @param $host
+     * @param string $host
      * @return $this
      */
     public function host($host)
@@ -104,8 +103,8 @@ trait ApiBuilderTrait
     }
 
     /**
-     * Set the api version to use
-     * @param $version
+     * Set the api version to use. Default will be v3.
+     * @param string $version
      * @return $this
      */
     public function apiVersion($version)
@@ -118,7 +117,7 @@ trait ApiBuilderTrait
      * Set the primary org id that the records will be added to.
      * This helps prevents errors in the playerlync api as the primary organization affected does not always belong to the
      * username provided.
-     * @param $primaryOrgId
+     * @param string $primaryOrgId
      * @return $this
      */
     public function primaryOrgId($primaryOrgId)
@@ -128,7 +127,7 @@ trait ApiBuilderTrait
     }
 
     /**
-     * Set the service to be used by the API connection for inserting data.
+     * Set the POST service to be used by the API connection for inserting data.
      * Refer to the API docs for information on services available
      * @param string $servicePath
      * @return $this
@@ -140,7 +139,7 @@ trait ApiBuilderTrait
     }
 
     /**
-     * Set the service to be used by the API connection for retrieving data.
+     * Set the GET service to be used by the API connection for retrieving data.
      * Refer to the API docs for information on services available
      * @param string $servicePath
      * @return $this
@@ -154,7 +153,7 @@ trait ApiBuilderTrait
     /**
      * Set the filter query parameter as it is recognized by the playerlync api.
      * Refer to the playerlync API docs for syntax information
-     * @param $filter
+     * @param string $filter
      * @return $this
      */
     public function filter($filter)
@@ -167,7 +166,7 @@ trait ApiBuilderTrait
      * Set the orderby query parameter as it is recognized by the playerlync api.
      * Refer to the Playerlync API docs for syntax information.
      *
-     * @param $order
+     * @param string $order
      * @return $this
      */
     public function orderBy($order)
@@ -177,9 +176,11 @@ trait ApiBuilderTrait
     }
 
     /**
-     * Toggle to turn off async bulk requests, if applicable. (This only affects importing)
+     * Toggle to turn on/off async bulk requests, if applicable. (This only affects importing).
+     * By default, async bulk requests are enabled.
+     * It is not recommended to disable this as it will make the process slower.
      *
-     * @param $supportBatch
+     * @param bool $supportBatch
      * @return $this
      */
     public function supportBatch($supportBatch)
@@ -190,7 +191,7 @@ trait ApiBuilderTrait
 
     /**
      * the source value that records will be categorized as inside the playerlync data
-     * @param $source
+     * @param string $source
      * @return $this
      */
     protected function source($source)
@@ -201,7 +202,7 @@ trait ApiBuilderTrait
 
     /**
      * Build the playerlync api connection with the desired settings.
-     * @param null $logger
+     * @param string|null $logger
      * @return APIConnector
      * @throws BuilderException
      */

@@ -20,9 +20,7 @@ use PlMigration\Model\Field;
 use PlMigration\PlayerlyncExport;
 
 /**
- * Class FileExportBuilder
- * Builder to the FileExport class
- * Provides clearly defined methods to setup an export process
+ * Builder to configure and execute the export process. Once configurations are ready, execute the process with the export() function
  * @package PlMigration\Builder
  */
 class FileExportBuilder
@@ -88,8 +86,9 @@ class FileExportBuilder
     }
 
     /**
-     * Full path to where the created exported file should be located
-     * @param $file
+     * Set the full path to where the created exported file will be located.
+     * If the directory does not exist, it will NOT be created and return an error
+     * @param string $file
      * @return $this
      */
     public function outputFile($file)
@@ -99,8 +98,9 @@ class FileExportBuilder
     }
 
     /**
-     * Set the date format to be output on the exported file
-     * @param mixed ...$format
+     * Set the date format to be output on the exported file.
+     * The date can be created by using the constants in TimeFormat.php
+     * @param string ...$format
      * @return $this
      */
     public function timeFormat(...$format)
@@ -122,8 +122,8 @@ class FileExportBuilder
     }
 
     /**
-     * File that contains run history to prevent returning of previous runs.
-     * @param $file
+     * File that configures history file to prevent returning of previous runs.
+     * @param string $file Filepath of the history file, including the file name
      * @return FileExportBuilder
      */
     public function runHistoryFile($file)
@@ -133,22 +133,23 @@ class FileExportBuilder
     }
 
     /**
-     * Add a field to be added to the output file. The order of the output files is determined by the order of the function calls
-     * @param $apiField
-     * @param null $headerName
-     * @param string $fieldType
+     * Add a field to be added to the output.
+     * The order of the output fields is determined by the sequence of the function calls
+     * @param string $apiField The name of the field from the playerlync API
+     * @param string|null $alias The alias name to be used for the output (if applicable). For file exports, it would be the header name
+     * @param string $fieldType The type of field that is being created. Refer to Field.php constants for types available. Default is Field::VARIABLE
      * @return $this
      */
-    public function addField($apiField, $headerName = null, $fieldType = Field::VARIABLE)
+    public function addField($apiField, $alias = null, $fieldType = Field::VARIABLE)
     {
-        $headerName = $headerName ?: $apiField;
-        $this->fields[] = new Field($apiField, $headerName, $fieldType);
+        $alias = $alias ?: $apiField;
+        $this->fields[] = new Field($apiField, $alias, $fieldType);
         return $this;
     }
 
     /**
      * Select a directory to send the exported file to via a selected protocol client (ftp, sftp, etc)
-     * @param $destination
+     * @param string $destination File path of the remote server location to send file
      * @param IClient $protocol
      * @return $this
      */
@@ -255,7 +256,7 @@ class FileExportBuilder
 
     /**
      * Validate fields the are added to the output file are valid
-     * @param $structure
+     * @param array $structure
      * @return array
      * @throws BuilderException
      */
@@ -287,9 +288,9 @@ class FileExportBuilder
 
     /**
      * Append the last run time query parameter to have GET service return a subset of records
-     * @param $historyFile
-     * @param $type
-     * @param $structure
+     * @param object $historyFile
+     * @param string $type
+     * @param array $structure
      */
     private function addLastRunTimeFilter($historyFile, $type, $structure)
     {

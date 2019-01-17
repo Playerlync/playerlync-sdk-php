@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+        <script type="text/javascript">
+        function loadExternalCodeSnippets() {
+            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+                var src = pre.getAttribute('data-src');
+                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+                var language = 'php';
+
+                var code = document.createElement('code');
+                code.className = 'language-' + language;
+
+                pre.textContent = '';
+
+                code.textContent = 'Loading…';
+
+                pre.appendChild(code);
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.open('GET', src, true);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+
+                        if (xhr.status < 400 && xhr.responseText) {
+                            code.textContent = xhr.responseText;
+
+                            Prism.highlightElement(code);
+                        }
+                        else if (xhr.status >= 400) {
+                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                        }
+                        else {
+                            code.textContent = '✖ Error: File does not exist or is empty';
+                        }
+                    }
+                };
+
+                xhr.send(null);
+            });
+        }
+
+        $(document).ready(function(){
+            loadExternalCodeSnippets();
+        });
+        $('#source-view').on('shown', function () {
+            loadExternalCodeSnippets();
+        })
+    </script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/PlayerLync.html">\PlayerLync</a></li>
+                                                        <li><a href="../namespaces/PlMigration.html">\PlMigration</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">189</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">1</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-2003214230"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-2003214230" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2114049978"></a>
+                                <a href="../namespaces/PlayerLync.html" style="margin-left: 30px; padding-left: 0">PlayerLync</a>
+            </div>
+            <div id="namespace-2114049978" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-754169904"></a>
+                                <a href="../namespaces/PlayerLync.Authentication.html" style="margin-left: 30px; padding-left: 0">Authentication</a>
+            </div>
+            <div id="namespace-754169904" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-810417982"></a>
+                                <a href="../namespaces/PlayerLync.Authentication.Oauth2.html" style="margin-left: 30px; padding-left: 0">Oauth2</a>
+            </div>
+            <div id="namespace-810417982" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Authentication.Oauth2.AccessToken.html">AccessToken</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Authentication.Oauth2.OAuth2Client.html">OAuth2Client</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1453554429"></a>
+                                <a href="../namespaces/PlayerLync.Exceptions.html" style="margin-left: 30px; padding-left: 0">Exceptions</a>
+            </div>
+            <div id="namespace-1453554429" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncAuthenticationException.html">PlayerLyncAuthenticationException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncClientException.html">PlayerLyncClientException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncOtherException.html">PlayerLyncOtherException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncResponseException.html">PlayerLyncResponseException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncSDKException.html">PlayerLyncSDKException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncServerException.html">PlayerLyncServerException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1721114980"></a>
+                                <a href="../namespaces/PlayerLync.FileUpload.html" style="margin-left: 30px; padding-left: 0">FileUpload</a>
+            </div>
+            <div id="namespace-1721114980" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.Mimetypes.html">Mimetypes</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.PlayerLyncFile.html">PlayerLyncFile</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.PlayerLyncVideo.html">PlayerLyncVideo</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1644764462"></a>
+                                <a href="../namespaces/PlayerLync.Http.html" style="margin-left: 30px; padding-left: 0">Http</a>
+            </div>
+            <div id="namespace-1644764462" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlayerLync.Http.RequestBodyInterface.html">RequestBodyInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Http.PLAPIRawResponse.html">PLAPIRawResponse</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Http.RequestBodyJsonEncoded.html">RequestBodyJsonEncoded</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Http.RequestBodyMultipart.html">RequestBodyMultipart</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Http.RequestBodyUrlEncoded.html">RequestBodyUrlEncoded</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1288960065"></a>
+                                <a href="../namespaces/PlayerLync.HttpClients.html" style="margin-left: 30px; padding-left: 0">HttpClients</a>
+            </div>
+            <div id="namespace-1288960065" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlayerLync.HttpClients.PlayerLyncHttpClientInterface.html">PlayerLyncHttpClientInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.HttpClients.PlayerLyncCurl.html">PlayerLyncCurl</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.HttpClients.PlayerLyncCurlHttpClient.html">PlayerLyncCurlHttpClient</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1482720632"></a>
+                                <a href="../namespaces/PlayerLync.Url.html" style="margin-left: 30px; padding-left: 0">Url</a>
+            </div>
+            <div id="namespace-1482720632" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Url.PlayerLyncUrlManipulator.html">PlayerLyncUrlManipulator</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLync.html">PlayerLync</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncApp.html">PlayerLyncApp</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncClient.html">PlayerLyncClient</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncRequest.html">PlayerLyncRequest</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncResponse.html">PlayerLyncResponse</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-54735880"></a>
+                                <a href="../namespaces/PlMigration.html" style="margin-left: 30px; padding-left: 0">PlMigration</a>
+            </div>
+            <div id="namespace-54735880" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1979598491"></a>
+                                <a href="../namespaces/PlMigration.Builder.html" style="margin-left: 30px; padding-left: 0">Builder</a>
+            </div>
+            <div id="namespace-1979598491" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1271242984"></a>
+                                <a href="../namespaces/PlMigration.Builder.Helper.html" style="margin-left: 30px; padding-left: 0">Helper</a>
+            </div>
+            <div id="namespace-1271242984" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Builder.Helper.TimeFormat.html">TimeFormat</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1921012593"></a>
+                                <a href="../namespaces/PlMigration.Builder.Traits.html" style="margin-left: 30px; padding-left: 0">Traits</a>
+            </div>
+            <div id="namespace-1921012593" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                            <li class="trait"><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html">ApiBuilderTrait</a></li>
+                                                    <li class="trait"><a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html">CsvBuilderTrait</a></li>
+                                                    <li class="trait"><a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html">ErrorLogBuilderTrait</a></li>
+                                                                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Builder.FileExportBuilder.html">FileExportBuilder</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Builder.FileImportBuilder.html">FileImportBuilder</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Builder.FileImportSyncBuilder.html">FileImportSyncBuilder</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Builder.FtpBuilder.html">FtpBuilder</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Builder.SftpBuilder.html">SftpBuilder</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-118018229"></a>
+                                <a href="../namespaces/PlMigration.Client.html" style="margin-left: 30px; padding-left: 0">Client</a>
+            </div>
+            <div id="namespace-118018229" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Client.IClient.html">IClient</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Client.Client.html">Client</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Client.FtpClient.html">FtpClient</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Client.SftpClient.html">SftpClient</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-643620741"></a>
+                                <a href="../namespaces/PlMigration.Connectors.html" style="margin-left: 30px; padding-left: 0">Connectors</a>
+            </div>
+            <div id="namespace-643620741" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Connectors.IConnector.html">IConnector</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Connectors.APIConnector.html">APIConnector</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-830489382"></a>
+                                <a href="../namespaces/PlMigration.Exceptions.html" style="margin-left: 30px; padding-left: 0">Exceptions</a>
+            </div>
+            <div id="namespace-830489382" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.BuilderException.html">BuilderException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ClientException.html">ClientException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ConnectorException.html">ConnectorException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ExportException.html">ExportException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ImportException.html">ImportException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ReaderException.html">ReaderException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.WriterException.html">WriterException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-750096118"></a>
+                                <a href="../namespaces/PlMigration.Helper.html" style="margin-left: 30px; padding-left: 0">Helper</a>
+            </div>
+            <div id="namespace-750096118" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1083726705"></a>
+                                <a href="../namespaces/PlMigration.Helper.DataFunctions.html" style="margin-left: 30px; padding-left: 0">DataFunctions</a>
+            </div>
+            <div id="namespace-1083726705" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Helper.DataFunctions.IValueManipulator.html">IValueManipulator</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Helper.DataFunctions.RemoveSpecialCharacters.html">RemoveSpecialCharacters</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                            <li class="trait"><a href="../classes/PlMigration.Helper.LoggerTrait.html">LoggerTrait</a></li>
+                                                                            <li class="class"><a href="../classes/PlMigration.Helper.PlapiClient.html">PlapiClient</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-996699851"></a>
+                                <a href="../namespaces/PlMigration.Model.html" style="margin-left: 30px; padding-left: 0">Model</a>
+            </div>
+            <div id="namespace-996699851" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Model.ExportModel.html">ExportModel</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Model.Field.html">Field</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Model.Formatter.html">Formatter</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Model.ImportModel.html">ImportModel</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1223207844"></a>
+                                <a href="../namespaces/PlMigration.Reader.html" style="margin-left: 30px; padding-left: 0">Reader</a>
+            </div>
+            <div id="namespace-1223207844" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Reader.IReader.html">IReader</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Reader.CsvReader.html">CsvReader</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1544416190"></a>
+                                <a href="../namespaces/PlMigration.Writer.html" style="margin-left: 30px; padding-left: 0">Writer</a>
+            </div>
+            <div id="namespace-1544416190" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Writer.IWriter.html">IWriter</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Writer.CsvWriter.html">CsvWriter</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Writer.TransactionLogger.html">TransactionLogger</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.PlayerlyncExport.html">PlayerlyncExport</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.PlayerlyncImport.html">PlayerlyncImport</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.PlayerlyncImportSync.html">PlayerlyncImportSync</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content file">
+                    <nav>
+                                                                    </nav>
+
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+                    <h1><small>PlayerLync/Exceptions</small>PlayerLyncSDKException.php</h1>
+                    <p><em>The MIT License (MIT)</em></p>
+                    <p>Copyright (c) 2015 PlayerLync</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p>
+
+                    
+                    
+                                        <h2>Classes</h2>
+                    <table class="table table-hover">
+                                            <tr>
+                            <td><a href="../classes/PlayerLync.Exceptions.PlayerLyncSDKException.html">PlayerLyncSDKException</a></td>
+                            <td><em>Class PlayerLyncSDKException</em></td>
+                        </tr>
+                                        </table>
+                                    </div>
+
+                <aside class="span4 detailsbar">
+                    <dl>
+                                                    <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">\Default</div></dd>
+                        
+                        
+                    </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                                            </table>
+
+                </aside>
+            </div>
+
+            
+            
+        </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label"></h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/PlayerLync/Exceptions/PlayerLyncSDKException.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/PlayerLync.html">\PlayerLync</a></li>
+                                                                            <li><a href="../namespaces/PlMigration.html">\PlMigration</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on January 17th, 2019 at 15:35.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

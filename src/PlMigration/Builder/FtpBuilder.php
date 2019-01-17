@@ -9,19 +9,27 @@ namespace PlMigration\Builder;
 
 use PlMigration\Client\FtpClient;
 
+/**
+ * Builder to create an ftp connection object
+ *
+ * @package PlMigration\Builder
+ */
 class FtpBuilder
 {
     /**
+     * Hostname url
      * @var string
      */
     private $host;
 
     /**
+     * username for connection
      * @var string
      */
     private $username;
 
     /**
+     * password for connection
      * @var string
      */
     private $password;

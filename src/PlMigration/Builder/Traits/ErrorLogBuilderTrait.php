@@ -13,7 +13,6 @@ use Monolog\Logger;
 use PlMigration\Exceptions\BuilderException;
 
 /**
- * Trait ErrorLogBuilderTrait
  * Trait containing settings to enable the error logging during exporting or importing
  * @package PlMigration\Builder\Traits
  */
@@ -27,12 +26,13 @@ trait ErrorLogBuilderTrait
 
     /**
      * Location of the error log file
+     * @var string
      */
     private $errorLogFile;
 
     /**
      * Add an error message
-     * @param $message
+     * @param string $message
      */
     protected function addError($message)
     {
@@ -44,7 +44,7 @@ trait ErrorLogBuilderTrait
 
     /**
      * Add a debug message
-     * @param $message
+     * @param string $message
      */
     protected function addDebug($message)
     {
@@ -56,7 +56,7 @@ trait ErrorLogBuilderTrait
 
     /**
      * Set the location of where the file error/debug log will reside
-     * @param $file
+     * @param string $file
      * @return $this
      */
     public function errorLog($file)
@@ -67,7 +67,7 @@ trait ErrorLogBuilderTrait
 
     /**
      * Create the error log with the settings chosen
-     * @param $logName
+     * @param string $logName
      * @throws BuilderException
      */
     protected function buildErrorLog($logName)

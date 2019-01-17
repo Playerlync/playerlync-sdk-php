@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/PlayerLync.html">\PlayerLync</a></li>
+                                                        <li><a href="../namespaces/PlMigration.html">\PlMigration</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">189</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">1</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-563825793"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-563825793" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1421170713"></a>
+                                <a href="../namespaces/PlayerLync.html" style="margin-left: 30px; padding-left: 0">PlayerLync</a>
+            </div>
+            <div id="namespace-1421170713" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-864677914"></a>
+                                <a href="../namespaces/PlayerLync.Authentication.html" style="margin-left: 30px; padding-left: 0">Authentication</a>
+            </div>
+            <div id="namespace-864677914" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1082403313"></a>
+                                <a href="../namespaces/PlayerLync.Authentication.Oauth2.html" style="margin-left: 30px; padding-left: 0">Oauth2</a>
+            </div>
+            <div id="namespace-1082403313" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Authentication.Oauth2.AccessToken.html">AccessToken</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Authentication.Oauth2.OAuth2Client.html">OAuth2Client</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1583083623"></a>
+                                <a href="../namespaces/PlayerLync.Exceptions.html" style="margin-left: 30px; padding-left: 0">Exceptions</a>
+            </div>
+            <div id="namespace-1583083623" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncAuthenticationException.html">PlayerLyncAuthenticationException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncClientException.html">PlayerLyncClientException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncOtherException.html">PlayerLyncOtherException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncResponseException.html">PlayerLyncResponseException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncSDKException.html">PlayerLyncSDKException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncServerException.html">PlayerLyncServerException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1274066054"></a>
+                                <a href="../namespaces/PlayerLync.FileUpload.html" style="margin-left: 30px; padding-left: 0">FileUpload</a>
+            </div>
+            <div id="namespace-1274066054" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.Mimetypes.html">Mimetypes</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.PlayerLyncFile.html">PlayerLyncFile</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.PlayerLyncVideo.html">PlayerLyncVideo</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-736566054"></a>
+                                <a href="../namespaces/PlayerLync.Http.html" style="margin-left: 30px; padding-left: 0">Http</a>
+            </div>
+            <div id="namespace-736566054" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlayerLync.Http.RequestBodyInterface.html">RequestBodyInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Http.PLAPIRawResponse.html">PLAPIRawResponse</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Http.RequestBodyJsonEncoded.html">RequestBodyJsonEncoded</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Http.RequestBodyMultipart.html">RequestBodyMultipart</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Http.RequestBodyUrlEncoded.html">RequestBodyUrlEncoded</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-350500880"></a>
+                                <a href="../namespaces/PlayerLync.HttpClients.html" style="margin-left: 30px; padding-left: 0">HttpClients</a>
+            </div>
+            <div id="namespace-350500880" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlayerLync.HttpClients.PlayerLyncHttpClientInterface.html">PlayerLyncHttpClientInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.HttpClients.PlayerLyncCurl.html">PlayerLyncCurl</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.HttpClients.PlayerLyncCurlHttpClient.html">PlayerLyncCurlHttpClient</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-166106843"></a>
+                                <a href="../namespaces/PlayerLync.Url.html" style="margin-left: 30px; padding-left: 0">Url</a>
+            </div>
+            <div id="namespace-166106843" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Url.PlayerLyncUrlManipulator.html">PlayerLyncUrlManipulator</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLync.html">PlayerLync</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncApp.html">PlayerLyncApp</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncClient.html">PlayerLyncClient</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncRequest.html">PlayerLyncRequest</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncResponse.html">PlayerLyncResponse</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-494445382"></a>
+                                <a href="../namespaces/PlMigration.html" style="margin-left: 30px; padding-left: 0">PlMigration</a>
+            </div>
+            <div id="namespace-494445382" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2123764672"></a>
+                                <a href="../namespaces/PlMigration.Builder.html" style="margin-left: 30px; padding-left: 0">Builder</a>
+            </div>
+            <div id="namespace-2123764672" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1295518094"></a>
+                                <a href="../namespaces/PlMigration.Builder.Helper.html" style="margin-left: 30px; padding-left: 0">Helper</a>
+            </div>
+            <div id="namespace-1295518094" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Builder.Helper.TimeFormat.html">TimeFormat</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-891092763"></a>
+                                <a href="../namespaces/PlMigration.Builder.Traits.html" style="margin-left: 30px; padding-left: 0">Traits</a>
+            </div>
+            <div id="namespace-891092763" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                            <li class="trait"><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html">ApiBuilderTrait</a></li>
+                                                    <li class="trait"><a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html">CsvBuilderTrait</a></li>
+                                                    <li class="trait"><a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html">ErrorLogBuilderTrait</a></li>
+                                                                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Builder.FileExportBuilder.html">FileExportBuilder</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Builder.FileImportBuilder.html">FileImportBuilder</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Builder.FileImportSyncBuilder.html">FileImportSyncBuilder</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Builder.FtpBuilder.html">FtpBuilder</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Builder.SftpBuilder.html">SftpBuilder</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-300587193"></a>
+                                <a href="../namespaces/PlMigration.Client.html" style="margin-left: 30px; padding-left: 0">Client</a>
+            </div>
+            <div id="namespace-300587193" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Client.IClient.html">IClient</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Client.Client.html">Client</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Client.FtpClient.html">FtpClient</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Client.SftpClient.html">SftpClient</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-256697900"></a>
+                                <a href="../namespaces/PlMigration.Connectors.html" style="margin-left: 30px; padding-left: 0">Connectors</a>
+            </div>
+            <div id="namespace-256697900" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Connectors.IConnector.html">IConnector</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Connectors.APIConnector.html">APIConnector</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1704516134"></a>
+                                <a href="../namespaces/PlMigration.Exceptions.html" style="margin-left: 30px; padding-left: 0">Exceptions</a>
+            </div>
+            <div id="namespace-1704516134" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.BuilderException.html">BuilderException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ClientException.html">ClientException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ConnectorException.html">ConnectorException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ExportException.html">ExportException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ImportException.html">ImportException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ReaderException.html">ReaderException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.WriterException.html">WriterException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1660037012"></a>
+                                <a href="../namespaces/PlMigration.Helper.html" style="margin-left: 30px; padding-left: 0">Helper</a>
+            </div>
+            <div id="namespace-1660037012" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1741645385"></a>
+                                <a href="../namespaces/PlMigration.Helper.DataFunctions.html" style="margin-left: 30px; padding-left: 0">DataFunctions</a>
+            </div>
+            <div id="namespace-1741645385" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Helper.DataFunctions.IValueManipulator.html">IValueManipulator</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Helper.DataFunctions.RemoveSpecialCharacters.html">RemoveSpecialCharacters</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                            <li class="trait"><a href="../classes/PlMigration.Helper.LoggerTrait.html">LoggerTrait</a></li>
+                                                                            <li class="class"><a href="../classes/PlMigration.Helper.PlapiClient.html">PlapiClient</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2071514335"></a>
+                                <a href="../namespaces/PlMigration.Model.html" style="margin-left: 30px; padding-left: 0">Model</a>
+            </div>
+            <div id="namespace-2071514335" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Model.ExportModel.html">ExportModel</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Model.Field.html">Field</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Model.Formatter.html">Formatter</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Model.ImportModel.html">ImportModel</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1583281991"></a>
+                                <a href="../namespaces/PlMigration.Reader.html" style="margin-left: 30px; padding-left: 0">Reader</a>
+            </div>
+            <div id="namespace-1583281991" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Reader.IReader.html">IReader</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Reader.CsvReader.html">CsvReader</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-586999048"></a>
+                                <a href="../namespaces/PlMigration.Writer.html" style="margin-left: 30px; padding-left: 0">Writer</a>
+            </div>
+            <div id="namespace-586999048" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Writer.IWriter.html">IWriter</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Writer.CsvWriter.html">CsvWriter</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Writer.TransactionLogger.html">TransactionLogger</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.PlayerlyncExport.html">PlayerlyncExport</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.PlayerlyncImport.html">PlayerlyncImport</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.PlayerlyncImportSync.html">PlayerlyncImportSync</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/PlMigration.html">\PlMigration</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\PlMigration</small>PlayerlyncImportSync</h1>
+                    <p><em>An importer to use when
+Class PlayerlyncImportSynchronizer</em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/PlMigration.PlayerlyncImportSync.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImportSync.html#method_import" class="">import()</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#method_getRecord" class="">getRecord()</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImportSync.html#method_sendActivityRecord" class="">sendActivityRecord()</a><br />
+                                                                    <a href="../classes/PlMigration.Helper.LoggerTrait.html#method_getLogger" class="">getLogger()</a><br />
+                                                                    <a href="../classes/PlMigration.Helper.LoggerTrait.html#method_setLogger" class="">setLogger()</a><br />
+                                                                    <a href="../classes/PlMigration.Helper.LoggerTrait.html#method_error" class="">error()</a><br />
+                                                                    <a href="../classes/PlMigration.Helper.LoggerTrait.html#method_warning" class="">warning()</a><br />
+                                                                    <a href="../classes/PlMigration.Helper.LoggerTrait.html#method_debug" class="">debug()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#method_insertRecord" class="">insertRecord()</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#method_insertRecords" class="">insertRecords()</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#method_fillModelWithData" class="">fillModelWithData()</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#method_failure" class="">failure()</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#method_success" class="">success()</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#method_isDuplicate" class="">isDuplicate()</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#method_addToMemo" class="">addToMemo()</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImportSync.html#method_get" class="">get()</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImportSync.html#method_deleteRecords" class="">deleteRecords()</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImportSync.html#method_deleteRecord" class="">deleteRecord()</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImportSync.html#method_deleted" class="">deleted()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#property_connector" class="">$connector</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#property_model" class="">$model</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#property_reader" class="">$reader</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#property_transactionLogger" class="">$transactionLogger</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#property_counter" class="">$counter</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#property_queue" class="">$queue</a><br />
+                                                                    <a href="../classes/PlMigration.PlayerlyncImport.html#property_memo" class="">$memo</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <em>No private methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/PlMigration.Helper.LoggerTrait.html#property_logger" class="">$logger</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/PlMigration.PlayerlyncImportSync.html"><div class="path-wrapper">PlMigration/PlayerlyncImportSync.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">PlMigration</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                
+                                        <div class="namespace-wrapper"><a href="../classes/PlMigration.PlayerlyncImport.html">\PlMigration\PlayerlyncImport</a></div>
+                                                                                                    <div class="namespace-wrapper">\PlMigration\PlayerlyncImportSync</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_connector" name="property_connector" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$connector</h3>
+                <pre class="signature">$connector : \PlMigration\Connectors\IConnector</pre>
+                <p><em>Connection protocol to the server</em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/PlMigration.Connectors.IConnector.html">\PlMigration\Connectors\IConnector</a>
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_model" name="property_model" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$model</h3>
+                <pre class="signature">$model : \PlMigration\Model\ImportModel</pre>
+                <p><em>Model holding template for mapping information into corresponding fields</em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/PlMigration.Model.ImportModel.html">\PlMigration\Model\ImportModel</a>
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_reader" name="property_reader" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$reader</h3>
+                <pre class="signature">$reader : \PlMigration\Reader\IReader</pre>
+                <p><em>Data file reader</em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/PlMigration.Reader.IReader.html">\PlMigration\Reader\IReader</a>
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_transactionLogger" name="property_transactionLogger" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$transactionLogger</h3>
+                <pre class="signature">$transactionLogger : \PlMigration\Writer\TransactionLogger</pre>
+                <p><em>Transaction logger that will separate successful &amp; failed records from the data file that couldn&#039;t make it into
+the server</em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/PlMigration.Writer.TransactionLogger.html">\PlMigration\Writer\TransactionLogger</a>
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_counter" name="property_counter" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$counter</h3>
+                <pre class="signature">$counter : array</pre>
+                <p><em>Counter of successful and failed records during the import process</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_queue" name="property_queue" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$queue</h3>
+                <pre class="signature">$queue : array</pre>
+                <p><em>Array that holds the request data to be sent in batch.</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_memo" name="property_memo" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$memo</h3>
+                <pre class="signature">$memo : array</pre>
+                <p><em>Array holding data of unique records already inserted</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_logger" name="property_logger" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$logger</h3>
+                <pre class="signature">$logger : \Monolog\Logger</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                \Monolog\Logger
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Helper.LoggerTrait.html"><div class="path-wrapper">\PlMigration\Helper\LoggerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(\PlMigration\Connectors\IConnector  <span class="argument">$connector</span>, \PlMigration\Reader\IReader  <span class="argument">$reader</span>, \PlMigration\Model\ImportModel  <span class="argument">$model</span>, array  <span class="argument">$options = array()</span>) </pre>
+                <p><em>PlayerlyncImportSynchronizer constructor.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td><a href="../classes/PlMigration.Connectors.IConnector.html">\PlMigration\Connectors\IConnector</a></td>
+                                <td>$connector </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/PlMigration.Reader.IReader.html">\PlMigration\Reader\IReader</a></td>
+                                <td>$reader </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/PlMigration.Model.ImportModel.html">\PlMigration\Model\ImportModel</a></td>
+                                <td>$model </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$options </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlMigration\Exceptions\ImportException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_import" name="method_import" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">import()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">import() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRecord" name="method_getRecord" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRecord()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRecord() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_sendActivityRecord" name="method_sendActivityRecord" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">sendActivityRecord()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">sendActivityRecord(  <span class="argument">$startTime</span>,   <span class="argument">$endTime</span>) </pre>
+                <p><em>Send an activity record to track the changes occurred</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$startTime </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$endTime </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getLogger" name="method_getLogger" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getLogger()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getLogger() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Helper.LoggerTrait.html"><div class="path-wrapper">\PlMigration\Helper\LoggerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setLogger" name="method_setLogger" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setLogger()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setLogger(  <span class="argument">$logger</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$logger </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Helper.LoggerTrait.html"><div class="path-wrapper">\PlMigration\Helper\LoggerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_error" name="method_error" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">error()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">error(  <span class="argument">$message</span>,   <span class="argument">$context = array()</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$message </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$context </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Helper.LoggerTrait.html"><div class="path-wrapper">\PlMigration\Helper\LoggerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_warning" name="method_warning" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">warning()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">warning(  <span class="argument">$message</span>,   <span class="argument">$context = array()</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$message </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$context </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Helper.LoggerTrait.html"><div class="path-wrapper">\PlMigration\Helper\LoggerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_debug" name="method_debug" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">debug()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">debug(  <span class="argument">$message</span>,   <span class="argument">$context = array()</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$message </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$context </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Helper.LoggerTrait.html"><div class="path-wrapper">\PlMigration\Helper\LoggerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_insertRecord" name="method_insertRecord" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">insertRecord()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">insertRecord(  <span class="argument">$record</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$record </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_insertRecords" name="method_insertRecords" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">insertRecords()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">insertRecords(  <span class="argument">$record</span>,   <span class="argument">$force = false</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$record </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$force </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_fillModelWithData" name="method_fillModelWithData" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">fillModelWithData()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">fillModelWithData(  <span class="argument">$record</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$record </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_failure" name="method_failure" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">failure()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">failure(  <span class="argument">$record</span>,   <span class="argument">$errorMessage</span>, array  <span class="argument">$context = array()</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$record </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$errorMessage </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$context </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_success" name="method_success" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">success()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">success(  <span class="argument">$rawRecord</span>,   <span class="argument">$apiRecord</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$rawRecord </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$apiRecord </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isDuplicate" name="method_isDuplicate" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isDuplicate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isDuplicate(array  <span class="argument">$data</span>) : boolean</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addToMemo" name="method_addToMemo" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">addToMemo()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addToMemo(  <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.PlayerlyncImport.html"><div class="path-wrapper">\PlMigration\PlayerlyncImport</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_get" name="method_get" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">get()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">get(boolean  <span class="argument">$hasNext = false</span>) : array</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$hasNext </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlMigration\Exceptions\ConnectorException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_deleteRecords" name="method_deleteRecords" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">deleteRecords()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">deleteRecords(  <span class="argument">$record</span>,   <span class="argument">$force</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$record </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$force </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_deleteRecord" name="method_deleteRecord" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">deleteRecord()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">deleteRecord(  <span class="argument">$record</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$record </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_deleted" name="method_deleted" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">deleted()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">deleted(  <span class="argument">$record</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$record </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">PlayerlyncImportSync.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/PlMigration/PlayerlyncImportSync.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/PlayerLync.html">\PlayerLync</a></li>
+                                                                            <li><a href="../namespaces/PlMigration.html">\PlMigration</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on January 17th, 2019 at 15:35.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

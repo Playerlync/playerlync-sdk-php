@@ -7,6 +7,10 @@
 
 namespace PlMigration\Builder\Helper;
 
+/**
+ * Class that contains constants used to create a date format to be used the ExportBuilder in the timeFormat() function
+ * @package PlMigration\Builder\Helper
+ */
 class TimeFormat
 {
     /**

@@ -1,0 +1,2603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/PlayerLync.html">\PlayerLync</a></li>
+                                                        <li><a href="../namespaces/PlMigration.html">\PlMigration</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">189</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">1</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1479823497"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-1479823497" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-878923218"></a>
+                                <a href="../namespaces/PlayerLync.html" style="margin-left: 30px; padding-left: 0">PlayerLync</a>
+            </div>
+            <div id="namespace-878923218" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1078634779"></a>
+                                <a href="../namespaces/PlayerLync.Authentication.html" style="margin-left: 30px; padding-left: 0">Authentication</a>
+            </div>
+            <div id="namespace-1078634779" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-836409199"></a>
+                                <a href="../namespaces/PlayerLync.Authentication.Oauth2.html" style="margin-left: 30px; padding-left: 0">Oauth2</a>
+            </div>
+            <div id="namespace-836409199" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Authentication.Oauth2.AccessToken.html">AccessToken</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Authentication.Oauth2.OAuth2Client.html">OAuth2Client</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2110516433"></a>
+                                <a href="../namespaces/PlayerLync.Exceptions.html" style="margin-left: 30px; padding-left: 0">Exceptions</a>
+            </div>
+            <div id="namespace-2110516433" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncAuthenticationException.html">PlayerLyncAuthenticationException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncClientException.html">PlayerLyncClientException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncOtherException.html">PlayerLyncOtherException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncResponseException.html">PlayerLyncResponseException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncSDKException.html">PlayerLyncSDKException</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Exceptions.PlayerLyncServerException.html">PlayerLyncServerException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1178686088"></a>
+                                <a href="../namespaces/PlayerLync.FileUpload.html" style="margin-left: 30px; padding-left: 0">FileUpload</a>
+            </div>
+            <div id="namespace-1178686088" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.Mimetypes.html">Mimetypes</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.PlayerLyncFile.html">PlayerLyncFile</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.FileUpload.PlayerLyncVideo.html">PlayerLyncVideo</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1368073633"></a>
+                                <a href="../namespaces/PlayerLync.Http.html" style="margin-left: 30px; padding-left: 0">Http</a>
+            </div>
+            <div id="namespace-1368073633" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlayerLync.Http.RequestBodyInterface.html">RequestBodyInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Http.PLAPIRawResponse.html">PLAPIRawResponse</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Http.RequestBodyJsonEncoded.html">RequestBodyJsonEncoded</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Http.RequestBodyMultipart.html">RequestBodyMultipart</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.Http.RequestBodyUrlEncoded.html">RequestBodyUrlEncoded</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1226934051"></a>
+                                <a href="../namespaces/PlayerLync.HttpClients.html" style="margin-left: 30px; padding-left: 0">HttpClients</a>
+            </div>
+            <div id="namespace-1226934051" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlayerLync.HttpClients.PlayerLyncHttpClientInterface.html">PlayerLyncHttpClientInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.HttpClients.PlayerLyncCurl.html">PlayerLyncCurl</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.HttpClients.PlayerLyncCurlHttpClient.html">PlayerLyncCurlHttpClient</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1073225140"></a>
+                                <a href="../namespaces/PlayerLync.Url.html" style="margin-left: 30px; padding-left: 0">Url</a>
+            </div>
+            <div id="namespace-1073225140" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.Url.PlayerLyncUrlManipulator.html">PlayerLyncUrlManipulator</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLync.html">PlayerLync</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncApp.html">PlayerLyncApp</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncClient.html">PlayerLyncClient</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncRequest.html">PlayerLyncRequest</a></li>
+                                                    <li class="class"><a href="../classes/PlayerLync.PlayerLyncResponse.html">PlayerLyncResponse</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-959484805"></a>
+                                <a href="../namespaces/PlMigration.html" style="margin-left: 30px; padding-left: 0">PlMigration</a>
+            </div>
+            <div id="namespace-959484805" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-940141400"></a>
+                                <a href="../namespaces/PlMigration.Builder.html" style="margin-left: 30px; padding-left: 0">Builder</a>
+            </div>
+            <div id="namespace-940141400" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-489011657"></a>
+                                <a href="../namespaces/PlMigration.Builder.Helper.html" style="margin-left: 30px; padding-left: 0">Helper</a>
+            </div>
+            <div id="namespace-489011657" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Builder.Helper.TimeFormat.html">TimeFormat</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1053875608"></a>
+                                <a href="../namespaces/PlMigration.Builder.Traits.html" style="margin-left: 30px; padding-left: 0">Traits</a>
+            </div>
+            <div id="namespace-1053875608" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                            <li class="trait"><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html">ApiBuilderTrait</a></li>
+                                                    <li class="trait"><a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html">CsvBuilderTrait</a></li>
+                                                    <li class="trait"><a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html">ErrorLogBuilderTrait</a></li>
+                                                                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Builder.FileExportBuilder.html">FileExportBuilder</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Builder.FileImportBuilder.html">FileImportBuilder</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Builder.FileImportSyncBuilder.html">FileImportSyncBuilder</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Builder.FtpBuilder.html">FtpBuilder</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Builder.SftpBuilder.html">SftpBuilder</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-722771522"></a>
+                                <a href="../namespaces/PlMigration.Client.html" style="margin-left: 30px; padding-left: 0">Client</a>
+            </div>
+            <div id="namespace-722771522" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Client.IClient.html">IClient</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Client.Client.html">Client</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Client.FtpClient.html">FtpClient</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Client.SftpClient.html">SftpClient</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-277609664"></a>
+                                <a href="../namespaces/PlMigration.Connectors.html" style="margin-left: 30px; padding-left: 0">Connectors</a>
+            </div>
+            <div id="namespace-277609664" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Connectors.IConnector.html">IConnector</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Connectors.APIConnector.html">APIConnector</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1516899790"></a>
+                                <a href="../namespaces/PlMigration.Exceptions.html" style="margin-left: 30px; padding-left: 0">Exceptions</a>
+            </div>
+            <div id="namespace-1516899790" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.BuilderException.html">BuilderException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ClientException.html">ClientException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ConnectorException.html">ConnectorException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ExportException.html">ExportException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ImportException.html">ImportException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.ReaderException.html">ReaderException</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Exceptions.WriterException.html">WriterException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-750470471"></a>
+                                <a href="../namespaces/PlMigration.Helper.html" style="margin-left: 30px; padding-left: 0">Helper</a>
+            </div>
+            <div id="namespace-750470471" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1123575369"></a>
+                                <a href="../namespaces/PlMigration.Helper.DataFunctions.html" style="margin-left: 30px; padding-left: 0">DataFunctions</a>
+            </div>
+            <div id="namespace-1123575369" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Helper.DataFunctions.IValueManipulator.html">IValueManipulator</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Helper.DataFunctions.RemoveSpecialCharacters.html">RemoveSpecialCharacters</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                            <li class="trait"><a href="../classes/PlMigration.Helper.LoggerTrait.html">LoggerTrait</a></li>
+                                                                            <li class="class"><a href="../classes/PlMigration.Helper.PlapiClient.html">PlapiClient</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-337244181"></a>
+                                <a href="../namespaces/PlMigration.Model.html" style="margin-left: 30px; padding-left: 0">Model</a>
+            </div>
+            <div id="namespace-337244181" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Model.ExportModel.html">ExportModel</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Model.Field.html">Field</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Model.Formatter.html">Formatter</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Model.ImportModel.html">ImportModel</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1142011030"></a>
+                                <a href="../namespaces/PlMigration.Reader.html" style="margin-left: 30px; padding-left: 0">Reader</a>
+            </div>
+            <div id="namespace-1142011030" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Reader.IReader.html">IReader</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Reader.CsvReader.html">CsvReader</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1485080123"></a>
+                                <a href="../namespaces/PlMigration.Writer.html" style="margin-left: 30px; padding-left: 0">Writer</a>
+            </div>
+            <div id="namespace-1485080123" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PlMigration.Writer.IWriter.html">IWriter</a></li>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.Writer.CsvWriter.html">CsvWriter</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.Writer.TransactionLogger.html">TransactionLogger</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PlMigration.PlayerlyncExport.html">PlayerlyncExport</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.PlayerlyncImport.html">PlayerlyncImport</a></li>
+                                                    <li class="class"><a href="../classes/PlMigration.PlayerlyncImportSync.html">PlayerlyncImportSync</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/PlMigration.Builder.html">\PlMigration\Builder</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\PlMigration\Builder</small>FileExportBuilder</h1>
+                    <p><em>Builder to configure and execute the export process. Once configurations are ready, execute the process with the export() function</em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_clientId" class="">clientId()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_clientSecret" class="">clientSecret()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_username" class="">username()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_password" class="">password()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_host" class="">host()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_apiVersion" class="">apiVersion()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_primaryOrgId" class="">primaryOrgId()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_postService" class="">postService()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_getService" class="">getService()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_filter" class="">filter()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_orderBy" class="">orderBy()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_supportBatch" class="">supportBatch()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html#method_delimiter" class="">delimiter()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html#method_enclosure" class="">enclosure()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html#method_writeFileAppend" class="">writeFileAppend()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html#method_errorLog" class="">errorLog()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#method_outputFile" class="">outputFile()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#method_timeFormat" class="">timeFormat()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#method_includeHeaders" class="">includeHeaders()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#method_runHistoryFile" class="">runHistoryFile()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#method_addField" class="">addField()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#method_sendTo" class="">sendTo()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#method_export" class="">export()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_source" class="">source()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html#method_buildWriter" class="">buildWriter()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html#method_buildReader" class="">buildReader()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html#method_addError" class="">addError()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html#method_addDebug" class="">addDebug()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html#method_buildErrorLog" class="">buildErrorLog()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#method_build" class="">build()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#property_queryParams" class="">$queryParams</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html#property_errorLog" class="">$errorLog</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#method_buildApi" class="">buildApi()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#method_verifyHistoryFile" class="">verifyHistoryFile()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#method_buildFields" class="">buildFields()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#method_addLastRunTimeFilter" class="">addLastRunTimeFilter()</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#method_saveRunTime" class="">saveRunTime()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#property_hostSettings" class="">$hostSettings</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#property_postService" class="">$postService</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#property_getService" class="">$getService</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html#property_source" class="">$source</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html#property_csvOptions" class="">$csvOptions</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html#property_delimiter" class="">$delimiter</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html#property_enclosure" class="">$enclosure</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html#property_errorLogFile" class="">$errorLogFile</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#property_outputFile" class="">$outputFile</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#property_historyFile" class="">$historyFile</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#property_historyFileData" class="">$historyFileData</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#property_format" class="">$format</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#property_options" class="">$options</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#property_protocol" class="">$protocol</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#property_destination" class="">$destination</a><br />
+                                                                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html#property_fields" class="">$fields</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/PlMigration.Builder.FileExportBuilder.html"><div class="path-wrapper">PlMigration/Builder/FileExportBuilder.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">PlMigration\Builder</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\PlMigration\Builder\FileExportBuilder</div>
+                            </dd>
+
+                        
+                                                                                    <dt>Uses traits</dt>
+                                                        <dd>
+                                <a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html">                                    <div class="namespace-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div>
+                                </a>                            </dd>
+                                                                                <dd>
+                                <a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html">                                    <div class="namespace-wrapper">\PlMigration\Builder\Traits\CsvBuilderTrait</div>
+                                </a>                            </dd>
+                                                                                <dd>
+                                <a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html">                                    <div class="namespace-wrapper">\PlMigration\Builder\Traits\ErrorLogBuilderTrait</div>
+                                </a>                            </dd>
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_queryParams" name="property_queryParams" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$queryParams</h3>
+                <pre class="signature">$queryParams : array</pre>
+                <p><em>Array has holds the query parameters to be used when performing GET services</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_errorLog" name="property_errorLog" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$errorLog</h3>
+                <pre class="signature">$errorLog : \Monolog\Logger</pre>
+                <p><em>Logger object</em></p>
+                
+
+                                <h4>Type</h4>
+                \Monolog\Logger
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ErrorLogBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_hostSettings" name="property_hostSettings" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$hostSettings</h3>
+                <pre class="signature">$hostSettings : array</pre>
+                <p><em>Array that holds the api settings</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_postService" name="property_postService" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$postService</h3>
+                <pre class="signature">$postService : string</pre>
+                <p><em>Playerlync API path of a POST service to use for importing records</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_getService" name="property_getService" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$getService</h3>
+                <pre class="signature">$getService : string</pre>
+                <p><em>Playerlync API path of a GET service to use for retrieving records</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_source" name="property_source" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$source</h3>
+                <pre class="signature">$source : string</pre>
+                <p><em>Name of source that records are associated with</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_csvOptions" name="property_csvOptions" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$csvOptions</h3>
+                <pre class="signature">$csvOptions : array</pre>
+                <p><em>array of options allowed on the data file writer/reader</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\CsvBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_delimiter" name="property_delimiter" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$delimiter</h3>
+                <pre class="signature">$delimiter : string</pre>
+                <p><em>Delimiter used by the csv writer/reader. Default value: ,</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\CsvBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_enclosure" name="property_enclosure" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$enclosure</h3>
+                <pre class="signature">$enclosure : string</pre>
+                <p><em>Enclosure used by the csv writer/reader. Default value: &quot;</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\CsvBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_errorLogFile" name="property_errorLogFile" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$errorLogFile</h3>
+                <pre class="signature">$errorLogFile : string</pre>
+                <p><em>Location of the error log file</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ErrorLogBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_outputFile" name="property_outputFile" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$outputFile</h3>
+                <pre class="signature">$outputFile : string</pre>
+                <p><em>Full path to the output file created</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_historyFile" name="property_historyFile" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$historyFile</h3>
+                <pre class="signature">$historyFile : string</pre>
+                <p><em>File containing run history</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_historyFileData" name="property_historyFileData" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$historyFileData</h3>
+                <pre class="signature">$historyFileData : object</pre>
+                <p><em>Parsed Data of the history file</em></p>
+                
+
+                                <h4>Type</h4>
+                object
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_format" name="property_format" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$format</h3>
+                <pre class="signature">$format : array</pre>
+                <p><em>Specific format to be used in the output file (ie. time)</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_options" name="property_options" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$options</h3>
+                <pre class="signature">$options : array</pre>
+                <p><em>array holding additional settings that will be used by the export</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_protocol" name="property_protocol" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$protocol</h3>
+                <pre class="signature">$protocol : \PlMigration\Client\IClient</pre>
+                <p><em>Protocol to use when sending the file to an outside server location</em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/PlMigration.Client.IClient.html">\PlMigration\Client\IClient</a>
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_destination" name="property_destination" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$destination</h3>
+                <pre class="signature">$destination : string</pre>
+                <p><em>String holding the directory to send the created data file</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_fields" name="property_fields" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$fields</h3>
+                <pre class="signature">$fields : array&lt;mixed,\PlMigration\Model\Field&gt;</pre>
+                <p><em>Fields to be retrieved from the data provider</em></p>
+                
+
+                                <h4>Type</h4>
+                array&lt;mixed,<a href="../classes/PlMigration.Model.Field.html">\PlMigration\Model\Field</a>&gt;
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_clientId" name="method_clientId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">clientId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">clientId(string  <span class="argument">$clientId</span>) : $this</pre>
+                <p><em>Set the client_id to be used to connect to the playerlync API</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$clientId </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_clientSecret" name="method_clientSecret" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">clientSecret()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">clientSecret(string  <span class="argument">$clientSecret</span>) : $this</pre>
+                <p><em>Set the client_secret to be used to connect to the playerlync API</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$clientSecret </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_username" name="method_username" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">username()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">username(string  <span class="argument">$username</span>) : $this</pre>
+                <p><em>Set the username to be authenticated to connect to the playerlync API</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$username </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_password" name="method_password" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">password()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">password(string  <span class="argument">$password</span>) : $this</pre>
+                <p><em>Set the password for the username provided.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$password </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_host" name="method_host" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">host()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">host(string  <span class="argument">$host</span>) : $this</pre>
+                <p><em>Set the host to connect to. Include the port number if not 443</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$host </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_apiVersion" name="method_apiVersion" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">apiVersion()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">apiVersion(string  <span class="argument">$version</span>) : $this</pre>
+                <p><em>Set the api version to use. Default will be v3.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$version </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_primaryOrgId" name="method_primaryOrgId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">primaryOrgId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">primaryOrgId(string  <span class="argument">$primaryOrgId</span>) : $this</pre>
+                <p><em>Set the primary org id that the records will be added to.</em></p>
+                <p>This helps prevents errors in the playerlync api as the primary organization affected does not always belong to the
+username provided.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$primaryOrgId </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_postService" name="method_postService" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">postService()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">postService(string  <span class="argument">$servicePath</span>) : $this</pre>
+                <p><em>Set the POST service to be used by the API connection for inserting data.</em></p>
+                <p>Refer to the API docs for information on services available</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$servicePath </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getService" name="method_getService" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getService()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getService(string  <span class="argument">$servicePath</span>) : $this</pre>
+                <p><em>Set the GET service to be used by the API connection for retrieving data.</em></p>
+                <p>Refer to the API docs for information on services available</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$servicePath </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_filter" name="method_filter" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">filter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">filter(string  <span class="argument">$filter</span>) : $this</pre>
+                <p><em>Set the filter query parameter as it is recognized by the playerlync api.</em></p>
+                <p>Refer to the playerlync API docs for syntax information</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$filter </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_orderBy" name="method_orderBy" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">orderBy()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">orderBy(string  <span class="argument">$order</span>) : $this</pre>
+                <p><em>Set the orderby query parameter as it is recognized by the playerlync api.</em></p>
+                <p>Refer to the Playerlync API docs for syntax information.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$order </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_supportBatch" name="method_supportBatch" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">supportBatch()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">supportBatch(boolean  <span class="argument">$supportBatch</span>) : $this</pre>
+                <p><em>Toggle to turn on/off async bulk requests, if applicable. (This only affects importing).</em></p>
+                <p>By default, async bulk requests are enabled.
+It is not recommended to disable this as it will make the process slower.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$supportBatch </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_delimiter" name="method_delimiter" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">delimiter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">delimiter(string  <span class="argument">$delimiter</span>) : $this</pre>
+                <p><em>Set the recognized delimiter character between fields.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$delimiter </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\CsvBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_enclosure" name="method_enclosure" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">enclosure()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">enclosure(string  <span class="argument">$enclosure</span>) : $this</pre>
+                <p><em>Set the recognized enclosure character around fields.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$enclosure </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\CsvBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_writeFileAppend" name="method_writeFileAppend" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">writeFileAppend()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">writeFileAppend(boolean  <span class="argument">$append</span>) : $this</pre>
+                <p><em>Toggle to allow export to use the export for multiple executions into a file.</em></p>
+                <p>Used by the export application for running the same service with different filter settings into one file.
+Disabled by default.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$append </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\CsvBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_errorLog" name="method_errorLog" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">errorLog()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">errorLog(string  <span class="argument">$file</span>) : $this</pre>
+                <p><em>Set the location of where the file error/debug log will reside</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$file </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ErrorLogBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct() </pre>
+                <p><em>ExportBuilder constructor.</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_outputFile" name="method_outputFile" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">outputFile()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">outputFile(string  <span class="argument">$file</span>) : $this</pre>
+                <p><em>Set the full path to where the created exported file will be located.</em></p>
+                <p>If the directory does not exist, it will NOT be created and return an error</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$file </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_timeFormat" name="method_timeFormat" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">timeFormat()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">timeFormat(string  <span class="argument">$format</span>) : $this</pre>
+                <p><em>Set the date format to be output on the exported file.</em></p>
+                <p>The date can be created by using the constants in TimeFormat.php</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$format </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_includeHeaders" name="method_includeHeaders" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">includeHeaders()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">includeHeaders(boolean  <span class="argument">$include</span>) : $this</pre>
+                <p><em>Toggle to enable the exported file to include a header row with the names of the associated data.</em></p>
+                <p>By default, it is not included.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$include </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_runHistoryFile" name="method_runHistoryFile" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">runHistoryFile()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">runHistoryFile(string  <span class="argument">$file</span>) : \PlMigration\Builder\FileExportBuilder</pre>
+                <p><em>File that configures history file to prevent returning of previous runs.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$file </td>
+                                <td><p>Filepath of the history file, including the file name</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlMigration.Builder.FileExportBuilder.html">\PlMigration\Builder\FileExportBuilder</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addField" name="method_addField" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addField()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addField(string  <span class="argument">$apiField</span>, string|null  <span class="argument">$alias = null</span>, string  <span class="argument">$fieldType = \PlMigration\Model\Field::VARIABLE</span>) : $this</pre>
+                <p><em>Add a field to be added to the output.</em></p>
+                <p>The order of the output fields is determined by the sequence of the function calls</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$apiField </td>
+                                <td><p>The name of the field from the playerlync API</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|null</td>
+                                <td>$alias </td>
+                                <td><p>The alias name to be used for the output (if applicable). For file exports, it would be the header name</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$fieldType </td>
+                                <td><p>The type of field that is being created. Refer to Field.php constants for types available. Default is Field::VARIABLE</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_sendTo" name="method_sendTo" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">sendTo()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">sendTo(string  <span class="argument">$destination</span>, \PlMigration\Client\IClient  <span class="argument">$protocol</span>) : $this</pre>
+                <p><em>Select a directory to send the exported file to via a selected protocol client (ftp, sftp, etc)</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$destination </td>
+                                <td><p>File path of the remote server location to send file</p></td>
+                            </tr>
+                                                    <tr>
+                                <td><a href="../classes/PlMigration.Client.IClient.html">\PlMigration\Client\IClient</a></td>
+                                <td>$protocol </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_export" name="method_export" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">export()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">export() : mixed</pre>
+                <p><em>Function that will export the api data to an output file and then send the file to another server if configured</em></p>
+                
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlMigration\Exceptions\BuilderException</dt>
+                            <dd></dd>
+                                                    <dt>\PlMigration\Exceptions\ExportException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_source" name="method_source" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">source()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">source(string  <span class="argument">$source</span>) : $this</pre>
+                <p><em>the source value that records will be categorized as inside the playerlync data</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$source </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    $this
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_buildWriter" name="method_buildWriter" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">buildWriter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">buildWriter(string  <span class="argument">$file</span>) : \PlMigration\Writer\CsvWriter</pre>
+                <p><em>Build the csv writer object with the settings desired</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$file </td>
+                                <td><p>File path to the location of the csv file to be created</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlMigration\Exceptions\BuilderException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlMigration.Writer.CsvWriter.html">\PlMigration\Writer\CsvWriter</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\CsvBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_buildReader" name="method_buildReader" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">buildReader()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">buildReader(string  <span class="argument">$file</span>) : \PlMigration\Reader\CsvReader</pre>
+                <p><em>Build the csv reader object with the settings desired</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$file </td>
+                                <td><p>File path to the location of the csv file to be found</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlMigration\Exceptions\BuilderException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlMigration.Reader.CsvReader.html">\PlMigration\Reader\CsvReader</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.CsvBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\CsvBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addError" name="method_addError" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">addError()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addError(string  <span class="argument">$message</span>) </pre>
+                <p><em>Add an error message</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$message </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ErrorLogBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addDebug" name="method_addDebug" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">addDebug()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addDebug(string  <span class="argument">$message</span>) </pre>
+                <p><em>Add a debug message</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$message </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ErrorLogBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_buildErrorLog" name="method_buildErrorLog" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">buildErrorLog()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">buildErrorLog(string  <span class="argument">$logName</span>) </pre>
+                <p><em>Create the error log with the settings chosen</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$logName </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlMigration\Exceptions\BuilderException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ErrorLogBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ErrorLogBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_build" name="method_build" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">build()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">build() : \PlMigration\PlayerlyncExport</pre>
+                <p><em>Validate data provided and build the export objects to start export process</em></p>
+                
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlMigration\Exceptions\BuilderException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlMigration.PlayerlyncExport.html">\PlMigration\PlayerlyncExport</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_buildApi" name="method_buildApi" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">buildApi()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">buildApi(string|null  <span class="argument">$logger = null</span>) : \PlMigration\Connectors\APIConnector</pre>
+                <p><em>Build the playerlync api connection with the desired settings.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string|null</td>
+                                <td>$logger </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlMigration\Exceptions\BuilderException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/PlMigration.Connectors.APIConnector.html">\PlMigration\Connectors\APIConnector</a>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/PlMigration.Builder.Traits.ApiBuilderTrait.html"><div class="path-wrapper">\PlMigration\Builder\Traits\ApiBuilderTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_verifyHistoryFile" name="method_verifyHistoryFile" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">verifyHistoryFile()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">verifyHistoryFile() </pre>
+                <p><em>Verify the history file has been created correctly</em></p>
+                
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlMigration\Exceptions\BuilderException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_buildFields" name="method_buildFields" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">buildFields()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">buildFields(array  <span class="argument">$structure</span>) : array</pre>
+                <p><em>Validate fields the are added to the output file are valid</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$structure </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlMigration\Exceptions\BuilderException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addLastRunTimeFilter" name="method_addLastRunTimeFilter" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">addLastRunTimeFilter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addLastRunTimeFilter(object  <span class="argument">$historyFile</span>, string  <span class="argument">$type</span>, array  <span class="argument">$structure</span>) </pre>
+                <p><em>Append the last run time query parameter to have GET service return a subset of records</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>object</td>
+                                <td>$historyFile </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$type </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$structure </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_saveRunTime" name="method_saveRunTime" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">saveRunTime()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">saveRunTime() </pre>
+                <p><em>Update the last execution time into the history configuration file</em></p>
+                
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\PlMigration\Exceptions\BuilderException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">FileExportBuilder.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/PlMigration/Builder/FileExportBuilder.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/PlayerLync.html">\PlayerLync</a></li>
+                                                                            <li><a href="../namespaces/PlMigration.html">\PlMigration</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on January 17th, 2019 at 15:35.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>
