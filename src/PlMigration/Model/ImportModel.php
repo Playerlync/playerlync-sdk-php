@@ -7,10 +7,12 @@
 
 namespace PlMigration\Model;
 
+use PlMigration\Model\Field\Field;
+use PlMigration\Model\Field\ImportField;
 
 class ImportModel
 {
-    /** @var Field[] */
+    /** @var ImportField[] */
     private $apiFields;
 
     private $primaryKey;
@@ -44,13 +46,10 @@ class ImportModel
         $row = [];
         foreach($this->apiFields as $field => $fieldInfo)
         {
-            if($fieldInfo->getType() === Field::CONSTANT)
-                $value = $fieldInfo->getAlias();
-            else
+            $value = $fieldInfo->getAlias()->getValue($record);
+            foreach($fieldInfo->getExtra() as $extraAction)
             {
-                $value = trim($record[$fieldInfo->getAlias()]);
-                foreach($fieldInfo->getExtra() as $extraAction)
-                    $value = $extraAction->execute($value);
+                $value = $extraAction->execute($value);
             }
             $row[$field] = $value;
         }

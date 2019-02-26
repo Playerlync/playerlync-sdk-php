@@ -5,7 +5,7 @@
  * Date: 10/9/18
  */
 
-namespace PlMigration\Model;
+namespace PlMigration\Model\Field;
 
 use PlMigration\Helper\DataFunctions\IValueManipulator;
 
@@ -13,7 +13,7 @@ use PlMigration\Helper\DataFunctions\IValueManipulator;
  * Class that creates Field objects to be used by the Models
  * @package PlMigration\Model
  */
-class Field
+abstract class Field
 {
     /**
      * Constant type for field.
@@ -39,28 +39,31 @@ class Field
     const SECONDARY_KEY = 'secondary_key';
 
     /**
-     * Name of the field object as it is recognized by the playerlync system.
-     * @var string
+     * Field that is required by the data source to not be empty to be able to be imported/exported
      */
-    private $field;
+    const REQUIRED = 'required';
 
     /**
-     * The type of field that it is.
+     * The type of field that it is. Refer to constants available
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
-     * The alias name to be recognized by another system outside of playerlync.
-     * @var string
+     * Name of the field object as it is recognized by the Playerlync system.
      */
-    private $alias;
+    protected $field;
+
+    /**
+     * The alias to be recognized by another system outside of Playerlync.
+     */
+    protected $alias;
 
     /**
      * Array of extra functions to allow data value manipulation for the Field used like type checking, value validation, etc.
      * @var IValueManipulator[]
      */
-    private $extra = [];
+    protected $extra = [];
 
     /**
      * Create a field to be used by the model class for importing and exporting
@@ -73,7 +76,7 @@ class Field
     {
         $this->field = $field;
         $this->type = $type;
-        $this->alias = $alias;
+        $this->alias = $alias === null ? null : $this->buildAlias($type, $alias);
 
         if(!is_array($extra))
         {
@@ -83,7 +86,9 @@ class Field
         foreach($extra as $extraFunctionality)
         {
             if($extraFunctionality instanceof IValueManipulator)
+            {
                 $this->extra[] = $extraFunctionality;
+            }
         }
     }
 
@@ -106,8 +111,8 @@ class Field
     }
 
     /**
-     * Get field alias name
-     * @return string
+     * Get field alias
+     * @return IAlias
      */
     public function getAlias()
     {
@@ -121,5 +126,40 @@ class Field
     public function getExtra()
     {
         return $this->extra;
+    }
+
+    /**
+     * Add an extra manipulation function for the field
+     * @param IValueManipulator $manipulator
+     */
+    public function addExtra(IValueManipulator $manipulator)
+    {
+        $this->extra[] = $manipulator;
+    }
+
+    /**
+     * @param string $type
+     * @param string $aliasString
+     * @return IAlias
+     */
+    protected function buildAlias($type, $aliasString)
+    {
+        if($type === self::CONSTANT)
+        {
+            return new ConstantAlias($aliasString);
+        }
+        if(substr_count($aliasString, '%') > 1)
+        {
+            return new FormattedAlias($aliasString);
+        }
+        return new Alias($aliasString);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAliasFields()
+    {
+        return $this->getAlias()->getReferenceFields();
     }
 }

@@ -15,8 +15,10 @@ use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ExportException;
+use PlMigration\Helper\DataFunctions\DateFormatter;
 use PlMigration\Model\ExportModel;
-use PlMigration\Model\Field;
+use PlMigration\Model\Field\ExportField;
+use PlMigration\Model\Field\Field;
 use PlMigration\PlayerlyncExport;
 
 /**
@@ -48,10 +50,10 @@ class FileExportBuilder
     private $historyFileData;
 
     /**
-     * Specific format to be used in the output file (ie. time)
-     * @var array
+     * Specific date format to be used in the output file (ie. time)
+     * @var DateFormatter
      */
-    private $format = [];
+    private $dateFormat;
 
     /**
      * array holding additional settings that will be used by the export
@@ -73,7 +75,7 @@ class FileExportBuilder
 
     /**
      * Fields to be retrieved from the data provider
-     * @var Field[]
+     * @var ExportField[]
      */
     private $fields = [];
 
@@ -105,7 +107,7 @@ class FileExportBuilder
      */
     public function timeFormat(...$format)
     {
-        $this->format['time'] = implode('', $format);
+        $this->dateFormat = new DateFormatter(implode('', $format));
         return $this;
     }
 
@@ -135,15 +137,15 @@ class FileExportBuilder
     /**
      * Add a field to be added to the output.
      * The order of the output fields is determined by the sequence of the function calls
-     * @param string $apiField The name of the field from the playerlync API
-     * @param string|null $alias The alias name to be used for the output (if applicable). For file exports, it would be the header name
+     * @param string $apiAlias The field from the playerlync API
+     * @param string|null $outputName The output name to be used for the output (such as the header name)
      * @param string $fieldType The type of field that is being created. Refer to Field.php constants for types available. Default is Field::VARIABLE
      * @return $this
      */
-    public function addField($apiField, $alias = null, $fieldType = Field::VARIABLE)
+    public function addField($apiAlias, $outputName = null, $fieldType = Field::VARIABLE)
     {
-        $alias = $alias ?: $apiField;
-        $this->fields[] = new Field($apiField, $alias, $fieldType);
+        $outputName = $outputName ?: $apiAlias;
+        $this->fields[] = new ExportField($outputName, $apiAlias, $fieldType);
         return $this;
     }
 
@@ -215,13 +217,12 @@ class FileExportBuilder
             $this->historyFileData = $this->verifyHistoryFile();
             $writer = $this->buildWriter($this->outputFile);
             $api = $this->buildApi($this->errorLog);
-            $model = new ExportModel($this->buildFields($api->getStructure()), $this->format);
+            $model = new ExportModel($this->buildFields($api->getStructure(), $api->getTimeFields()));
             if($api->getGetService() === null)
             {
                 throw new BuilderException('getService() method needs to provide a playerlync API path to run export');
             }
 
-            $model->setTimeFields($api->getTimeFields());
             $this->addLastRunTimeFilter($this->historyFileData, pathinfo($this->outputFile,PATHINFO_BASENAME), $api->getStructure());
             $api->setQueryParams($this->queryParams);
 
@@ -257,30 +258,40 @@ class FileExportBuilder
     /**
      * Validate fields the are added to the output file are valid
      * @param array $structure
+     * @param array $timeFields
      * @return array
      * @throws BuilderException
      */
-    private function buildFields($structure)
+    private function buildFields($structure, $timeFields)
     {
         $structure = array_keys($structure);
         $fields = [];
-        /** @var Field $field */
+        /** @var ExportField $field */
         foreach($this->fields as $field)
         {
             if($field->getField() === null && $field->getAlias() === null)
             {
                 throw new BuilderException('Field and header cannot both be null');
             }
-            if(array_key_exists($field->getAlias(), $fields))
+            if(array_key_exists($field->getField(), $fields))
             {
-                throw new BuilderException('Attempted to insert duplicate header: '.$field->getAlias());
+                throw new BuilderException('Attempted to insert duplicate header: '.$field->getField());
             }
-            if($field->getType() !== Field::CONSTANT && !\in_array($field->getField(), $structure, true))
+            if($field->getType() !== Field::CONSTANT)
             {
-                throw new BuilderException("Unknown field \"{$field->getField()}\" provided that is not returned in the service");
+                foreach($field->getAliasFields() as $refField)
+                {
+                    if(!\in_array($refField, $structure, true))
+                    {
+                        throw new BuilderException("Unknown field \"{$refField}\" provided that is not returned in the service");
+                    }
+
+                    if($this->dateFormat !== null && in_array($refField, $timeFields))
+                        $field->addExtra($this->dateFormat);
+                }
             }
 
-            $fields[$field->getAlias()] = $field;
+            $fields[$field->getField()] = $field;
         }
         $this->fields = [];
         return $fields;

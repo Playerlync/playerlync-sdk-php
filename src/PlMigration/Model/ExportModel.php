@@ -7,28 +7,18 @@
 
 namespace PlMigration\Model;
 
+use PlMigration\Model\Field\ExportField;
+
 class ExportModel
 {
-    private $fields = [];
+    /**
+     * @var ExportField[]
+     */
+    private $fields;
 
-    private $specialFields = [
-        'constant' => [],
-        'time' => []
-    ];
-
-    private $formats = [
-        'time'=> null
-    ];
-
-    public function __construct(array $fields, $formats)
+    public function __construct(array $fields)
     {
-        /** @var Field $field */
-        foreach($fields as $header => $field)
-        {
-            $this->parseField($header,$field);
-        }
-
-        $this->formats = array_merge($this->formats, $formats);
+        $this->fields = $fields;
     }
 
     /**
@@ -37,62 +27,22 @@ class ExportModel
      */
     public function fillModel($data)
     {
-        $model = $this->fields;
-
-        foreach($model as $index => $mapValue)
+        $output = [];
+        foreach($this->fields as $field)
         {
-            if(array_key_exists($index, $this->specialFields['constant']))
+            $value = $field->getAlias()->getValue($data);
+            foreach($field->getExtra() as $extraAction)
             {
-                $model[$index] = $this->specialFields['constant'][$index];
-                continue;
+                $value = $extraAction->execute($value);
             }
-            if($mapValue === null)
-            {
-                $model[$index] = null;
-                continue;
-            }
-
-            if(array_key_exists($mapValue, $data))
-            {
-                $model[$index] = $this->getFormattedValue($mapValue, $data[$mapValue]);
-            }
+            $output[$field->getField()] = $value;
         }
 
-        return $model;
+        return $output;
     }
 
     public function getHeaders()
     {
         return array_keys($this->fields);
-    }
-
-    /**
-     * @param $header
-     * @param Field $field
-     */
-    private function parseField($header, Field $field)
-    {
-        $value = $field->getField();
-        if($field->getType() === Field::CONSTANT)
-        {
-            $value = null;
-            $this->specialFields['constant'][$header] = $field->getField();
-        }
-        $this->fields[$header] = $value;
-    }
-
-    private function getFormattedValue($field, $value)
-    {
-        if(\in_array($field, $this->specialFields['time'],true))
-        {
-            $value = Formatter::formatTime($value, $this->formats['time']);
-        }
-
-        return $value;
-    }
-
-    public function setTimeFields($fields)
-    {
-        $this->specialFields['time'] = $fields;
     }
 }

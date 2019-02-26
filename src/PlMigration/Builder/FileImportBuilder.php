@@ -16,7 +16,8 @@ use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\WriterException;
 use PlMigration\Helper\DataFunctions\IValueManipulator;
-use PlMigration\Model\Field;
+use PlMigration\Model\Field\Field;
+use PlMigration\Model\Field\ImportField;
 use PlMigration\Model\ImportModel;
 use PlMigration\PlayerlyncImport;
 use PlMigration\Writer\TransactionLogger;
@@ -138,8 +139,7 @@ class FileImportBuilder
      */
     public function addField($apiField, $type = Field::VARIABLE, $extra = [])
     {
-        $this->fields[] = new Field($apiField, count($this->fields), $type, $extra);
-        //$this->mapField($apiField, count($this->fields), $type);
+        $this->fields[] = new ImportField($apiField, (string)count($this->fields), $type, $extra);
         return $this;
     }
 
@@ -166,7 +166,7 @@ class FileImportBuilder
      */
     public function mapField($apiField, $alias, $type = Field::VARIABLE, $extra = [])
     {
-        $this->fields[] = new Field($apiField, $alias, $type, $extra);
+        $this->fields[] = new ImportField($apiField, (string)$alias, $type, $extra);
         return $this;
     }
 
@@ -200,9 +200,12 @@ class FileImportBuilder
             $record = $reader->getRecord();
             foreach($model->getFields() as $field)
             {
-                if($field->getType() !== Field::CONSTANT && !array_key_exists($field->getAlias(), $record))
+                foreach($field->getAliasFields() as $refField)
                 {
-                    throw new BuilderException($field->getField().' is mapped to an invalid column number '.$field->getAlias());
+                    if(!array_key_exists($refField, $record))
+                    {
+                        throw new BuilderException($field->getField().' is mapped to an invalid column number '. $refField);
+                    }
                 }
             }
             $this->source(APIConnector::DEFAULT_SOURCE);

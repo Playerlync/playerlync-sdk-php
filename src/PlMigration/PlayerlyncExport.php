@@ -100,6 +100,9 @@ class PlayerlyncExport
         return $response;
     }
 
+    /**
+     * @param $record
+     */
     public function writeRow($record)
     {
         $row = $this->model->fillModel($record);
