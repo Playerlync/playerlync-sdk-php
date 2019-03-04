@@ -9,10 +9,14 @@
 namespace PlMigration;
 
 use PlMigration\Connectors\IConnector;
+use PlMigration\Exceptions\ConnectorException;
 use PlMigration\Model\ImportModel;
 use PlMigration\Reader\IReader;
 
 /**
+ * Imported created for playerlync data types that can't be run with PlayerlyncImport class.
+ * NOT RECOMMENDED FOR USE UNLESS NECESSARY
+ * CONTAINS PERFORMANCE ISSUES ON BIG DATA SETS
  * Class PlayerlyncImportPostPut
  * @package PlMigration
  */
@@ -33,6 +37,10 @@ class PlayerlyncMappedImport extends PlayerlyncImport
      */
     private $serverDataMapMemo = [];
 
+    private $primaryKey;
+
+    private $mapKey;
+
     /**
      * PlayerlyncImportPostPut constructor.
      * @param IConnector $connector
@@ -47,6 +55,11 @@ class PlayerlyncMappedImport extends PlayerlyncImport
         if(isset($options['mapping']))
         {
             $this->mapServerData = $options['mapping'];
+        }
+        if(isset($options['key_map']))
+        {
+            list($this->primaryKey,$this->mapKey) = $options['key_map'];
+            $this->connector->setOptions(['primary_key'=> $this->primaryKey]);
         }
     }
 
@@ -81,7 +94,19 @@ class PlayerlyncMappedImport extends PlayerlyncImport
     protected function getServerRecords()
     {
         do {
-            $this->serverRecords = array_merge($this->serverRecords, $this->connector->getRecords(['disable_source'=> true]));
+            $serverRecords = $this->connector->getRecords(['disable_source'=> true]);
+            if($this->primaryKey !== null)
+            {
+                foreach($serverRecords as $record)
+                {
+                    $this->serverRecords[$record->{$this->mapKey}] = $record;
+                }
+            }
+            else
+            {
+                $this->serverRecords = array_merge($this->serverRecords, $serverRecords);
+            }
+
         }while($this->connector->hasNext());
     }
 
@@ -95,31 +120,67 @@ class PlayerlyncMappedImport extends PlayerlyncImport
         $row = parent::fillModelWithData($record);
 
         if(empty($row))
+        {
             return $row;
+        }
+
+        if($this->primaryKey !== null && array_key_exists($row[$this->mapKey], $this->serverRecords))
+        {
+            $row[$this->primaryKey] = $this->serverRecords[$row[$this->mapKey]]->{$this->primaryKey};
+        }
 
         foreach($this->mapServerData as $inputField => list($referenceField,$retrieveField))
         {
-            if(!isset($row[$inputField]))
+            if(!isset($row[$inputField])) //If the data doesn't have the input field, skip mapping
             {
                 continue;
             }
-            if(isset($this->serverDataMapMemo[$inputField][$row[$inputField]]))
+
+            if(isset($this->serverDataMapMemo[$inputField][$row[$inputField]])) //If the value exists in the memo map, grab it
             {
                 $row[$inputField] = $this->serverDataMapMemo[$inputField][$row[$inputField]];
+                continue;
             }
-            else
+
+            foreach($this->serverRecords as $serverRecord)
             {
-                foreach($this->serverRecords as $serverRecord)
+                if($serverRecord->$referenceField == $row[$inputField])
                 {
-                    if($serverRecord->$referenceField == $row[$inputField])
-                    {
-                        $this->serverDataMapMemo[$inputField][$row[$inputField]] = $serverRecord->$retrieveField;
-                        $row[$inputField] = $serverRecord->$retrieveField;
-                        break;
-                    }
+                    $this->serverDataMapMemo[$inputField][$row[$inputField]] = $serverRecord->$retrieveField;
+                    $row[$inputField] = $serverRecord->$retrieveField;
+                    break;
                 }
             }
         }
         return $row;
+    }
+
+    /**
+     * @param $record
+     */
+    protected function insertRecord($record)
+    {
+        $row = $this->fillModelWithData($record);
+        try
+        {
+            if(!$this->isAllowedToInsert($row, $record))
+            {
+                return;
+            }
+            if(isset($row[$this->primaryKey]))
+            {
+                $this->connector->updateRecord($row);
+            }
+            else
+            {
+                $this->connector->insertRecord($row);
+            }
+
+            $this->success($record, $row);
+        }
+        catch(ConnectorException $e)
+        {
+            $this->failure($record, $e->getMessage(), $row);
+        }
     }
 }

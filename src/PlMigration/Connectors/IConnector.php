@@ -40,6 +40,13 @@ interface IConnector
     public function insertRecord($data);
 
     /**
+     * Update the data record into the system
+     * @param $data
+     * @return mixed
+     */
+    public function updateRecord($data);
+
+    /**
      * Insert an array of records into the system
      * @param $requests
      * @return mixed

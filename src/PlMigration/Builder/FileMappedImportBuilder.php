@@ -14,10 +14,15 @@ use PlMigration\PlayerlyncMappedImport;
 
 class FileMappedImportBuilder extends FileImportBuilder
 {
+    /**
+     * Not recommended for use without professional guidance
+     * FileMappedImportBuilder constructor.
+     */
     public function __construct()
     {
         parent::__construct();
         $this->options['mapping'] = [];
+        $this->options['key_map'] = [];
     }
 
     /**
@@ -33,9 +38,25 @@ class FileMappedImportBuilder extends FileImportBuilder
         return new PlayerlyncMappedImport($api, $reader, $model, $options);
     }
 
+    /**
+     * @param $inputApiField
+     * @param $compareApiField
+     * @param $retrieveField
+     * @return $this
+     */
     public function addDataFieldMap($inputApiField, $compareApiField, $retrieveField)
     {
         $this->options['mapping'][$inputApiField] = [$compareApiField, $retrieveField];
+        return $this;
+    }
+
+    /**
+     * @param $dataSourceKey
+     * @param $apiKey
+     */
+    public function updatePrimaryKey($dataSourceKey, $apiKey)
+    {
+        $this->options['key_map'] = [$apiKey, $dataSourceKey];
         return $this;
     }
 }

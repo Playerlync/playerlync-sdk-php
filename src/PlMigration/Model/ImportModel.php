@@ -45,6 +45,7 @@ class ImportModel
             if($fieldInfo->getType() === Field::PRIMARY_KEY)
             {
                 $this->primaryKey = $fieldInfo->getField();
+                $this->requiredApiFields[] = $fieldInfo->getField();
             }
 
             if($fieldInfo->getType() === Field::SECONDARY_KEY)

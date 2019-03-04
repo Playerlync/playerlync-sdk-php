@@ -73,6 +73,11 @@ class APIConnector implements IConnector
     private $source;
 
     /**
+     * @var string
+     */
+    private $primaryKey;
+
+    /**
      * APIConnector constructor.
      * @param $getService
      * @param array $query
@@ -368,6 +373,11 @@ class APIConnector implements IConnector
         {
             $this->page = $options['page'];
         }
+
+        if(isset($options['primary_key']))
+        {
+            $this->primaryKey = $options['primary_key'];
+        }
     }
 
     public function getGetService()
@@ -378,5 +388,24 @@ class APIConnector implements IConnector
     public function getPostService()
     {
         return $this->postService;
+    }
+
+    /**
+     * Update the data record into the system
+     * @param array $data
+     * @return mixed
+     */
+    public function updateRecord($data)
+    {
+        return $this->put($this->postService.'/'.$data[$this->primaryKey], [], $data);
+    }
+
+    protected function put($path, $query, $body)
+    {
+        $params = [
+            'query' => $query,
+            'json' => $body
+        ];
+        $this->request('put', $path, $params);
     }
 }

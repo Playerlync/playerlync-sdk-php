@@ -155,6 +155,25 @@ class PlapiClient
     }
 
     /**
+     * @param $path
+     * @param $params
+     * @return object
+     * @throws ClientException
+     */
+    public function put($path, $params)
+    {
+        $options = array_merge([
+            'headers' => $this->getHeaders()
+        ],$params);
+
+        $response = $this->request('PUT', $this->buildPlapiPath($path), $options);
+
+        $this->validatePlapiOk($response);
+
+        return $response;
+    }
+
+    /**
      * @param $requestsArray
      * @return array
      */
