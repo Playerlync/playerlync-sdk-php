@@ -13,10 +13,10 @@ interface IConnector
 {
     /**
      * Retrieve an array of records from the playerlync system
+     * @param array $config
      * @return array
-     * @throws ConnectorException
      */
-    public function getRecords();
+    public function getRecords(array $config = []);
 
     /**
      * Returns true when there are more records to be retrieved for another getRecords() call

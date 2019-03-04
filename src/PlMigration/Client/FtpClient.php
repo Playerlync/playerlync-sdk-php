@@ -10,10 +10,10 @@ namespace PlMigration\Client;
 use FtpClient\FtpException;
 use PlMigration\Exceptions\ClientException;
 
-class FtpClient extends Client
+class FtpClient extends RemoteClient
 {
     /** @var \FtpClient\FtpClient */
-    private $protocol;
+    protected $protocol;
     /** @var string */
     private $host;
     /** @var int int */
@@ -72,7 +72,7 @@ class FtpClient extends Client
      * @return bool
      * @throws ClientException
      */
-    protected function remoteFileExists($file)
+    protected function fileExists($file)
     {
         try
         {
@@ -126,6 +126,17 @@ class FtpClient extends Client
 
     protected function moveFile($remoteFile, $remoteDestination)
     {
-        return $this->protocol->rename($remoteFile, $remoteDestination.'/'.pathinfo($remoteFile, PATHINFO_BASENAME));
+        return $this->protocol->rename($remoteFile, $remoteDestination);
+    }
+
+    /**
+     * @param $directory
+     * @param bool $includeDirectories
+     * @return array
+     * @throws ClientException
+     */
+    protected function getChildren($directory, $includeDirectories = false)
+    {
+        throw new ClientException('method not implemented for this protocol');
     }
 }

@@ -18,48 +18,26 @@ use PlMigration\Exceptions\ClientException;
 interface IClient
 {
     /**
-     * Upload a file to the directory desired.
-     *
-     * @param $localFile
-     * @param $remoteDestination
-     * @return mixed
-     * @throws ClientException
-     */
-    public function put($localFile, $remoteDestination);
-
-    /**
-     * Download a remote file to a local location
-     * @param $remoteFile
-     * @param $localDestination
-     * @return mixed
-     * @throws ClientException
-     */
-    public function get($remoteFile, $localDestination);
-
-    /**
      * Delete a file in the remote server
-     * @param $remoteFile
+     * @param $file
      * @throws ClientException
      */
-    public function delete($remoteFile);
+    public function delete($file);
 
     /**
      * Move a remote file from one spot in the server to another.
-     * @param $remoteFile
-     * @param $remoteDestination
+     * @param $file
+     * @param $destination
      * @return mixed
-     * @throws ClientException
      */
-    public function move($remoteFile, $remoteDestination);
+    public function move($file, $destination);
 
     /**
-     * Create a connection to the remote server with the information provided
+     * Retrieve a list of files found in a specified directory and filter by a specific file pattern if provided
+     * @param string $directory file path to get files from in
+     * @param string $filePattern file pattern (files-start-wit*)
+     * @return array
      * @throws ClientException
      */
-    public function connect();
-
-    /**
-     * Close the connection to the remote server
-     */
-    public function close();
+    public function getDirectoryFiles($directory, $filePattern = null);
 }

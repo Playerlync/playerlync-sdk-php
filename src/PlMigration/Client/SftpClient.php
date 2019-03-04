@@ -10,10 +10,10 @@ namespace PlMigration\Client;
 use phpseclib\Net\SFTP;
 use PlMigration\Exceptions\ClientException;
 
-class SftpClient extends Client
+class SftpClient extends RemoteClient
 {
     /** @var SFTP */
-    private $protocol;
+    protected $protocol;
 
     /** @var string */
     private $host;
@@ -50,7 +50,6 @@ class SftpClient extends Client
      */
     protected function downloadFile($localDestination, $remoteFile)
     {
-        $localDestination .= './'.pathinfo($remoteFile,PATHINFO_BASENAME);
         $this->protocol->get($remoteFile, $localDestination);
     }
 
@@ -61,14 +60,10 @@ class SftpClient extends Client
      * @return bool
      * @throws ClientException
      */
-    protected function remoteFileExists($file)
+    protected function fileExists($file)
     {
         $fileInfo = pathinfo($file);
-        $files = $this->protocol->nlist($fileInfo['dirname']);
-        if($files === false)
-        {
-            throw new ClientException('Directory does not exist');
-        }
+        $files = $this->getChildren($fileInfo['dirname'], false);
         return in_array($fileInfo['basename'], $files, true);
     }
 
@@ -111,6 +106,34 @@ class SftpClient extends Client
 
     protected function moveFile($remoteFile, $remoteDestination)
     {
-        $this->protocol->rename($remoteFile, $remoteDestination.'/'.pathinfo($remoteFile, PATHINFO_BASENAME));
+        $this->protocol->rename($remoteFile, $remoteDestination);
+    }
+
+    /**
+     *
+     * @param $directory
+     * @param bool $includeDirectories
+     * @return array
+     * @throws ClientException
+     */
+    protected function getChildren($directory, $includeDirectories = true)
+    {
+        $this->protocol->setListOrder(true);
+        $this->protocol->setListOrder('mtime', SORT_ASC);
+        $files = $this->protocol->nlist($directory);
+        if($files === false)
+        {
+            throw new ClientException('Directory does not exist');
+        }
+
+        if(!$includeDirectories)
+        {
+            foreach ($files as $key => $file)
+            {
+                if(pathinfo($file, PATHINFO_EXTENSION) === '')
+                    unset($files[$key]);
+            }
+        }
+        return $files;
     }
 }

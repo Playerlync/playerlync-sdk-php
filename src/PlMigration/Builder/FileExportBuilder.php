@@ -11,6 +11,7 @@ use PlMigration\Builder\Traits\ApiBuilderTrait;
 use PlMigration\Builder\Traits\CsvBuilderTrait;
 use PlMigration\Builder\Traits\ErrorLogBuilderTrait;
 use PlMigration\Client\IClient;
+use PlMigration\Client\RemoteClient;
 use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
 use PlMigration\Exceptions\BuilderException;
@@ -63,7 +64,7 @@ class FileExportBuilder
 
     /**
      * Protocol to use when sending the file to an outside server location
-     * @var IClient
+     * @var RemoteClient
      */
     private $protocol;
 
@@ -152,10 +153,10 @@ class FileExportBuilder
     /**
      * Select a directory to send the exported file to via a selected protocol client (ftp, sftp, etc)
      * @param string $destination File path of the remote server location to send file
-     * @param IClient $protocol
+     * @param RemoteClient $protocol
      * @return $this
      */
-    public function sendTo($destination, IClient $protocol)
+    public function sendTo($destination, RemoteClient $protocol)
     {
         $this->protocol = $protocol;
         $this->destination = $destination;
@@ -189,7 +190,7 @@ class FileExportBuilder
             try
             {
                 $this->protocol->connect();
-                $this->protocol->put($output, $this->destination);
+                $this->protocol->upload($output, $this->destination);
                 $this->protocol->close();
             }
             catch (ClientException $e)

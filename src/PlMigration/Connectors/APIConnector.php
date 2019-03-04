@@ -118,13 +118,14 @@ class APIConnector implements IConnector
     }
 
     /**
+     * @param array $config
      * @return array
      * @throws ConnectorException
      */
-    public function getRecords()
+    public function getRecords(array $config = [])
     {
         $queryParams = $this->queryParams;
-        if($this->source !== null)
+        if($this->source !== null && !isset($config['disable_source']))
         {
             if(isset($queryParams['filter']))
             {

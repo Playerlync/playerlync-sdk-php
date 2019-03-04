@@ -12,8 +12,19 @@ namespace PlMigration\Model\Field;
  * Class ConstantAlias
  * @package PlMigration\Model
  */
-class ConstantAlias extends Alias
+class ConstantAlias implements IAlias
 {
+    private $value;
+
+    /**
+     * Alias constructor.
+     * @param $constantValue
+     */
+    public function __construct($constantValue)
+    {
+        $this->value = $constantValue;
+    }
+
     /**
      * Return the constant value
      * @param $record
@@ -21,7 +32,7 @@ class ConstantAlias extends Alias
      */
     public function getValue($record)
     {
-        return $this->fields[0];
+        return $this->value;
     }
 
     /**

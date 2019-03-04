@@ -10,12 +10,13 @@ namespace PlMigration;
 use PlMigration\Connectors\IConnector;
 use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
+use PlMigration\Helper\ImportInterface;
 use PlMigration\Helper\LoggerTrait;
 use PlMigration\Model\ImportModel;
 use PlMigration\Reader\IReader;
 use PlMigration\Writer\TransactionLogger;
 
-class PlayerlyncImport
+class PlayerlyncImport implements ImportInterface
 {
     use LoggerTrait;
 
@@ -122,9 +123,8 @@ class PlayerlyncImport
         $row = $this->fillModelWithData($record);
         try
         {
-            if($this->isDuplicate($row))
+            if(!$this->isAllowedToInsert($row, $record))
             {
-                $this->failure($record, 'Prevented to insert duplicate record based on the primary key', $row);
                 return;
             }
             $this->connector->insertRecord($row);
@@ -139,11 +139,12 @@ class PlayerlyncImport
     protected function insertRecords($record, $force = false)
     {
         $row = $this->fillModelWithData($record);
-        if($this->isDuplicate($row))
+
+        if(!$this->isAllowedToInsert($row, $record))
         {
-            $this->failure($record, 'Prevented to insert duplicate record based on the primary key', $row);
             return;
         }
+
         $this->queue['raw'][] = $record;
         $this->queue['formatted'][] = $row;
 
@@ -168,9 +169,21 @@ class PlayerlyncImport
         }
     }
 
+    /**
+     * Setup the data to be taken to the API
+     * @param array $record
+     * @return array
+     */
     protected function fillModelWithData($record)
     {
-        $row = $this->model->fillModel($record);
+        try
+        {
+            $row = $this->model->fillModel($record);
+        } catch (Exceptions\ModelException $e)
+        {
+            $this->failure($record, $e->getMessage());
+            return [];
+        }
         $row['source'] = 'sdk';
         $row['sync_date'] = time();
         return $row;
@@ -191,6 +204,7 @@ class PlayerlyncImport
     {
         ++$this->counter['success'];
         $this->addToMemo($apiRecord);
+        $this->debug('Successful insert', $apiRecord);
         if($this->transactionLogger !== null)
         {
             $this->transactionLogger->addSuccess($rawRecord);
@@ -261,5 +275,26 @@ class PlayerlyncImport
                 $this->memo[] = $data[$this->model->getPrimaryKey()];
             }
         }
+    }
+
+    /**
+     * @param $apiData
+     * @param $rawRecord
+     * @return bool
+     */
+    protected function isAllowedToInsert(array $apiData, array $rawRecord)
+    {
+        if(empty($apiData))
+        {
+            return false;
+        }
+
+        if($this->isDuplicate($apiData))
+        {
+            $this->failure($rawRecord, 'Prevented to insert duplicate record based on the primary key', $apiData);
+            return false;
+        }
+
+        return true;
     }
 }

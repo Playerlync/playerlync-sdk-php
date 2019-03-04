@@ -31,6 +31,12 @@ trait ErrorLogBuilderTrait
     private $errorLogFile;
 
     /**
+     * Determine the log level
+     * @var int
+     */
+    private $logLevel;
+
+    /**
      * Add an error message
      * @param string $message
      */
@@ -57,11 +63,13 @@ trait ErrorLogBuilderTrait
     /**
      * Set the location of where the file error/debug log will reside
      * @param string $file
+     * @param int $logLevel
      * @return $this
      */
-    public function errorLog($file)
+    public function errorLog($file, $logLevel = Logger::ERROR)
     {
         $this->errorLogFile = $file;
+        $this->logLevel = $logLevel;
         return $this;
     }
 
@@ -79,7 +87,7 @@ trait ErrorLogBuilderTrait
 
         try
         {
-            $handler = new StreamHandler($this->errorLogFile, Logger::DEBUG);
+            $handler = new StreamHandler($this->errorLogFile, $this->logLevel);
             $handler->setFormatter(new LineFormatter("[%datetime%] %channel%.%level_name%: %message% %context%\n"));
             $this->errorLog = new Logger($logName);
             $this->errorLog->pushHandler($handler);

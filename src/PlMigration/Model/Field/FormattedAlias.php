@@ -8,8 +8,9 @@
 
 namespace PlMigration\Model\Field;
 
-class FormattedAlias extends Alias
+class FormattedAlias implements IAlias
 {
+    private $fields = [];
     /**
      * @var string Format string template
      */
@@ -54,5 +55,14 @@ class FormattedAlias extends Alias
                     $this->fields[] = $result;
             }
         }
+    }
+
+    /**
+     * Return the field(s) that are used by this alias
+     * @return array
+     */
+    public function getReferenceFields()
+    {
+        return $this->fields;
     }
 }

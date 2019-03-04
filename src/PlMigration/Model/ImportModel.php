@@ -7,6 +7,7 @@
 
 namespace PlMigration\Model;
 
+use PlMigration\Exceptions\ModelException;
 use PlMigration\Model\Field\Field;
 use PlMigration\Model\Field\ImportField;
 
@@ -15,9 +16,21 @@ class ImportModel
     /** @var ImportField[] */
     private $apiFields;
 
+    /**
+     * @var string
+     */
     private $primaryKey;
 
+    /**
+     * @var string
+     */
     private $secondaryKey;
+
+    /**
+     * Array of required fields set by the client
+     * @var array
+     */
+    private $requiredApiFields = [];
 
     /**
      * ImportModel constructor.
@@ -38,15 +51,30 @@ class ImportModel
             {
                 $this->secondaryKey = $fieldInfo->getField();
             }
+
+            if($fieldInfo->getType() === Field::REQUIRED)
+            {
+                $this->requiredApiFields[] = $fieldInfo->getField();
+            }
         }
     }
 
+    /**
+     * @param $record
+     * @return array
+     * @throws ModelException
+     */
     public function fillModel($record)
     {
         $row = [];
         foreach($this->apiFields as $field => $fieldInfo)
         {
             $value = $fieldInfo->getAlias()->getValue($record);
+
+            if(empty($value) && in_array($field, $this->requiredApiFields, true))
+            {
+                throw new ModelException('Required field cannot be empty: '. $field);
+            }
             foreach($fieldInfo->getExtra() as $extraAction)
             {
                 $value = $extraAction->execute($value);
@@ -69,5 +97,10 @@ class ImportModel
     public function getFields()
     {
         return $this->apiFields;
+    }
+
+    public function getRequiredFields()
+    {
+        return $this->requiredApiFields;
     }
 }

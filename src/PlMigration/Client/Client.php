@@ -14,111 +14,89 @@ abstract class Client implements IClient
     protected $allowOverwrite = false;
 
     /**
-     * Download a remote file from the server into a local destination
-     * @param $remoteFile
-     * @param $localDestination
-     * @return bool
-     * @throws ClientException
-     */
-    public function get($remoteFile, $localDestination)
-    {
-        if($this->remoteFileExists($remoteFile))
-        {
-            return $this->downloadFile($localDestination, $remoteFile);
-        }
-
-        throw new ClientException($remoteFile.' file does not exist.');
-    }
-
-    /**
-     * Upload a local file into a remote location in the server.
-     * If the file already exists, it will not be allowed to be overwritten by default
-     * @param $localFile
-     * @param $remoteLocation
-     * @return bool
-     * @throws ClientException
-     */
-    public function put($localFile, $remoteLocation)
-    {
-        if(substr($remoteLocation,-1) !== '/')
-        {
-            $remoteLocation .= '/';
-        }
-
-        $remoteLocation .= pathinfo($localFile, PATHINFO_BASENAME);
-
-        if(!$this->allowOverwrite && $this->remoteFileExists($remoteLocation))
-        {
-            throw new ClientException('File already exists in the server');
-        }
-
-        return $this->uploadFile($remoteLocation, $localFile);
-    }
-
-    /**
-     * @param $remoteFile
-     * @throws ClientException
-     */
-    public function delete($remoteFile)
-    {
-        if($this->remoteFileExists($remoteFile))
-        {
-            $this->deleteFile($remoteFile);
-        }
-    }
-
-    /**
-     * @param $remoteFile
-     * @param $remoteDestination
-     * @return mixed|void
-     * @throws ClientException
-     */
-    public function move($remoteFile, $remoteDestination)
-    {
-        if($this->remoteFileExists($remoteFile) && $this->remoteFileExists($remoteDestination))
-        {
-            $this->moveFile($remoteFile, $remoteDestination);
-        }
-    }
-
-    public function __destruct()
-    {
-        $this->close();
-    }
-
-    /**
-     * @param $localDestination
-     * @param $remoteFile
-     * @return mixed
-     */
-    abstract protected function downloadFile($localDestination, $remoteFile);
-
-    /**
      * Check if the file exists
      * throws exception if the directory does not exist
      * @param $file
      * @return bool
      * @throws ClientException
      */
-    abstract protected function remoteFileExists($file);
+    abstract protected function fileExists($file);
 
     /**
-     * @param $remoteLocation
-     * @param $localFile
+     * @param $file
      * @return mixed
      */
-    abstract protected function uploadFile($remoteLocation, $localFile);
+    abstract protected function deleteFile($file);
 
     /**
-     * @param $remoteFile
+     * @param $file
+     * @param $destination
      * @return mixed
      */
-    abstract protected function deleteFile($remoteFile);
+    abstract protected function moveFile($file, $destination);
 
     /**
-     * @param $remoteFile
-     * @param $remoteDestination
-     * @return mixed
+     * Retrieve all files that are inside the directory.
+     * Throws error if the directory does not exist.
+     * @param string $directory
+     * @param bool $includeDirectories
+     * @return array
+     * @throws ClientException
      */
-    abstract protected function moveFile($remoteFile, $remoteDestination);
+    abstract protected function getChildren($directory, $includeDirectories = false);
+
+    /**
+     * Retrieve a list of files found in a specified directory and filter by a specific file pattern if provided
+     * @param string $directory file path to get information from
+     * @param string $filePattern file pattern (files-start-wit*)
+     * @return array
+     * @throws ClientException
+     */
+    public function getDirectoryFiles($directory, $filePattern = null)
+    {
+        $files = $this->getChildren($directory);
+
+        if($filePattern !== null)
+        {
+            $filePattern = substr($filePattern, 0, -1);
+        }
+
+        foreach($files as $key => $file)
+        {
+            if(!empty($filePattern) && strpos($file,$filePattern) !== 0)
+            {
+                unset($files[$key]);
+            }
+        }
+
+        return $files;
+    }
+
+    /**
+     * @param $file
+     * @throws ClientException
+     */
+    public function delete($file)
+    {
+        if($this->fileExists($file))
+        {
+            $this->deleteFile($file);
+        }
+    }
+
+    /**
+     * @param $file
+     * @param $destination
+     * @return mixed|void
+     * @throws ClientException
+     */
+    public function move($file, $destination)
+    {
+        if($this->fileExists($file) && $this->fileExists($destination))
+        {
+            $destination .= '/'.pathinfo($file, PATHINFO_BASENAME);
+
+            $this->moveFile($file, $destination);
+        }
+    }
 }

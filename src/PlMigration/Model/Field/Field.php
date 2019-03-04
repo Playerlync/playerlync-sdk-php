@@ -55,7 +55,7 @@ abstract class Field
     protected $field;
 
     /**
-     * The alias to be recognized by another system outside of Playerlync.
+     * The alias to be recognized by another system for the field name
      */
     protected $alias;
 
@@ -76,7 +76,15 @@ abstract class Field
     {
         $this->field = $field;
         $this->type = $type;
-        $this->alias = $alias === null ? null : $this->buildAlias($type, $alias);
+
+        if($alias instanceof IAlias)
+        {
+            $this->alias = $alias;
+        }
+        else
+        {
+            $this->alias = $this->buildAlias($type, $alias);
+        }
 
         if(!is_array($extra))
         {
@@ -144,6 +152,8 @@ abstract class Field
      */
     protected function buildAlias($type, $aliasString)
     {
+        if($aliasString === null)
+            return null;
         if($type === self::CONSTANT)
         {
             return new ConstantAlias($aliasString);
@@ -152,7 +162,7 @@ abstract class Field
         {
             return new FormattedAlias($aliasString);
         }
-        return new Alias($aliasString);
+        return new SimpleAlias($aliasString);
     }
 
     /**

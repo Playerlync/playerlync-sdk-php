@@ -8,7 +8,7 @@
 
 namespace PlMigration\Model\Field;
 
-class Alias implements IAlias
+class SimpleAlias implements IAlias
 {
     /**
      * @var array
