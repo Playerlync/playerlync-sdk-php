@@ -298,8 +298,7 @@ class FileImportBuilder
         }
         catch(ClientException $e)
         {
-            $this->addError($e->getMessage());
-            throw new BuilderException($e->getMessage());
+            throw new BuilderException('Unable to get input file: '. $e->getMessage());
         }
         return pathinfo($this->inputFile,PATHINFO_BASENAME);
     }
