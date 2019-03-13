@@ -56,7 +56,7 @@ class PlayerlyncMappedImport extends PlayerlyncImport
         {
             $this->mapServerData = $options['mapping'];
         }
-        if(isset($options['key_map']))
+        if(isset($options['key_map']) && !empty($options['key_map']))
         {
             list($this->primaryKey,$this->mapKey) = $options['key_map'];
             $this->connector->setOptions(['primary_key'=> $this->primaryKey]);

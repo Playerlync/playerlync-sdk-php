@@ -337,6 +337,10 @@ class FileImportBuilder
         $options = $this->options;
         if($this->transactionLogDir !== null)
         {
+            if(!is_dir($this->transactionLogDir) && !mkdir($this->transactionLogDir))
+            {
+                throw new BuilderException('Unable to create transaction directory');
+            }
             try
             {
                 $options['transaction_log'] = new TransactionLogger($this->transactionLogDir, $this->inputFile, $this->enclosure, $this->delimiter);
