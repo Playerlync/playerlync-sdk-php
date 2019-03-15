@@ -7,7 +7,7 @@
 
 namespace PlMigration\Builder;
 
-use PlMigration\Connectors\APIConnector;
+use PlMigration\Connectors\APIv3Connector;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ImportException;
 use PlMigration\Model\ImportModel;
@@ -25,7 +25,7 @@ class FileImportSyncBuilder extends FileImportBuilder
      *
      * @param ImportModel $model
      * @param CsvReader $reader
-     * @param ApiConnector $api
+     * @param APIv3Connector $api
      * @param array $options
      * @return PlayerlyncImportSync
      * @throws BuilderException

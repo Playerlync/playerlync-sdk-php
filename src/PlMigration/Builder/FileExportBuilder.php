@@ -7,10 +7,9 @@
 
 namespace PlMigration\Builder;
 
+use PlMigration\Builder\Helper\ExportBuilder;
 use PlMigration\Builder\Traits\ApiBuilderTrait;
 use PlMigration\Builder\Traits\CsvBuilderTrait;
-use PlMigration\Builder\Traits\ErrorLogBuilderTrait;
-use PlMigration\Client\IClient;
 use PlMigration\Client\RemoteClient;
 use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
@@ -19,18 +18,16 @@ use PlMigration\Exceptions\ExportException;
 use PlMigration\Helper\DataFunctions\DateFormatter;
 use PlMigration\Model\ExportModel;
 use PlMigration\Model\Field\ExportField;
-use PlMigration\Model\Field\Field;
 use PlMigration\PlayerlyncExport;
 
 /**
  * Builder to configure and execute the export process. Once configurations are ready, execute the process with the export() function
  * @package PlMigration\Builder
  */
-class FileExportBuilder
+class FileExportBuilder extends ExportBuilder
 {
     use ApiBuilderTrait;
     use CsvBuilderTrait;
-    use ErrorLogBuilderTrait;
 
     /**
      * Full path to the output file created
@@ -75,17 +72,10 @@ class FileExportBuilder
     private $destination;
 
     /**
-     * Fields to be retrieved from the data provider
-     * @var ExportField[]
-     */
-    private $fields = [];
-
-    /**
      * ExportBuilder constructor.
      */
     public function __construct()
     {
-        $this->apiVersion('v3');
     }
 
     /**
@@ -136,21 +126,6 @@ class FileExportBuilder
     }
 
     /**
-     * Add a field to be added to the output.
-     * The order of the output fields is determined by the sequence of the function calls
-     * @param string $apiAlias The field from the playerlync API
-     * @param string|null $outputName The output name to be used for the output (such as the header name)
-     * @param string $fieldType The type of field that is being created. Refer to Field.php constants for types available. Default is Field::VARIABLE
-     * @return $this
-     */
-    public function addField($apiAlias, $outputName = null, $fieldType = Field::VARIABLE)
-    {
-        $outputName = $outputName ?: $apiAlias;
-        $this->fields[] = new ExportField($outputName, $apiAlias, $fieldType);
-        return $this;
-    }
-
-    /**
      * Select a directory to send the exported file to via a selected protocol client (ftp, sftp, etc)
      * @param string $destination File path of the remote server location to send file
      * @param RemoteClient $protocol
@@ -190,7 +165,7 @@ class FileExportBuilder
             try
             {
                 $this->protocol->connect();
-                $this->protocol->upload($output, $this->destination);
+                $this->protocol->upload($this->outputFile, $this->destination);
                 $this->protocol->close();
             }
             catch (ClientException $e)
@@ -217,13 +192,12 @@ class FileExportBuilder
             $this->buildErrorLog('ExportLog');
             $this->historyFileData = $this->verifyHistoryFile();
             $writer = $this->buildWriter($this->outputFile);
-            $api = $this->buildApi($this->errorLog);
-            $model = new ExportModel($this->buildFields($api->getStructure(), $api->getTimeFields()));
-            if($api->getGetService() === null)
+            if($this->getService === null)
             {
-                throw new BuilderException('getService() method needs to provide a playerlync API path to run export');
+                throw new BuilderException('getService() method needed to provide a playerlync API path to run export');
             }
-
+            $api = $this->buildApi($this->errorLog);
+            $model = new ExportModel($this->buildExportFields($api->getStructure(), $api->getTimeFields()));
             $this->addLastRunTimeFilter($this->historyFileData, pathinfo($this->outputFile,PATHINFO_BASENAME), $api->getStructure());
             $api->setQueryParams($this->queryParams);
 
@@ -263,38 +237,23 @@ class FileExportBuilder
      * @return array
      * @throws BuilderException
      */
-    private function buildFields($structure, $timeFields)
+    private function buildExportFields($structure, $timeFields)
     {
         $structure = array_keys($structure);
-        $fields = [];
+        $fields = $this->buildFields();
         /** @var ExportField $field */
-        foreach($this->fields as $field)
+        foreach($fields as $field)
         {
-            if($field->getField() === null && $field->getAlias() === null)
+            foreach($field->getAliasFields() as $refField)
             {
-                throw new BuilderException('Field and header cannot both be null');
-            }
-            if(array_key_exists($field->getField(), $fields))
-            {
-                throw new BuilderException('Attempted to insert duplicate header: '.$field->getField());
-            }
-            if($field->getType() !== Field::CONSTANT)
-            {
-                foreach($field->getAliasFields() as $refField)
+                if(!\in_array($refField, $structure, true))
                 {
-                    if(!\in_array($refField, $structure, true))
-                    {
-                        throw new BuilderException("Unknown field \"{$refField}\" provided that is not returned in the service");
-                    }
-
-                    if($this->dateFormat !== null && in_array($refField, $timeFields))
-                        $field->addExtra($this->dateFormat);
+                    throw new BuilderException("Unknown field \"{$refField}\" provided that is not returned in the service");
                 }
+                if($this->dateFormat !== null && in_array($refField, $timeFields))
+                    $field->addExtra($this->dateFormat);
             }
-
-            $fields[$field->getField()] = $field;
         }
-        $this->fields = [];
         return $fields;
     }
 

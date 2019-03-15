@@ -29,25 +29,11 @@ class PlapiClient
     private $apiVersion = 'v3';
 
     /**
-     * JWT access token retrieved from oauth server
-     *
-     * @var string
-     */
-    private $accessToken;
-
-    /**
      * Primary org id value to use for Primary-Org-Id header
      *
      * @var string
      */
     private $primaryOrgId;
-
-    /**
-     * member Id of authenticated user used
-     *
-     * @var string
-     */
-    private $memberId;
 
     /**
      * server info
@@ -57,16 +43,9 @@ class PlapiClient
     private $serverInfo = [];
 
     /**
-     * Array containing the given configurations for the server connection
-     * @var array
+     * @var PlapiOauthManager
      */
-    private $config;
-
-    /**
-     * Unix Timestamp value of when the Oauth token will expire
-     * @var float
-     */
-    private $expireTime;
+    private $oauthManager;
 
     /**
      * PlapiClient constructor.
@@ -85,9 +64,9 @@ class PlapiClient
             }
         }
 
-        if (isset($config['default_api_version']))
+        if (isset($config['api_version']))
         {
-            $this->apiVersion = $config['default_api_version'];
+            $this->apiVersion = $config['api_version'];
         }
 
         if(isset($config['primary_org_id']))
@@ -95,10 +74,10 @@ class PlapiClient
             $this->primaryOrgId = $config['primary_org_id'];
         }
 
-        $this->config = $config;
         $this->setupClient($config);
         $this->ping();
-        $this->authenticate($config);
+        $this->oauthManager = new PlapiOauthManager($this->client, $config);
+        $this->oauthManager->authenticate();
     }
 
 
@@ -124,7 +103,7 @@ class PlapiClient
     public function get($path, $query)
     {
         $options = [
-            'headers' => $this->getHeaders(),
+            'headers' => $this->getDefaultHeaders(),
             'query' => $query
         ];
 
@@ -144,7 +123,7 @@ class PlapiClient
     public function post($path, $params)
     {
         $options = array_merge([
-            'headers' => $this->getHeaders()
+            'headers' => $this->getDefaultHeaders()
         ],$params);
 
         $response = $this->request('POST', $this->buildPlapiPath($path), $options);
@@ -163,7 +142,7 @@ class PlapiClient
     public function put($path, $params)
     {
         $options = array_merge([
-            'headers' => $this->getHeaders()
+            'headers' => $this->getDefaultHeaders()
         ],$params);
 
         $response = $this->request('PUT', $this->buildPlapiPath($path), $options);
@@ -182,7 +161,7 @@ class PlapiClient
         $requests = function ($requests) {
             foreach($requests as $request)
             {
-                yield new Request($request['method'], $this->buildPlapiPath($request['path']).'?upsert=1', $this->getHeaders(), json_encode($request['body']));
+                yield new Request($request['method'], $this->buildPlapiPath($request['path']).'?upsert=1', $this->getDefaultHeaders(), json_encode($request['body']));
             }
         };
         $this->checkToken();
@@ -191,7 +170,7 @@ class PlapiClient
 
     public function getMemberId()
     {
-        return $this->memberId;
+        return $this->oauthManager->getMemberId();
     }
 
     public function getPrimaryOrgId()
@@ -200,41 +179,12 @@ class PlapiClient
     }
 
     /**
-     * @param $config
-     * @throws ClientException
-     */
-    private function authenticate($config)
-    {
-        $response = $this->request('POST', '/API/src/Scripts/OAuth/token.php',[
-            'form_params' => [
-                'grant_type' => 'password',
-                'client_id' => $config['client_id'],
-                'client_secret' => $config['client_secret'],
-                'username' => $config['username'],
-                'password' => $config['password']
-            ]], false);
-
-        if(isset($response->error_description))
-        {
-            throw new ClientException('Could not authenticate: ' . $response->error_description);
-        }
-
-        if($this->primaryOrgId === null)
-        {
-            $this->primaryOrgId = $response->primary_org_id;
-        }
-        $this->accessToken = $response->access_token;
-        $this->memberId = $response->memberid;
-        $this->expireTime = time() + $response->expires_in;
-    }
-
-    /**
      * @return array
      */
-    private function getHeaders()
+    private function getDefaultHeaders()
     {
         return [
-            'Authorization' => 'Bearer '. $this->accessToken,
+            'Authorization' => 'Bearer '. $this->oauthManager->getAccessToken(),
             'Primary-Org-Id' => $this->primaryOrgId
         ];
     }
@@ -254,11 +204,10 @@ class PlapiClient
      * @param $method
      * @param $uri
      * @param $options
-     * @param bool $checkToken
      * @return object
      * @throws ClientException
      */
-    private function request($method, $uri, $options, $checkToken = true)
+    private function request($method, $uri, $options)
     {
         try
         {
@@ -280,10 +229,7 @@ class PlapiClient
             throw new ClientException('Unable to decode JSON response. '.strip_tags($response->getBody()));
         }
 
-        if($checkToken)
-        {
-            $this->checkToken();
-        }
+        $this->checkToken();
         return $json;
     }
 
@@ -329,9 +275,9 @@ class PlapiClient
      */
     private function checkToken()
     {
-        if($this->expireTime - time() < 600)
+        if($this->oauthManager->needsToRenew())
         {
-            $this->authenticate($this->config);
+            $this->oauthManager->authenticate();
         }
     }
 }

@@ -7,7 +7,7 @@
 
 namespace PlMigration\Builder\Traits;
 
-use PlMigration\Connectors\APIConnector;
+use PlMigration\Connectors\APIv3Connector;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ConnectorException;
 
@@ -40,12 +40,6 @@ trait ApiBuilderTrait
      * @var array
      */
     protected $queryParams;
-
-    /**
-     * Name of source that records are associated with
-     * @var string
-     */
-    private $source;
 
     /**
      * Set the client_id to be used to connect to the playerlync API
@@ -99,17 +93,6 @@ trait ApiBuilderTrait
     public function host($host)
     {
         $this->hostSettings['host'] = $host;
-        return $this;
-    }
-
-    /**
-     * Set the api version to use. Default will be v3.
-     * @param string $version
-     * @return $this
-     */
-    public function apiVersion($version)
-    {
-        $this->hostSettings['default_api_version'] = $version;
         return $this;
     }
 
@@ -190,20 +173,9 @@ trait ApiBuilderTrait
     }
 
     /**
-     * the source value that records will be categorized as inside the playerlync data
-     * @param string $source
-     * @return $this
-     */
-    protected function source($source)
-    {
-        $this->source = $source;
-        return $this;
-    }
-
-    /**
      * Build the playerlync api connection with the desired settings.
      * @param string|null $logger
-     * @return APIConnector
+     * @return APIv3Connector
      * @throws BuilderException
      */
     private function buildApi($logger = null)
@@ -211,7 +183,7 @@ trait ApiBuilderTrait
         $this->hostSettings['logger'] = $logger;
         try
         {
-            return new APIConnector($this->getService, $this->queryParams, $this->postService, $this->hostSettings, $this->source);
+            return new APIv3Connector($this->getService, $this->queryParams, $this->postService, $this->hostSettings);
         }
         catch (ConnectorException $e)
         {

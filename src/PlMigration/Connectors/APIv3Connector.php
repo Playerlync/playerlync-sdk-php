@@ -13,7 +13,7 @@ use PlMigration\Helper\LoggerTrait;
 use PlMigration\Helper\PlapiClient;
 use Psr\Http\Message\ResponseInterface;
 
-class APIConnector implements IConnector
+class APIv3Connector implements IConnector
 {
     use LoggerTrait;
 
@@ -67,26 +67,19 @@ class APIConnector implements IConnector
     private $supportBatch = true;
 
     /**
-     * Name of source for the records that will be added to the API
-     * @var string
-     */
-    private $source;
-
-    /**
      * @var string
      */
     private $primaryKey;
 
     /**
-     * APIConnector constructor.
+     * APIv3Connector constructor.
      * @param $getService
      * @param array $query
      * @param $postService
      * @param array $config
-     * @param null $source
      * @throws ConnectorException
      */
-    public function __construct($getService, $query, $postService, array $config = [], $source = null)
+    public function __construct($getService, $query, $postService, array $config = [])
     {
         try
         {
@@ -119,7 +112,6 @@ class APIConnector implements IConnector
             $this->setLogger($config['logger']);
         }
         $this->debug('Connected to '.$this->api->getServerVersion().' server version.');
-        $this->source = $source;
     }
 
     /**
@@ -130,17 +122,7 @@ class APIConnector implements IConnector
     public function getRecords(array $config = [])
     {
         $queryParams = $this->queryParams;
-        if($this->source !== null && !isset($config['disable_source']))
-        {
-            if(isset($queryParams['filter']))
-            {
-                $queryParams['filter'] .= ',source|eq|'.$this->source;
-            }
-            else
-            {
-                $queryParams['filter'] = 'source|eq|'.$this->source;
-            }
-        }
+
         $queryParams['page'] = $this->page;
 
         $response = $this->get($this->getService, $queryParams);
