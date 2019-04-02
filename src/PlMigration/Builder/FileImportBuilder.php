@@ -241,11 +241,11 @@ class FileImportBuilder extends ImportBuilder
     {
         try
         {
+            $this->protocol->connect();
             if(substr($this->inputFile, -1) === '*') //If finding a file pattern (ie. /Tests/member-*)
             {
                 $fileInfo = pathinfo($this->inputFile);
 
-                $this->protocol->connect();
                 $files = $this->protocol->getDirectoryFiles($fileInfo['dirname'], $fileInfo['basename']);
 
                 if(empty($files))

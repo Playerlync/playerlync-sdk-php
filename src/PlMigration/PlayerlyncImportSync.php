@@ -136,7 +136,7 @@ class PlayerlyncImportSync extends PlayerlyncImport
      */
     protected function get(&$hasNext = false)
     {
-        $response = $this->connector->getRecords();
+        $response = $this->connector->getRecords(['source'=> 'sdk']);
         $hasNext = $this->connector->hasNext();
         return $response;
     }

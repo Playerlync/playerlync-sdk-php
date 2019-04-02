@@ -124,6 +124,13 @@ class APIv3Connector implements IConnector
         $queryParams = $this->queryParams;
 
         $queryParams['page'] = $this->page;
+        if(isset($config['source']))
+        {
+            if(isset($queryParams['filter']))
+                $queryParams['filter'] .= ',source|eq|'.$config['source'];
+            else
+                $queryParams['filter'] = 'source|eq|'.$config['source'];
+        }
 
         $response = $this->get($this->getService, $queryParams);
 
