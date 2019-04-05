@@ -126,6 +126,17 @@ class FileExportBuilder extends ExportBuilder
     }
 
     /**
+     * Add a primary key to prevent duplicate API records to be inserted by the API field key set
+     * @param $primaryKey
+     * @return $this
+     */
+    public function primaryKey($primaryKey)
+    {
+        $this->options['primaryKey'] = $primaryKey;
+        return $this;
+    }
+
+    /**
      * Select a directory to send the exported file to via a selected protocol client (ftp, sftp, etc)
      * @param string $destination File path of the remote server location to send file
      * @param RemoteClient $protocol

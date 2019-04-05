@@ -39,6 +39,17 @@ abstract class ExportBuilder
         return $this;
     }
 
+    /**
+     * Add a constant value field to the output
+     * @param $apiAlias
+     * @param null $outputName
+     * @return $this
+     */
+    public function addConstant($apiAlias, $outputName = null)
+    {
+        return $this->addField($apiAlias, $outputName, Field::CONSTANT);
+    }
+
     abstract protected function build();
 
     abstract public function export();

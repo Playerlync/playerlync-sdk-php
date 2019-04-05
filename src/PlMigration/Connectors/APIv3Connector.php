@@ -401,4 +401,12 @@ class APIv3Connector implements IConnector
     {
         return $this->request('delete', $this->postService.'/'.$data[$this->primaryKey], []);
     }
+
+    /**
+     * @return PlapiClient
+     */
+    public function getClient()
+    {
+        return $this->api;
+    }
 }

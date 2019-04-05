@@ -7,7 +7,9 @@
 
 namespace PlMigration;
 
+use PlMigration\Connectors\APIv3Connector;
 use PlMigration\Connectors\IConnector;
+use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
 use PlMigration\Exceptions\ExportException;
 use PlMigration\Model\ExportModel;
@@ -35,6 +37,12 @@ class PlayerlyncExport
      */
     private $model;
 
+    protected $cache = [];
+
+    protected $dataCache = [];
+
+    protected $primaryKey;
+
     /**
      * Instantiate a new exporter.
      * @param IConnector $api
@@ -57,6 +65,11 @@ class PlayerlyncExport
         {
             $this->setLogger($options['logger']);
         }
+
+        if(isset($options['primaryKey']))
+        {
+            $this->primaryKey = $options['primaryKey'];
+        }
     }
 
     /**
@@ -72,7 +85,10 @@ class PlayerlyncExport
 
                 foreach($records as $record)
                 {
-                    $this->writeRow((array)$record);
+                    if(!$this->isDuplicate($record))
+                    {
+                        $this->writeRow((array)$record);
+                    }
                 }
             }
             while($hasNext);
@@ -108,5 +124,61 @@ class PlayerlyncExport
         $row = $this->model->fillModel($record);
 
         $this->writer->writeRecord($row);
+
+        if($this->primaryKey !== null)
+            $this->cache[$record[$this->primaryKey]] = true;
+    }
+
+    /**
+     * Determine whether the record is considered duplicate with the given primary key value
+     * @param $apiRecord
+     * @return bool
+     */
+    protected function isDuplicate($apiRecord)
+    {
+        if($this->primaryKey !== null)
+        {
+            if(array_key_exists($apiRecord->{$this->primaryKey}, $this->cache))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param $apiRecord
+     * @param $additionalType
+     * @param $joinKey
+     * @return false|\stdClass
+     */
+    protected function getAdditionalData($apiRecord, $additionalType, $joinKey)
+    {
+        $additionalData = false;
+        if(!array_key_exists($additionalType, $this->dataCache))
+        {
+            $this->dataCache[$additionalType] = [];
+        }
+
+        if(array_key_exists($apiRecord[$joinKey], $this->dataCache[$additionalType]))
+        {
+            $additionalData = $this->dataCache[$additionalType][$apiRecord[$joinKey]];
+        }
+        else
+        {
+            try
+            {
+                $additionalData = $this->api->getClient()->get("/$additionalType/".$apiRecord[$joinKey],[])->data;
+                $this->dataCache[$additionalType][$apiRecord[$joinKey]] = $additionalData;
+            }
+            catch(ClientException $e)
+            {
+                $this->dataCache[$additionalType][$apiRecord[$joinKey]] = false;
+            }
+        }
+
+        if($additionalData === false)
+        {
+            $this->warning("Unable to find additional data on $additionalType $joinKey: ".$apiRecord[$joinKey].'.', $apiRecord);
+        }
+        return $additionalData;
     }
 }

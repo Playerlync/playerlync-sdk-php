@@ -23,7 +23,7 @@ class ExportModel
 
     /**
      * @param mixed $data
-     * @return mixed
+     * @return array
      */
     public function fillModel($data)
     {
