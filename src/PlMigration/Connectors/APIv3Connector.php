@@ -17,7 +17,6 @@ class APIv3Connector implements IConnector
 {
     use LoggerTrait;
 
-    const DEFAULT_SOURCE = 'sdk';
     /**
      *
      * @var PlapiClient
@@ -383,18 +382,23 @@ class APIv3Connector implements IConnector
      * Update the data record into the system
      * @param array $data
      * @return mixed
+     * @throws ConnectorException
      */
     public function updateRecord($data)
     {
-        return $this->put($this->postService.'/'.$data[$this->primaryKey], [], $data);
+        $params = [
+            'json' => $data
+        ];
+        return $this->request('put', $this->postService.'/'.$data[$this->primaryKey], $params);
     }
 
-    protected function put($path, $query, $body)
+    /**
+     * @param $data
+     * @return mixed
+     * @throws ConnectorException
+     */
+    public function deleteRecord($data)
     {
-        $params = [
-            'query' => $query,
-            'json' => $body
-        ];
-        $this->request('put', $path, $params);
+        return $this->request('delete', $this->postService.'/'.$data[$this->primaryKey], []);
     }
 }

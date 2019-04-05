@@ -39,6 +39,14 @@ trait LoggerTrait
         }
     }
 
+    public function notice($message, $context = [])
+    {
+        if($this->logger !== null)
+        {
+            $this->logger->addRecord(Logger::NOTICE, $message, $context);
+        }
+    }
+
     public function debug($message, $context = [])
     {
         if($this->logger !== null)

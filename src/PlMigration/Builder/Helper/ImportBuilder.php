@@ -21,6 +21,11 @@ abstract class ImportBuilder
     use ErrorLogBuilderTrait;
 
     /**
+     * Default value of the source to be sent it for
+     */
+    const DEFAULT_SOURCE = 'sdk';
+
+    /**
      * Fields to be used in the import
      * @var array
      */
@@ -29,8 +34,8 @@ abstract class ImportBuilder
     /**
      * Add a field to be mapped from the outside source to the playerlync system.
      * Unlike addField(), this function provides more flexibility by allowing multiple pieces of outside data point to a single point in Playerlync data, and vice versa.
-     * However, it causes a higher likelyhood of bad data mapping.
-     * DO NOT mix the addField() and mapField() together for an import. This will result in confusing results.
+     * However, it causes a higher likelihood of bad data mapping.
+     *
      * example:
      * data file contents:
      *   testlogin,smith,denver,qwerty
@@ -75,7 +80,6 @@ abstract class ImportBuilder
             }
             $fields[$fieldInfo->getField()] = $fieldInfo;
         }
-        $this->fields = [];
         return $fields;
     }
 }

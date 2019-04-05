@@ -12,7 +12,6 @@ use PlMigration\Builder\Traits\ApiBuilderTrait;
 use PlMigration\Builder\Traits\CsvBuilderTrait;
 use PlMigration\Client\LocalClient;
 use PlMigration\Client\RemoteClient;
-use PlMigration\Connectors\APIv3Connector;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\WriterException;
@@ -79,6 +78,7 @@ class FileImportBuilder extends ImportBuilder
     public function __construct()
     {
         $this->protocol = new LocalClient();
+        $this->resetData();
     }
 
     /**
@@ -155,6 +155,7 @@ class FileImportBuilder extends ImportBuilder
     /**
      * Add a field to be mapped from the outside source to the playerlync system.
      * In a file import, the order of method calls indicates the column that will be mapped.
+     * DO NOT mix the addField() and mapField() together for an import. This will result in confusing results.
      * example:
      *  data file contents:
      *  testlogmein,smith,denver,qwerty
@@ -176,6 +177,19 @@ class FileImportBuilder extends ImportBuilder
     }
 
     /**
+     * String that determines what type of import source this is and the value will be saved in the server.
+     * useful for separating data from another when using sync scripts
+     * Default value: sdk
+     * @param $source
+     * @return $this
+     */
+    public function overwriteSource($source)
+    {
+        $this->options['source'] = $source;
+        return $this;
+    }
+
+    /**
      * Build all objects and execute the import import process
      *
      * @throws BuilderException
@@ -183,7 +197,6 @@ class FileImportBuilder extends ImportBuilder
     public function import()
     {
         $this->build()->import();
-
         if($this->storeLocation !== null)
             $this->transportDataSourceToANonVolatileStorageLocation();
 
@@ -223,10 +236,13 @@ class FileImportBuilder extends ImportBuilder
                 throw new BuilderException('postService() method needs to provide a Playerlync API path to run import');
             }
 
-            return $this->buildImporter($model, $reader, $api, $this->buildOptions());
+            $options = $this->buildOptions();
+            $this->resetData();
+            return $this->buildImporter($model, $reader, $api, $options);
         }
         catch(BuilderException $e)
         {
+            $this->resetData();
             $this->addError($e->getMessage());
             throw $e;
         }
@@ -342,5 +358,11 @@ class FileImportBuilder extends ImportBuilder
         {
             $this->addError('Failed to delete file, error:'.$e->getMessage());
         }
+    }
+
+    protected function resetData()
+    {
+        $this->options['source'] = self::DEFAULT_SOURCE;
+        $this->fields = [];
     }
 }

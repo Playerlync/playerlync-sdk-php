@@ -22,6 +22,13 @@ use PlMigration\Reader\IReader;
 class PlayerlyncImportSync extends PlayerlyncImport
 {
     /**
+     * Function that takes in a named array representing a Playerlync API record
+     * and determine if the record should be exempt from being deleted.
+     * Function should return true to exempt it from being deleted
+     * @var \Closure
+     */
+    protected $exemptDelete;
+    /**
      * PlayerlyncImportSynchronizer constructor.
      *
      * @param IConnector $connector
@@ -42,6 +49,11 @@ class PlayerlyncImportSync extends PlayerlyncImport
         if($model->getPrimaryKey() === null)
         {
             throw new ImportException('The primary key, and secondary key if applicable, are required to run the synchronized import');
+        }
+
+        if(isset($options['deleteExempt']))
+        {
+            $this->exemptDelete = $options['deleteExempt'];
         }
     }
 
@@ -136,19 +148,29 @@ class PlayerlyncImportSync extends PlayerlyncImport
      */
     protected function get(&$hasNext = false)
     {
-        $response = $this->connector->getRecords(['source'=> 'sdk']);
+        $response = $this->connector->getRecords(['source'=> $this->source]);
         $hasNext = $this->connector->hasNext();
         return $response;
     }
 
+    /**
+     * Process to run to delete multiple records
+     * @param $record
+     * @param $force
+     * @return void
+     */
     protected function deleteRecords($record, $force)
     {
+        if($this->isExemptFromDelete($record))
+        {
+            return;
+        }
         $record['delete_date'] = time(); //this will cause the records to be deleted
         $this->queue['deleted'][] = $record;
 
         if(!$force && count($this->queue['deleted']) < 50)
         {
-            return null;
+            return;
         }
 
         $responses = $this->connector->insertRecords($this->queue['deleted']);
@@ -171,8 +193,16 @@ class PlayerlyncImportSync extends PlayerlyncImport
         }
     }
 
+    /**
+     * Process to run when deleting a record
+     * @param $record
+     */
     protected function deleteRecord($record)
     {
+        if($this->isExemptFromDelete($record))
+        {
+            return;
+        }
         $record['delete_date'] = time(); //this will cause the record to be deleted
         try
         {
@@ -184,8 +214,24 @@ class PlayerlyncImportSync extends PlayerlyncImport
         }
     }
 
+    /**
+     * Log a record that has been deleted
+     * @param $record
+     */
     protected function deleted($record)
     {
         ++$this->counter['deleted'];
+    }
+
+    /**
+     * Determine if the API record is exempt from being deleted
+     * @param $record
+     * @return bool
+     */
+    protected function isExemptFromDelete($record)
+    {
+        if($this->exemptDelete !== null)
+            return $this->exemptDelete->__invoke($record);
+        return false;
     }
 }

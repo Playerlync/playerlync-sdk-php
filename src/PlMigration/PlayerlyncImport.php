@@ -7,6 +7,7 @@
 
 namespace PlMigration;
 
+use PlMigration\Builder\Helper\ImportBuilder;
 use PlMigration\Connectors\IConnector;
 use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
@@ -66,6 +67,15 @@ class PlayerlyncImport implements ImportInterface
     protected $memo = [];
 
     /**
+     * The descriptor of where the records come from. Used to validate that records come from a specific source.
+     * Can also be used to separate between different import source types when deleting in sync imports.
+     * (ie. differentiating between different types of org imports to not touch all organizations)
+     * Default value: sdk
+     * @var string
+     */
+    protected $source = ImportBuilder::DEFAULT_SOURCE;
+
+    /**
      * Instantiate a new importer.
      * @param IConnector $connector
      * @param IReader $reader
@@ -87,6 +97,11 @@ class PlayerlyncImport implements ImportInterface
         if(isset($options['logger']))
         {
             $this->setLogger($options['logger']);
+        }
+
+        if(isset($options['source']))
+        {
+            $this->source = $options['source'];
         }
 
         if(array_key_exists('include_headers', $options) && $options['include_headers'] === true)
@@ -184,7 +199,7 @@ class PlayerlyncImport implements ImportInterface
             $this->failure($record, $e->getMessage());
             return [];
         }
-        $row['source'] = 'sdk';
+        $row['source'] = $this->source;
         $row['sync_date'] = time();
         return $row;
     }

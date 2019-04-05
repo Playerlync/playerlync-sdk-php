@@ -2,34 +2,28 @@
 /**
  * Created by PhpStorm.
  * User: mloayza-auqui
- * Date: 2019-02-26
- * Time: 10:11
+ * Date: 2019-04-03
+ * Time: 08:59
  */
 
 namespace PlMigration;
 
 use PlMigration\Connectors\IConnector;
+use PlMigration\Exceptions\ConnectorException;
 use PlMigration\Helper\MappedImportTrait;
 use PlMigration\Model\ImportModel;
 use PlMigration\Reader\IReader;
 
-/**
- * Imported created for playerlync data types that can't be run with PlayerlyncImport class.
- * NOT RECOMMENDED FOR USE UNLESS NECESSARY
- * CONTAINS PERFORMANCE ISSUES ON BIG DATA SETS
- * Class PlayerlyncImportPostPut
- * @package PlMigration
- */
-class PlayerlyncMappedImport extends PlayerlyncImport
+class PlayerlyncMappedImportSync extends PlayerlyncImportSync
 {
     use MappedImportTrait;
 
     /**
-     * PlayerlyncMappedImport constructor.
      * @param IConnector $connector
      * @param IReader $reader
      * @param ImportModel $model
      * @param array $options
+     * @throws Exceptions\ImportException
      */
     public function __construct(IConnector $connector, IReader $reader, ImportModel $model, array $options = [])
     {
@@ -38,12 +32,31 @@ class PlayerlyncMappedImport extends PlayerlyncImport
         $this->setMappedData($options);
     }
 
-    /**
-     * Override to add grabbing server records of the importing type to be able to do data mapping
-     */
     public function import()
     {
         $this->getServerRecords();
         parent::import();
+    }
+
+    protected function deleteRecords($record, $force)
+    {
+        $this->deleteRecord($record);
+    }
+
+    protected function deleteRecord($record)
+    {
+        if($this->isExemptFromDelete($record))
+        {
+            return;
+        }
+
+        try
+        {
+            $this->connector->deleteRecord($record);
+        }
+        catch (ConnectorException $e)
+        {
+            $this->error('Failed to delete record: '.$e->getMessage(), $record);
+        }
     }
 }

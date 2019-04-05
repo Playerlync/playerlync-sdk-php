@@ -21,6 +21,18 @@ use PlMigration\Reader\CsvReader;
 class FileImportSyncBuilder extends FileImportBuilder
 {
     /**
+     * Send in a closure that will serve as a rule that will take in an array argument (representing an API record)
+     * and if it meets the desired conditions the closure returns true, it will not be deleted
+     * @param \Closure $closure
+     * @return $this
+     */
+    public function exemptedDeleteRecords(\Closure $closure)
+    {
+        $this->options['deleteExempt'] = $closure;
+        return $this;
+    }
+
+    /**
      * Build importer
      *
      * @param ImportModel $model

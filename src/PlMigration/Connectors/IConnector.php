@@ -47,6 +47,13 @@ interface IConnector
     public function updateRecord($data);
 
     /**
+     * @param $data
+     * @return mixed
+     * @throws ConnectorException
+     */
+    public function deleteRecord($data);
+
+    /**
      * Insert an array of records into the system
      * @param $requests
      * @return mixed

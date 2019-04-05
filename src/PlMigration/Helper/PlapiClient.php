@@ -153,6 +153,25 @@ class PlapiClient
     }
 
     /**
+     * @param $path
+     * @param $params
+     * @return object
+     * @throws ClientException
+     */
+    public function delete($path, $params)
+    {
+        $options = array_merge([
+            'headers' => $this->getDefaultHeaders()
+        ],$params);
+
+        $response = $this->request('DELETE', $this->buildPlapiPath($path), $options);
+
+        $this->validatePlapiOk($response);
+
+        return $response;
+    }
+
+    /**
      * @param $requestsArray
      * @return array
      */
