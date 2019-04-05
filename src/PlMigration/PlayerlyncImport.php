@@ -64,7 +64,7 @@ class PlayerlyncImport implements ImportInterface
      *
      * @var array
      */
-    protected $memo = [];
+    protected $cache = [];
 
     /**
      * The descriptor of where the records come from. Used to validate that records come from a specific source.
@@ -270,9 +270,9 @@ class PlayerlyncImport implements ImportInterface
         {
             if($this->model->getSecondaryKey() !== null)
             {
-                return \in_array($data[$this->model->getPrimaryKey()].','.$data[$this->model->getSecondaryKey()], $this->memo, true);
+                return array_key_exists($data[$this->model->getPrimaryKey()].','.$data[$this->model->getSecondaryKey()], $this->cache);
             }
-            return \in_array($data[$this->model->getPrimaryKey()], $this->memo, true);
+            return array_key_exists($data[$this->model->getPrimaryKey()], $this->cache);
         }
         return false;
     }
@@ -283,11 +283,11 @@ class PlayerlyncImport implements ImportInterface
         {
             if($this->model->getSecondaryKey() !== null)
             {
-                $this->memo[] = $data[$this->model->getPrimaryKey()].','.$data[$this->model->getSecondaryKey()];
+                $this->cache[$data[$this->model->getPrimaryKey()].','.$data[$this->model->getSecondaryKey()]] = true;
             }
             else
             {
-                $this->memo[] = $data[$this->model->getPrimaryKey()];
+                $this->cache[$data[$this->model->getPrimaryKey()]] = true;
             }
         }
     }
