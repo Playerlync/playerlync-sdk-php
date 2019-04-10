@@ -12,9 +12,11 @@ use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use PlMigration\Exceptions\ClientException;
+use Zend\Stdlib\ResponseInterface;
 
-class PlapiClient
+class PlapiClient implements ApiClient
 {
     /**
      * @var Client
@@ -80,7 +82,10 @@ class PlapiClient
         $this->oauthManager->authenticate();
     }
 
-
+    /**
+     * Instantiate the guzzle client
+     * @param $config
+     */
     private function setupClient($config)
     {
         $this->client = new Client([
@@ -102,16 +107,8 @@ class PlapiClient
      */
     public function get($path, $query)
     {
-        $options = [
-            'headers' => $this->getDefaultHeaders(),
-            'query' => $query
-        ];
-
-        $response = $this->request('GET', $this->buildPlapiPath($path), $options);
-
-        $this->validatePlapiOk($response);
-
-        return $response;
+        $response = $this->request('GET', $path, ['query' => $query]);
+        return $this->validateResponse($response);
     }
 
     /**
@@ -122,15 +119,8 @@ class PlapiClient
      */
     public function post($path, $params)
     {
-        $options = array_merge([
-            'headers' => $this->getDefaultHeaders()
-        ],$params);
-
-        $response = $this->request('POST', $this->buildPlapiPath($path), $options);
-
-        $this->validatePlapiOk($response);
-
-        return $response;
+        $response = $this->request('POST', $path, $params);
+        return $this->validateResponse($response);
     }
 
     /**
@@ -141,15 +131,8 @@ class PlapiClient
      */
     public function put($path, $params)
     {
-        $options = array_merge([
-            'headers' => $this->getDefaultHeaders()
-        ],$params);
-
-        $response = $this->request('PUT', $this->buildPlapiPath($path), $options);
-
-        $this->validatePlapiOk($response);
-
-        return $response;
+        $response = $this->request('PUT', $path, $params);
+        return $this->validateResponse($response);
     }
 
     /**
@@ -160,15 +143,8 @@ class PlapiClient
      */
     public function delete($path, $params)
     {
-        $options = array_merge([
-            'headers' => $this->getDefaultHeaders()
-        ],$params);
-
-        $response = $this->request('DELETE', $this->buildPlapiPath($path), $options);
-
-        $this->validatePlapiOk($response);
-
-        return $response;
+        $response = $this->request('DELETE', $path, $params);
+        return $this->validateResponse($response);
     }
 
     /**
@@ -221,16 +197,19 @@ class PlapiClient
 
     /**
      * @param $method
-     * @param $uri
+     * @param $servicePath
      * @param $options
-     * @return object
+     * @return Response
      * @throws ClientException
      */
-    private function request($method, $uri, $options)
+    public function request($method, $servicePath, $options = [])
     {
+        $options = array_merge([
+            'headers' => $this->getDefaultHeaders()
+        ],$options);
         try
         {
-            $response = $this->client->request($method, $uri, $options);
+            $response = $this->client->request($method, $this->buildPlapiPath($servicePath), $options);
         }
         catch (GuzzleException $e)
         {
@@ -242,26 +221,34 @@ class PlapiClient
             throw new ClientException('Invalid status code response: '.$response->getStatusCode());
         }
 
-        $json = json_decode($response->getBody());
-        if(!$json)
+        if($response->getBody()->read(1) !== '{')
         {
-            throw new ClientException('Unable to decode JSON response. '.strip_tags($response->getBody()));
+            throw new ClientException('API did not return JSON response. '.strip_tags($response->getBody()->read(4096)));
         }
+        $response->getBody()->rewind();
 
         $this->checkToken();
-        return $json;
+        return $response;
     }
 
     /**
-     * @param $response
+     * @param Response $response
+     * @return object
      * @throws ClientException
      */
-    private function validatePlapiOk($response)
+    public function validateResponse($response)
     {
-        if($response->status === 'INVALID_REQUEST')
+        $json = json_decode($response->getBody());
+
+        if(!$json)
         {
-            throw new ClientException($response->errors[0]->message);
+            throw new ClientException('Unable to decode json');
         }
+        if($json->status === 'INVALID_REQUEST')
+        {
+            throw new ClientException($json->errors[0]->message);
+        }
+        return $json;
     }
 
     /**
