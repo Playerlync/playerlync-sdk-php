@@ -18,7 +18,7 @@
     "issues": "https://github.com/playerlync/playerlync-sdk-php/issues"
   },
   "require": {
-    "php": ">=5.5",
+    "php": ">=7.0",
     "ext-curl": "*",
     "ext-ftp":"*",
     "ext-json":"*",
