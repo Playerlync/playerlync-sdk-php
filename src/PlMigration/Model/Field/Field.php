@@ -44,6 +44,11 @@ abstract class Field
     const REQUIRED = 'required';
 
     /**
+     * When a field is of this type, if the value is empty, it will be skipped from the API request object
+     */
+    const OPTIONAL = 'optional';
+
+    /**
      * The type of field that it is. Refer to constants available
      * @var string
      */

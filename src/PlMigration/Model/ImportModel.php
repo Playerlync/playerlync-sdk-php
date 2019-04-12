@@ -27,12 +27,6 @@ class ImportModel
     private $secondaryKey;
 
     /**
-     * Array of required fields set by the client
-     * @var array
-     */
-    private $requiredApiFields = [];
-
-    /**
      * ImportModel constructor.
      * @param array $fields
      */
@@ -45,17 +39,11 @@ class ImportModel
             if($fieldInfo->getType() === Field::PRIMARY_KEY)
             {
                 $this->primaryKey = $fieldInfo->getField();
-                $this->requiredApiFields[] = $fieldInfo->getField();
             }
 
             if($fieldInfo->getType() === Field::SECONDARY_KEY)
             {
                 $this->secondaryKey = $fieldInfo->getField();
-            }
-
-            if($fieldInfo->getType() === Field::REQUIRED)
-            {
-                $this->requiredApiFields[] = $fieldInfo->getField();
             }
         }
     }
@@ -72,7 +60,11 @@ class ImportModel
         {
             $value = $fieldInfo->getAlias()->getValue($record);
 
-            if(empty($value) && in_array($field, $this->requiredApiFields, true))
+            if(empty($value) && $fieldInfo->getType() === Field::OPTIONAL)
+            {
+                continue;
+            }
+            if(empty($value) && ($fieldInfo->getType() === Field::REQUIRED || $fieldInfo->getType() === Field::PRIMARY_KEY))
             {
                 throw new ModelException('Required field cannot be empty: '. $field);
             }
@@ -98,10 +90,5 @@ class ImportModel
     public function getFields()
     {
         return $this->apiFields;
-    }
-
-    public function getRequiredFields()
-    {
-        return $this->requiredApiFields;
     }
 }

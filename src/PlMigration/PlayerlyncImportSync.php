@@ -66,7 +66,7 @@ class PlayerlyncImportSync extends PlayerlyncImport
             $record = $this->getRecord();
             if($this->connector->supportBatch())
             {
-                $this->insertRecords($record, $this->reader->valid());
+                $this->insertRecords($record, !$this->reader->valid());
             }
             else
             {
