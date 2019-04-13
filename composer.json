@@ -25,7 +25,8 @@
     "keboola/csv": "^2.0",
     "nicolab/php-ftp-client": "^1.4",
     "guzzlehttp/guzzle": "~6.0",
-    "phpseclib/phpseclib": "~2.0"
+    "phpseclib/phpseclib": "~2.0",
+    "monolog/monolog": "^1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0",
