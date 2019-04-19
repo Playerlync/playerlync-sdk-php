@@ -247,6 +247,8 @@ class PlayerlyncImport implements ImportInterface
     protected function sendActivityRecord($startTime, $endTime)
     {
         $message = "{$this->counter['success']} records updated, {$this->counter['failed']} records failed";
+        $this->debug('Import took '.($endTime - $startTime) . ' seconds.');
+        $this->debug('Summary: '.$message);
         $data = [
             'activity_start_date' => $startTime,
             'activity_end_date'   => $endTime,

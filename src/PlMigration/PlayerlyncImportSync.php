@@ -122,6 +122,8 @@ class PlayerlyncImportSync extends PlayerlyncImport
     public function sendActivityRecord($startTime, $endTime)
     {
         $message = "{$this->counter['success']} record(s) updated, {$this->counter['deleted']} record(s) deleted, {$this->counter['failed']} record(s) failed to update";
+        $this->debug('Import took '.($endTime - $startTime) . ' seconds.');
+        $this->debug('Summary: '.$message);
         $data = [
             'activity_start_date' => $startTime,
             'activity_end_date'   => $endTime,
