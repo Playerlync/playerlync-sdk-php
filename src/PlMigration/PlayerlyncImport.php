@@ -7,6 +7,7 @@
 
 namespace PlMigration;
 
+use Monolog\Logger;
 use PlMigration\Builder\Helper\ImportBuilder;
 use PlMigration\Connectors\IConnector;
 use PlMigration\Exceptions\ClientException;
@@ -196,7 +197,7 @@ class PlayerlyncImport implements ImportInterface
             $row = $this->model->fillModel($record);
         } catch (Exceptions\ModelException $e)
         {
-            $this->failure($record, $e->getMessage());
+            $this->failure($record, $e->getMessage(), $record);
             return [];
         }
         $row['source'] = $this->source;
@@ -204,10 +205,15 @@ class PlayerlyncImport implements ImportInterface
         return $row;
     }
 
-    protected function failure($record, $errorMessage, array $context = [])
+    protected function failure($record, $errorMessage, array $context = [], $logLevel = Logger::ERROR)
     {
         ++$this->counter['failed'];
-        $this->error('Failed to import record: '.$errorMessage, $context);
+        if($logLevel === Logger::ERROR)
+            $this->error('Failed to import record: '.$errorMessage, $context);
+        elseif($logLevel === Logger::NOTICE)
+            $this->notice('Failed to import record: '.$errorMessage, $context);
+        elseif($logLevel === Logger::WARNING)
+            $this->warning('Failed to import record: '.$errorMessage, $context);
         if($this->transactionLogger !== null)
         {
             $record[] = $errorMessage;
@@ -306,7 +312,7 @@ class PlayerlyncImport implements ImportInterface
 
         if($this->isDuplicate($apiData))
         {
-            $this->failure($rawRecord, 'Prevented to insert duplicate record based on the primary key', $apiData);
+            $this->failure($rawRecord, 'Prevented to insert duplicate record based on the primary key', $apiData, Logger::NOTICE);
             return false;
         }
 

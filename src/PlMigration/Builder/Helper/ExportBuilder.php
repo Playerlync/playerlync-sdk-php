@@ -30,12 +30,13 @@ abstract class ExportBuilder
      * @param string $apiAlias The field from the playerlync API
      * @param string|null $outputName The output name to be used for the output (such as the header name)
      * @param string $fieldType The type of field that is being created. Refer to Field.php constants for types available. Default is Field::VARIABLE
+     * @param array $extra A list of objects that will allow value manipulation after the
      * @return $this
      */
-    public function addField($apiAlias, $outputName = null, $fieldType = Field::VARIABLE)
+    public function addField($apiAlias, $outputName = null, $fieldType = Field::VARIABLE, ...$extra)
     {
         $outputName = $outputName ?: $apiAlias;
-        $this->fields[] = new ExportField($outputName, $apiAlias, $fieldType);
+        $this->fields[] = new ExportField($outputName, $apiAlias, $fieldType, $extra);
         return $this;
     }
 
