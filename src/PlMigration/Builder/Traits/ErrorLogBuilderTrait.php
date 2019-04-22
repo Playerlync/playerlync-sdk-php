@@ -8,6 +8,7 @@
 namespace PlMigration\Builder\Traits;
 
 use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use PlMigration\Exceptions\BuilderException;
@@ -35,6 +36,12 @@ trait ErrorLogBuilderTrait
      * @var int
      */
     private $logLevel;
+
+    /**
+     * Number of maximum days to allow log file rotation
+     * @var int
+     */
+    private $maxDays = 0;
 
     /**
      * Add an error message
@@ -68,8 +75,21 @@ trait ErrorLogBuilderTrait
      */
     public function errorLog($file, $logLevel = Logger::ERROR)
     {
+        return $this->rotatingErrorLog($file, 0, $logLevel);
+    }
+
+    /**
+     * Create a rotating error log file where logging messages will be stored
+     * @param string $file
+     * @param int $maxDays number of days to store the error log files
+     * @param int $logLevel
+     * @return $this
+     */
+    public function rotatingErrorLog($file, $maxDays, $logLevel = Logger::ERROR)
+    {
         $this->errorLogFile = $file;
         $this->logLevel = $logLevel;
+        $this->maxDays = $maxDays;
         return $this;
     }
 
@@ -87,14 +107,20 @@ trait ErrorLogBuilderTrait
 
         try
         {
-            $handler = new StreamHandler($this->errorLogFile, $this->logLevel);
+            if($this->maxDays > 0)
+            {
+                $handler = new RotatingFileHandler($this->errorLogFile, $this->maxDays, $this->logLevel);
+            }
+            else
+            {
+                $handler = new StreamHandler($this->errorLogFile, $this->logLevel);
+            }
             $handler->setFormatter(new LineFormatter("[%datetime%] %channel%.%level_name%: %message% %context%\n"));
             $this->errorLog = new Logger($logName);
             $this->errorLog->pushHandler($handler);
         }
         catch (\Exception $e)
         {
-            echo $e->getMessage();
             throw new BuilderException('Failed to create error log file. '.$e->getMessage());
         }
     }

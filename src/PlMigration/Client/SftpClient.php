@@ -89,7 +89,7 @@ class SftpClient extends RemoteClient
 
         if(!$result)
         {
-            throw new ClientException('Incorrect login');
+            throw new ClientException('Failed to login to SFTP server');
         }
     }
 
