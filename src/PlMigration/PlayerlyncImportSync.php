@@ -209,6 +209,7 @@ class PlayerlyncImportSync extends PlayerlyncImport
         try
         {
             $this->connector->insertRecord($record);
+            $this->deleted($record);
         }
         catch (ConnectorException $e)
         {
@@ -223,6 +224,7 @@ class PlayerlyncImportSync extends PlayerlyncImport
     protected function deleted($record)
     {
         ++$this->counter['deleted'];
+        $this->debug('Deleted server record', $record);
     }
 
     /**

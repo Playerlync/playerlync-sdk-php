@@ -53,6 +53,7 @@ class PlayerlyncMappedImportSync extends PlayerlyncImportSync
         try
         {
             $this->connector->deleteRecord($record);
+            $this->deleted($record);
         }
         catch (ConnectorException $e)
         {
