@@ -72,12 +72,17 @@ abstract class RemoteClient extends Client implements IRemoteClient
 
         $remoteLocation .= pathinfo($localFile, PATHINFO_BASENAME);
 
+        if(!file_exists($localFile))
+        {
+            throw new ClientException('Local file does not exist');
+        }
+
         if(!$this->allowOverwrite && $this->fileExists($remoteLocation))
         {
             throw new ClientException('File already exists in the server');
         }
 
-        return $this->uploadFile($remoteLocation, $localFile);
+        return $this->uploadFile($remoteLocation, realpath($localFile));
     }
 
     public function __destruct()
