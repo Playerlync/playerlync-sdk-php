@@ -74,7 +74,7 @@ class SftpClient extends RemoteClient
      */
     protected function uploadFile($remoteFile, $localFile)
     {
-        return $this->protocol->put($remoteFile, $localFile);
+        return $this->protocol->put($remoteFile, $localFile, SFTP::SOURCE_LOCAL_FILE);
     }
 
     /**
