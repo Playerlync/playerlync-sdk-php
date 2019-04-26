@@ -15,7 +15,9 @@ use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ExportException;
+use PlMigration\Exceptions\NotificationException;
 use PlMigration\Helper\DataFunctions\DateFormatter;
+use PlMigration\Helper\Notifications\Attachable;
 use PlMigration\Model\ExportModel;
 use PlMigration\Model\Field\ExportField;
 use PlMigration\PlayerlyncExport;
@@ -188,6 +190,20 @@ class FileExportBuilder extends ExportBuilder
 
         $this->saveRunTime();
 
+        $this->errorLog->close();
+        if($this->notificationManager)
+        {
+            foreach($this->notifications as $notif)
+            {
+                $this->notificationManager->addRequest($notif);
+                try {
+                    $this->notificationManager->send();
+                } catch (NotificationException $e) {
+                }
+            }
+
+        }
+
         return $output;
     }
 
@@ -201,8 +217,10 @@ class FileExportBuilder extends ExportBuilder
         try
         {
             $this->buildErrorLog('ExportLog');
+            $this->addAttachment($this->errorLog->getHandlers()[0]->getUrl(), Attachable::LOG_FILE);
             $this->historyFileData = $this->verifyHistoryFile();
             $writer = $this->buildWriter($this->outputFile);
+            $this->addAttachment($writer->getFile(), Attachable::OUTPUT_FILE);
             if($this->getService === null)
             {
                 throw new BuilderException('getService() method needed to provide a playerlync API path to run export');
@@ -235,10 +253,10 @@ class FileExportBuilder extends ExportBuilder
             {
                 throw new BuilderException('Unable to create history file in '.$this->historyFile);
             }
-            $fileData = \json_decode(file_get_contents($this->historyFile));
+            $fileData = json_decode(file_get_contents($this->historyFile));
         }
 
-        return $fileData !== null ? $fileData : new \stdClass();
+        return $fileData ?? new \stdClass();
     }
 
     /**
@@ -302,7 +320,7 @@ class FileExportBuilder extends ExportBuilder
     {
         if($this->historyFile && $this->historyFileData)
         {
-            if(!file_put_contents($this->historyFile, \json_encode($this->historyFileData,JSON_PRETTY_PRINT)))
+            if(!file_put_contents($this->historyFile, json_encode($this->historyFileData,JSON_PRETTY_PRINT)))
             {
                 throw new BuilderException('Unable to save history file.');
             }

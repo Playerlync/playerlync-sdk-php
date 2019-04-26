@@ -28,7 +28,7 @@ class PlapiClient implements ApiClient
      *
      * @var string
      */
-    private $apiVersion = 'v3';
+    private $apiVersion;
 
     /**
      * Primary org id value to use for Primary-Org-Id header
@@ -66,20 +66,14 @@ class PlapiClient implements ApiClient
             }
         }
 
-        if (isset($config['api_version']))
-        {
-            $this->apiVersion = $config['api_version'];
-        }
-
-        if(isset($config['primary_org_id']))
-        {
-            $this->primaryOrgId = $config['primary_org_id'];
-        }
+        $this->apiVersion = $config['api_version'] ?? 'v3';
 
         $this->setupClient($config);
         $this->ping();
         $this->oauthManager = new PlapiOauthManager($this->client, $config);
         $this->oauthManager->authenticate();
+
+        $this->primaryOrgId = $config['primary_org_id'] ?? $this->oauthManager->getPrimaryOrgId();
     }
 
     /**
@@ -285,5 +279,10 @@ class PlapiClient implements ApiClient
         {
             $this->oauthManager->authenticate();
         }
+    }
+
+    public function getFileClient()
+    {
+        return new PlayerlyncFileClient($this->client);
     }
 }

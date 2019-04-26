@@ -51,6 +51,11 @@ class LocalClient extends RemoteClient
         rename($file, $destination);
     }
 
+    protected function copyFile($file, $destination)
+    {
+        copy($file, $destination);
+    }
+
     /**
      * Retrieve all files that are inside the directory.
      * Throws error if the directory does not exist.
@@ -101,7 +106,7 @@ class LocalClient extends RemoteClient
      */
     protected function downloadFile($localDestination, $remoteFile)
     {
-        $this->moveFile($remoteFile, $localDestination);
+        $this->copyFile($remoteFile, $localDestination);
     }
 
     /**
@@ -111,6 +116,6 @@ class LocalClient extends RemoteClient
      */
     protected function uploadFile($remoteLocation, $localFile)
     {
-        $this->moveFile($localFile, $remoteLocation);
+        $this->copyFile($localFile, $remoteLocation);
     }
 }

@@ -10,6 +10,7 @@ namespace PlMigration\Builder\Helper;
 
 
 use PlMigration\Builder\Traits\ErrorLogBuilderTrait;
+use PlMigration\Builder\Traits\NotificationTrait;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Model\Field\ExportField;
 use PlMigration\Model\Field\Field;
@@ -17,6 +18,7 @@ use PlMigration\Model\Field\Field;
 abstract class ExportBuilder
 {
     use ErrorLogBuilderTrait;
+    use NotificationTrait;
 
     /**
      * Fields to be retrieved from the data provider
