@@ -26,7 +26,6 @@ class EmailNotificationManagerTest extends UnitTest
 
     /**
      * @test
-     * @throws NotificationException
      */
     public function sendEmail()
     {
@@ -37,7 +36,19 @@ class EmailNotificationManagerTest extends UnitTest
 
     /**
      * @test
-     * @throws NotificationException
+     * @expectedException \PlMigration\Exceptions\NotificationException
+     */
+    public function sendBadEmail()
+    {
+        $manager = $this->instance();
+        $mail = $this->dummyEmail();
+        $mail->from = 'invalidEmail';
+        $manager->addRequest($mail);
+        $manager->send(true);
+    }
+
+    /**
+     * @test
      */
     public function sendEmailWithAttachment()
     {

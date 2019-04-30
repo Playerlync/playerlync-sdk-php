@@ -73,38 +73,48 @@ class EmailNotificationManager implements INotificationManager
             $this->requests[] = $request;
         }
     }
+
     /**
+     * @param bool $throwException
      * @throws NotificationException
      */
-    public function send()
+    public function send($throwException = false)
     {
         foreach($this->requests as $request)
         {
             $mailer = $this->setupMailer();
             $mailer->Body = $request->body;
             $mailer->Subject = $request->subject;
-            $mailer->addReplyTo($request->replyTo);
-            foreach($request->getBcc() as $bcc)
-                $mailer->addBCC($bcc);
-            foreach($request->getCc() as $cc)
-                $mailer->addCC($cc);
-            foreach($request->getRecipients() as $recipient)
-                $mailer->addAddress($recipient);
-            foreach($request->getAttachments() as $attachment)
-                $this->addAttachment($mailer,$attachment);
-
-            try
+            if(!empty($request->replyTo))
             {
-                $mailer->setFrom($request->from);
-                if(!$mailer->send())
+                if(!$mailer->addReplyTo($request->replyTo))
                 {
-                    $this->throwException($mailer->ErrorInfo);
+                    $this->warning($mailer->ErrorInfo);
                 }
             }
-            catch (Exception $e)
-            {
-                $this->throwException($e->getMessage());
+            foreach($request->getBcc() as $bcc) {
+                $this->addBCC($mailer, $bcc);
             }
+            foreach($request->getCc() as $cc) {
+                $this->addCC($mailer, $cc);
+            }
+            foreach($request->getRecipients() as $recipient) {
+                $this->addRecipient($mailer, $recipient);
+            }
+            foreach($request->getAttachments() as $attachment) {
+                $this->addAttachment($mailer,$attachment);
+            }
+
+            $this->setFrom($mailer, $request->from);
+            if(!$mailer->send())
+            {
+                $this->error($mailer->ErrorInfo);
+                if($throwException)
+                    throw new NotificationException($mailer->ErrorInfo);
+                continue;
+            }
+            $this->debug('Sent email. Subject: '.$request->subject);
+            $this->debug('Recipients: '. implode(',',$request->getRecipients()));
         }
         $this->requests = [];
     }
@@ -112,15 +122,63 @@ class EmailNotificationManager implements INotificationManager
     /**
      * @param PHPMailer $mailer
      * @param $attachment
-     * @throws NotificationException
      */
     protected function addAttachment($mailer, $attachment)
     {
-        try {
-            $mailer->addAttachment($attachment);
-        } catch (Exception $e) {
-            $this->throwException($e->getMessage());
+        if(!$mailer->addAttachment($attachment))
+        {
+            $this->warning($mailer->ErrorInfo);
         }
+    }
+
+    /**
+     * @param PHPMailer $mailer
+     * @param $address
+     */
+    protected function addBCC($mailer, $address)
+    {
+        if(!$mailer->addBCC($address))
+        {
+            $this->warning($mailer->ErrorInfo);
+        }
+    }
+
+    /**
+     * @param PHPMailer $mailer
+     * @param $address
+     */
+    protected function addRecipient($mailer, $address)
+    {
+        if(!$mailer->addAddress($address))
+        {
+            $this->warning($mailer->ErrorInfo);
+        }
+    }
+
+    /**
+     * @param PHPMailer $mailer
+     * @param $address
+     */
+    protected function addCC($mailer, $address)
+    {
+        if(!$mailer->addCC($address))
+        {
+            $this->warning($mailer->ErrorInfo);
+        }
+    }
+
+    /**
+     * @param PHPMailer $mailer
+     * @param $fromEmail
+     */
+    protected function setFrom($mailer, $fromEmail)
+    {
+        if(!$mailer->setFrom($fromEmail))
+        {
+            $this->error($mailer->ErrorInfo);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -140,15 +198,5 @@ class EmailNotificationManager implements INotificationManager
         $mailer->Password = $this->password;
         $mailer->FromName = 'Playerlync';
         return $mailer;
-    }
-
-    /**
-     * @param $message
-     * @throws NotificationException
-     */
-    protected function throwException($message)
-    {
-        $this->error($message);
-        throw new NotificationException($message);
     }
 }
