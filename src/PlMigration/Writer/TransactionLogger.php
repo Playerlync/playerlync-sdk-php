@@ -84,4 +84,22 @@ class TransactionLogger
             throw new WriterException('Unable to write into transaction file.');
         }
     }
+
+    /**
+     * Get the path of the success file
+     * @return string
+     */
+    public function getSuccessFile()
+    {
+        return $this->successFile;
+    }
+
+    /**
+     * Get the path of the failure file
+     * @return string
+     */
+    public function getFailureFile()
+    {
+        return $this->failureFile;
+    }
 }

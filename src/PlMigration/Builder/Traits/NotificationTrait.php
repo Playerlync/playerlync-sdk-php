@@ -3,6 +3,7 @@
 
 namespace PlMigration\Builder\Traits;
 
+use PlMigration\Exceptions\NotificationException;
 use PlMigration\Helper\Notifications\Attachable;
 use PlMigration\Helper\Notifications\INotificationManager;
 use PlMigration\Helper\Notifications\INotificationRequest;
@@ -60,6 +61,21 @@ trait NotificationTrait
             if($notification instanceof Attachable)
             {
                 $notification->addAttachment($file, $attachmentType);
+            }
+        }
+    }
+
+    /**
+     * Send the notifications to out to the recipients
+     */
+    protected function sendNotifications()
+    {
+        foreach($this->notifications as $notif)
+        {
+            $this->notificationManager->addRequest($notif);
+            try {
+                $this->notificationManager->send();
+            } catch (NotificationException $e) {
             }
         }
     }

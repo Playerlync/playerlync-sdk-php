@@ -10,6 +10,7 @@ namespace PlMigration\Builder;
 use PlMigration\Builder\Helper\ImportBuilder;
 use PlMigration\Builder\Traits\ApiBuilderTrait;
 use PlMigration\Builder\Traits\CsvBuilderTrait;
+use PlMigration\Builder\Traits\NotificationTrait;
 use PlMigration\Client\LocalClient;
 use PlMigration\Client\RemoteClient;
 use PlMigration\Exceptions\BuilderException;
@@ -17,6 +18,7 @@ use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\WriterException;
 use PlMigration\Helper\DataFunctions\IValueManipulator;
 use PlMigration\Helper\ImportInterface;
+use PlMigration\Helper\Notifications\Attachable;
 use PlMigration\Model\Field\Field;
 use PlMigration\Model\Field\ImportField;
 use PlMigration\Model\ImportModel;
@@ -32,6 +34,7 @@ class FileImportBuilder extends ImportBuilder
     /** sub classes that are also used to create the import */
     use CsvBuilderTrait;
     use ApiBuilderTrait;
+    use NotificationTrait;
 
     /**
      * Location of the input data file to be used for import
@@ -202,6 +205,9 @@ class FileImportBuilder extends ImportBuilder
 
         if($this->deleteFileWhenDone)
             $this->deleteFile();
+
+        if($this->notificationManager !== null)
+            $this->sendNotifications();
     }
 
     /**
@@ -214,10 +220,14 @@ class FileImportBuilder extends ImportBuilder
         try
         {
             $this->buildErrorLog('ImportLog');
-
+            $this->addAttachment($this->errorLog->getHandlers()[0]->getUrl(), Attachable::LOG_FILE);
             $model = new ImportModel($this->buildFields());
 
             $reader = $this->buildReader($this->getInputFile());
+
+            if($this->storeLocation === null)
+                $this->addAttachment($reader->getFile(), Attachable::INPUT_FILE);
+
             $record = $reader->getRecord();
             foreach($model->getFields() as $field)
             {
@@ -300,6 +310,8 @@ class FileImportBuilder extends ImportBuilder
             try
             {
                 $options['transaction_log'] = new TransactionLogger($this->transactionLogDir, $this->inputFile, $this->enclosure, $this->delimiter);
+                $this->addAttachment($options['transaction_log']->getFailureFile(), Attachable::TRANSACTION_FILE);
+                $this->addAttachment($options['transaction_log']->getSuccessFile(), Attachable::TRANSACTION_FILE);
             }
             catch (WriterException $e)
             {
@@ -341,6 +353,7 @@ class FileImportBuilder extends ImportBuilder
         {
             throw new BuilderException('Failed to move file to '. $this->storeLocation);
         }
+        $this->addAttachment($this->storeLocation . '/' . $fileName, Attachable::INPUT_FILE);
     }
 
     /**

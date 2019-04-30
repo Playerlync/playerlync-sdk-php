@@ -15,7 +15,6 @@ use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ExportException;
-use PlMigration\Exceptions\NotificationException;
 use PlMigration\Helper\DataFunctions\DateFormatter;
 use PlMigration\Helper\Notifications\Attachable;
 use PlMigration\Model\ExportModel;
@@ -191,17 +190,9 @@ class FileExportBuilder extends ExportBuilder
         $this->saveRunTime();
 
         $this->errorLog->close();
-        if($this->notificationManager)
+        if($this->notificationManager !== null)
         {
-            foreach($this->notifications as $notif)
-            {
-                $this->notificationManager->addRequest($notif);
-                try {
-                    $this->notificationManager->send();
-                } catch (NotificationException $e) {
-                }
-            }
-
+            $this->sendNotifications();
         }
 
         return $output;
@@ -275,7 +266,7 @@ class FileExportBuilder extends ExportBuilder
         {
             foreach($field->getAliasFields() as $refField)
             {
-                if(!\in_array($refField, $structure, true))
+                if(!in_array($refField, $structure, true))
                 {
                     throw new BuilderException("Unknown field \"{$refField}\" provided that is not returned in the service");
                 }

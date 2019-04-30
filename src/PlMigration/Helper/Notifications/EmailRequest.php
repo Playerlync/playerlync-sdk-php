@@ -71,15 +71,19 @@ class EmailRequest implements INotificationRequest, Attachable
      */
     public $replyTo = '';
 
-    public function __construct($from, ...$attachmentsAllowed)
+    /**
+     * Instantiate an email request object with configuration needed to be able to sent to the EmailNotificationManager
+     * EmailRequest constructor.
+     * @param $from
+     */
+    public function __construct($from)
     {
-        $this->attachmentsAllowed = $attachmentsAllowed;
         $this->from = $from;
     }
 
     /**
      * Add attachment if it is in the list of attachments allowed.
-     * To force attachment, do not send in attachmentType value
+     * To force attachment, leave the $attachmentType argument null
      * @param string $file
      * @param string $attachmentType
      */
@@ -121,6 +125,15 @@ class EmailRequest implements INotificationRequest, Attachable
         return $this->recipients[] = $recipient;
     }
 
+    /**
+     * Add an attachment type that can be accepted by the request.
+     * Refer to the list of constants in the Attachable class that are used
+     * @param $type
+     */
+    public function addAcceptedAttachment($type)
+    {
+        $this->attachmentsAllowed[] = $type;
+    }
     /**
      * Get all attachments stored
      * @return array
