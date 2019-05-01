@@ -105,7 +105,7 @@ class EmailNotificationManager implements INotificationManager
                 $this->addAttachment($mailer,$attachment);
             }
 
-            $this->setFrom($mailer, $request->from);
+            $this->setFrom($mailer, $request->from, $request->fromName);
             if(!$mailer->send())
             {
                 $this->error($mailer->ErrorInfo);
@@ -170,10 +170,13 @@ class EmailNotificationManager implements INotificationManager
     /**
      * @param PHPMailer $mailer
      * @param $fromEmail
+     * @param $fromName
+     * @return bool
      */
-    protected function setFrom($mailer, $fromEmail)
+    protected function setFrom($mailer, $fromEmail, $fromName)
     {
-        if(!$mailer->setFrom($fromEmail))
+        $fromName = empty($fromName) ? 'Playerlync' : $fromName;
+        if(!$mailer->setFrom($fromEmail, $fromName))
         {
             $this->error($mailer->ErrorInfo);
             return false;
@@ -196,7 +199,6 @@ class EmailNotificationManager implements INotificationManager
         $mailer->Port = $this->port;
         $mailer->Username = $this->username;
         $mailer->Password = $this->password;
-        $mailer->FromName = 'Playerlync';
         return $mailer;
     }
 }
