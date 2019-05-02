@@ -208,7 +208,8 @@ class FileExportBuilder extends ExportBuilder
         try
         {
             $this->buildErrorLog('ExportLog');
-            $this->addAttachment($this->errorLog->getHandlers()[0]->getUrl(), Attachable::LOG_FILE);
+            if($this->errorLog !== null)
+                $this->addAttachment($this->errorLog->getHandlers()[0]->getUrl(), Attachable::LOG_FILE);
             $this->historyFileData = $this->verifyHistoryFile();
             $writer = $this->buildWriter($this->outputFile);
             $this->addAttachment($writer->getFile(), Attachable::OUTPUT_FILE);

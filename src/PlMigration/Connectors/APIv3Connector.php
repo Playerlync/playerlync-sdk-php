@@ -11,6 +11,8 @@ use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
 use PlMigration\Helper\LoggerTrait;
 use PlMigration\Helper\PlapiClient;
+use PlMigration\Service\IService;
+use PlMigration\Service\Plapi\SimpleService;
 use Psr\Http\Message\ResponseInterface;
 
 class APIv3Connector implements IConnector
@@ -25,13 +27,13 @@ class APIv3Connector implements IConnector
 
     /**
      * API path of the GET service to be used
-     * @var string
+     * @var IService
      */
     private $getService;
 
     /**
      * API path of the POST service to be used
-     * @var string
+     * @var IService
      */
     private $postService;
 
@@ -89,14 +91,6 @@ class APIv3Connector implements IConnector
             throw new ConnectorException($e->getMessage());
         }
 
-        if($getService !== null && substr($getService,0,1) !== '/') {
-            $getService = '/' . $getService;
-        }
-
-        if($postService !== null && substr($postService,0,1) !== '/') {
-            $postService = '/' . $postService;
-        }
-
         $this->getService = $getService;
         $this->postService = $postService;
         $this->queryParams = $query;
@@ -131,13 +125,20 @@ class APIv3Connector implements IConnector
                 $queryParams['filter'] = 'source|eq|'.$config['source'];
         }
 
-        $response = $this->get($this->getService, $queryParams);
+        $response = $this->getService->execute($this->getClient(), ['query' => $queryParams]);
+
+        if(!($this->getService instanceof SimpleService))
+        {
+            $this->hasNext = false;
+            $this->debug(count($response). ' records found');
+            return $response;
+        }
+        $this->hasNext = $this->moreRecordsExist($response);
+        $this->page++;
 
         if($this->page === 1)
             $this->debug($response->totalitems. ' records found');
 
-        $this->hasNext = $this->moreRecordsExist($response);
-        $this->page++;
         return ($response->data !== null) ? $response->data : [];
     }
 
@@ -177,7 +178,7 @@ class APIv3Connector implements IConnector
     {
         if(!$this->structure)
         {
-            $response = $this->get($this->getService, ['structure'=> 1]);
+            $response = $this->get((string)$this->getService, ['structure'=> 1]);
 
             $this->structure = (array)$response->data->structure;
         }
@@ -200,7 +201,7 @@ class APIv3Connector implements IConnector
     public function insertRecord($data)
     {
         $query = ['upsert' => 1];
-        return $this->post($this->postService, $query, $data);
+        return $this->post((string)$this->postService, $query, $data);
     }
 
     public function setQueryParams($params)
@@ -232,7 +233,7 @@ class APIv3Connector implements IConnector
         {
             $requests[$i] = [
                 'method' => 'POST',
-                'path' => $this->postService,
+                'path' => (string)$this->postService,
                 'body' => $record
             ];
         }
@@ -389,7 +390,7 @@ class APIv3Connector implements IConnector
         $params = [
             'json' => $data
         ];
-        return $this->request('put', $this->postService.'/'.$data[$this->primaryKey], $params);
+        return $this->request('put', (string)$this->postService.'/'.$data[$this->primaryKey], $params);
     }
 
     /**
@@ -399,7 +400,7 @@ class APIv3Connector implements IConnector
      */
     public function deleteRecord($data)
     {
-        return $this->request('delete', $this->postService.'/'.$data[$this->primaryKey], []);
+        return $this->request('delete', (string)$this->postService.'/'.$data[$this->primaryKey], []);
     }
 
     /**

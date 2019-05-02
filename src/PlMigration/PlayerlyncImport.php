@@ -100,7 +100,7 @@ class PlayerlyncImport implements ImportInterface
             $this->setLogger($options['logger']);
         }
 
-        if(isset($options['source']))
+        if(array_key_exists('source', $options))
         {
             $this->source = $options['source'];
         }
@@ -278,24 +278,28 @@ class PlayerlyncImport implements ImportInterface
         {
             if($this->model->getSecondaryKey() !== null)
             {
-                return array_key_exists($data[$this->model->getPrimaryKey()].','.$data[$this->model->getSecondaryKey()], $this->cache);
+                return array_key_exists(strtolower($data[$this->model->getPrimaryKey()]).','.strtolower($data[$this->model->getSecondaryKey()]), $this->cache);
             }
-            return array_key_exists($data[$this->model->getPrimaryKey()], $this->cache);
+            return array_key_exists(strtolower($data[$this->model->getPrimaryKey()]), $this->cache);
         }
         return false;
     }
 
+    /**
+     * Add a successfully inserted record into the cache
+     * @param $data
+     */
     protected function addToMemo($data)
     {
         if($this->model->getPrimaryKey() !== null)
         {
             if($this->model->getSecondaryKey() !== null)
             {
-                $this->cache[$data[$this->model->getPrimaryKey()].','.$data[$this->model->getSecondaryKey()]] = true;
+                $this->cache[strtolower($data[$this->model->getPrimaryKey()]).','.strtolower($data[$this->model->getSecondaryKey()])] = true;
             }
             else
             {
-                $this->cache[$data[$this->model->getPrimaryKey()]] = true;
+                $this->cache[strtolower($data[$this->model->getPrimaryKey()])] = true;
             }
         }
     }

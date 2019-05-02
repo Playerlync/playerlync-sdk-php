@@ -220,7 +220,8 @@ class FileImportBuilder extends ImportBuilder
         try
         {
             $this->buildErrorLog('ImportLog');
-            $this->addAttachment($this->errorLog->getHandlers()[0]->getUrl(), Attachable::LOG_FILE);
+            if($this->errorLog !== null)
+                $this->addAttachment($this->errorLog->getHandlers()[0]->getUrl(), Attachable::LOG_FILE);
             $model = new ImportModel($this->buildFields());
 
             $reader = $this->buildReader($this->getInputFile());

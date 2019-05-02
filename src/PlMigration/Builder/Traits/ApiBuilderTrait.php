@@ -10,6 +10,8 @@ namespace PlMigration\Builder\Traits;
 use PlMigration\Connectors\APIv3Connector;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ConnectorException;
+use PlMigration\Service\IService;
+use PlMigration\Service\Plapi\SimpleService;
 
 /**
  * Trait containing configuration & settings methods to be used to connect to the Playerlync API
@@ -117,7 +119,10 @@ trait ApiBuilderTrait
      */
     public function postService($servicePath)
     {
-        $this->postService = $servicePath;
+        if(is_string($servicePath))
+            $this->postService = new SimpleService('POST', $servicePath);
+        elseif($servicePath instanceof IService)
+            $this->postService = $servicePath;
         return $this;
     }
 
@@ -129,7 +134,10 @@ trait ApiBuilderTrait
      */
     public function getService($servicePath)
     {
-        $this->getService = $servicePath;
+        if(is_string($servicePath))
+            $this->getService = new SimpleService('GET', $servicePath);
+        elseif($servicePath instanceof IService)
+            $this->getService = $servicePath;
         return $this;
     }
 

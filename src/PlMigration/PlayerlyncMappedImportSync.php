@@ -45,6 +45,11 @@ class PlayerlyncMappedImportSync extends PlayerlyncImportSync
 
     protected function deleteRecord($record)
     {
+        if($this->isDuplicate($record))
+        {
+            return;
+        }
+
         if($this->isExemptFromDelete($record))
         {
             return;

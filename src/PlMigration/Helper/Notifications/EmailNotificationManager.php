@@ -3,7 +3,6 @@
 
 namespace PlMigration\Helper\Notifications;
 
-use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PlMigration\Exceptions\NotificationException;
 use PlMigration\Helper\LoggerTrait;

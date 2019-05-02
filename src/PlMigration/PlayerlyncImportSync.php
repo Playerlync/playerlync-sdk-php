@@ -46,6 +46,7 @@ class PlayerlyncImportSync extends PlayerlyncImport
             'failed' => 0,
             'deleted' => 0];
 
+        $this->queue['deleted'] = [];
         if($model->getPrimaryKey() === null)
         {
             throw new ImportException('The primary key, and secondary key if applicable, are required to run the synchronized import');
@@ -92,11 +93,6 @@ class PlayerlyncImportSync extends PlayerlyncImport
             foreach($records as $index => $record)
             {
                 $record = (array)$record;
-                //If the record exists in the data that has been memoized by the import, we don't delete it
-                if($this->isDuplicate($record))
-                {
-                    continue;
-                }
 
                 $force = ($recordCount === ($index + 1)) && !$hasNext;
                 if($this->connector->supportBatch())
@@ -163,23 +159,23 @@ class PlayerlyncImportSync extends PlayerlyncImport
      */
     protected function deleteRecords($record, $force)
     {
-        if($this->isExemptFromDelete($record))
+        //If the record exists in the data that has been memoized by the import, we don't delete it
+        if(!$this->isDuplicate($record))
         {
-            return;
+            if(!$this->isExemptFromDelete($record))
+            {
+                $record['delete_date'] = time(); //this will cause the records to be deleted on a POST service
+                $this->queue['deleted'][] = $record;
+            }
         }
-        $record['delete_date'] = time(); //this will cause the records to be deleted
-        $this->queue['deleted'][] = $record;
+        elseif(!$force) {
+                return;
+        }
 
         if(!$force && count($this->queue['deleted']) < 50)
-        {
             return;
-        }
 
         $responses = $this->connector->insertRecords($this->queue['deleted']);
-        if($responses === null)
-        {
-            return;
-        }
 
         foreach($responses as $index => $response)
         {
@@ -201,6 +197,10 @@ class PlayerlyncImportSync extends PlayerlyncImport
      */
     protected function deleteRecord($record)
     {
+        if($this->isDuplicate($record))
+        {
+            return;
+        }
         if($this->isExemptFromDelete($record))
         {
             return;
