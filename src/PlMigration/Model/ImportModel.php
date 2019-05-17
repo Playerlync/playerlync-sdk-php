@@ -60,6 +60,11 @@ class ImportModel
         {
             $value = $fieldInfo->getAlias()->getValue($record);
 
+            foreach($fieldInfo->getExtra() as $extraAction)
+            {
+                $value = $extraAction->execute($value);
+            }
+
             if(empty($value) && $fieldInfo->getType() === Field::OPTIONAL)
             {
                 continue;
@@ -67,10 +72,6 @@ class ImportModel
             if(empty($value) && ($fieldInfo->getType() === Field::REQUIRED || $fieldInfo->getType() === Field::PRIMARY_KEY))
             {
                 throw new ModelException('Required field cannot be empty: '. $field);
-            }
-            foreach($fieldInfo->getExtra() as $extraAction)
-            {
-                $value = $extraAction->execute($value);
             }
             $row[$field] = $value;
         }
