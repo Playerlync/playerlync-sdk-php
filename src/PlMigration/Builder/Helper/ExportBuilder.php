@@ -78,7 +78,11 @@ abstract class ExportBuilder
             }
             $fields[$field->getField()] = $field;
         }
-        $this->fields = [];
         return $fields;
+    }
+
+    protected function resetData()
+    {
+        $this->fields = [];
     }
 }

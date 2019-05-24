@@ -43,6 +43,12 @@ class FileExportBuilder extends ExportBuilder
     private $historyFile;
 
     /**
+     * Whether or not the history file
+     * @var bool
+     */
+    private $updateHistoryFile = true;
+
+    /**
      * Parsed Data of the history file
      * @var object
      */
@@ -77,6 +83,7 @@ class FileExportBuilder extends ExportBuilder
      */
     public function __construct()
     {
+        $this->resetData();
     }
 
     /**
@@ -123,6 +130,19 @@ class FileExportBuilder extends ExportBuilder
     public function runHistoryFile($file)
     {
         $this->historyFile = $file;
+        return $this;
+    }
+
+    /**
+     * Toggle to decide if the history file should be updated when the export process is finished
+     * Default value: true
+     * This value will be reset to the default value when the export method is executed
+     * @param bool $update
+     * @return $this
+     */
+    public function updateHistoryFileAfterProcess($update)
+    {
+        $this->updateHistoryFile = $update;
         return $this;
     }
 
@@ -187,7 +207,8 @@ class FileExportBuilder extends ExportBuilder
             }
         }
 
-        $this->saveRunTime();
+        if($this->updateHistoryFile)
+            $this->saveRunTime();
 
         $this->errorLog->close();
         if($this->notificationManager !== null)
@@ -224,10 +245,12 @@ class FileExportBuilder extends ExportBuilder
 
             $this->options['logger'] = $this->errorLog;
 
+            $this->resetData();
             return new PlayerlyncExport($api, $writer, $model, $this->options);
         }
         catch(ConnectorException $e)
         {
+            $this->resetData();
             throw new BuilderException($e->getMessage());
         }
     }
@@ -314,8 +337,15 @@ class FileExportBuilder extends ExportBuilder
         {
             if(!file_put_contents($this->historyFile, json_encode($this->historyFileData,JSON_PRETTY_PRINT)))
             {
+                $this->addError('Unable to save history file');
                 throw new BuilderException('Unable to save history file.');
             }
         }
+    }
+
+    protected function resetData()
+    {
+        parent::resetData();
+        $this->updateHistoryFile = true;
     }
 }
