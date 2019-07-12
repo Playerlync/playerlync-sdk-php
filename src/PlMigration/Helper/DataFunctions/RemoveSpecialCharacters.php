@@ -14,14 +14,14 @@ namespace PlMigration\Helper\DataFunctions;
 class RemoveSpecialCharacters implements IValueManipulator
 {
     /**
-     * Replace a list of characters that are not allowed with ~~ because some fields in the Playerlync API don't allow them
+     * Replace a list of characters that are not allowed with _ because some fields in the Playerlync API don't allow them
      * List of characters that are filtered: [ : \ / < > ? " % # | *
-     * ie. member?name => member~~name
+     * ie. member?name => member_name
      * @param $value
      * @return string
      */
     public function execute($value)
     {
-        return preg_replace('/[:\*\?"%<>#|\/\\\\]/', '~~', $value);
+        return preg_replace('/[:\*\?"%<>#|\/\\\\]/', '_', $value);
     }
 }
