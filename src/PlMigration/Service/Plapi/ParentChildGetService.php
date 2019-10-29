@@ -24,20 +24,25 @@ class ParentChildGetService implements IService
      */
     private $prereqIds;
 
+    private $prereqOptions;
+
     /**
      * Class that gets parent service to be able to fill the second service.
      * For example: to be able to get group members from playerlync API, we need a GET groups to get all groups,
      * followed by a GET group/group_id/members to get the group members in each group.
      * ParentChildService constructor.
-     * @param $service
-     * @param $prereqService
+     * @param string $service
+     * @param string $prereqService
+     * @param array $prereqServiceOptions
      */
-    public function __construct($service, $prereqService)
+    public function __construct($service, $prereqService, $prereqServiceOptions = [])
     {
         $this->method = 'GET';
         $this->service = $this->cleanupPath($service);
         $this->prereqService = $this->cleanupPath($prereqService);
         $this->prereqIds = $this->parseKeysInPath($this->service);
+        if(is_array($prereqServiceOptions))
+            $this->prereqOptions = $prereqServiceOptions;
     }
 
     /**
@@ -49,7 +54,7 @@ class ParentChildGetService implements IService
     public function execute(ApiClient $apiConnection, $options = [])
     {
         $records = [];
-        $parentRecords = $this->getAll($apiConnection, $this->prereqService, $options);
+        $parentRecords = $this->getAll($apiConnection, $this->prereqService, $this->prereqOptions);
 
         foreach($parentRecords as $parentRecord)
         {
