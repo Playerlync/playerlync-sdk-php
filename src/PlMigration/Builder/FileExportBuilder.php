@@ -7,6 +7,7 @@
 
 namespace PlMigration\Builder;
 
+use Closure;
 use PlMigration\Builder\Helper\ExportBuilder;
 use PlMigration\Builder\Traits\ApiBuilderTrait;
 use PlMigration\Builder\Traits\CsvBuilderTrait;
@@ -154,6 +155,18 @@ class FileExportBuilder extends ExportBuilder
     public function primaryKey($primaryKey)
     {
         $this->options['primaryKey'] = $primaryKey;
+        return $this;
+    }
+
+    /**
+     * Add a validation step for each record before going into the output format to validate that we want to use it
+     * @param Closure $func Closure function that will take an array argument that will contain the raw api data to validate.
+     * the function will return true if we want to continue with the export process on the record, or false to skip.
+     * @return $this
+     */
+    public function inputValidator(Closure $func)
+    {
+        $this->options['recordValidator'] = $func;
         return $this;
     }
 

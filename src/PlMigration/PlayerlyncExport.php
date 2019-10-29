@@ -7,6 +7,7 @@
 
 namespace PlMigration;
 
+use Closure;
 use PlMigration\Connectors\APIv3Connector;
 use PlMigration\Connectors\IConnector;
 use PlMigration\Exceptions\ClientException;
@@ -37,11 +38,25 @@ class PlayerlyncExport
      */
     private $model;
 
+    /**
+     * @var array
+     */
     protected $cache = [];
 
+    /**
+     * @var array
+     */
     protected $dataCache = [];
 
+    /**
+     * @var string
+     */
     protected $primaryKey;
+
+    /**
+     * @var Closure[]
+     */
+    protected $recordValidator = [];
 
     /**
      * Instantiate a new exporter.
@@ -70,6 +85,11 @@ class PlayerlyncExport
         {
             $this->primaryKey = $options['primaryKey'];
         }
+
+        if(isset($options['recordValidator']) && is_callable($options['recordValidator']))
+        {
+            $this->recordValidator[] = $options['recordValidator'];
+        }
     }
 
     /**
@@ -85,7 +105,7 @@ class PlayerlyncExport
 
                 foreach($records as $record)
                 {
-                    if(!$this->isDuplicate($record))
+                    if($this->isValid($record) && !$this->isDuplicate($record))
                     {
                         $this->writeRow((array)$record);
                     }
@@ -180,5 +200,15 @@ class PlayerlyncExport
             $this->warning("Unable to find additional data on $additionalType $joinKey: ".$apiRecord[$joinKey].'.', $apiRecord);
         }
         return $additionalData;
+    }
+
+    protected function isValid($record): bool
+    {
+        foreach($this->recordValidator as $validation)
+        {
+            if(!$validation->__invoke($record))
+                return false;
+        }
+        return true;
     }
 }
