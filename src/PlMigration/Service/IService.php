@@ -15,5 +15,7 @@ interface IService
      */
     public function execute(ApiClient $apiConnection, $options = []);
 
+    public function getStructure(ApiClient $apiClient);
+
     public function __toString();
 }

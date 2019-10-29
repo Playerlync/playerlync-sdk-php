@@ -178,9 +178,7 @@ class APIv3Connector implements IConnector
     {
         if(!$this->structure)
         {
-            $response = $this->get((string)$this->getService, ['structure'=> 1]);
-
-            $this->structure = (array)$response->data->structure;
+            $this->structure = (array)$this->getService->getStructure($this->api);
         }
         return $this->structure;
     }
@@ -248,7 +246,11 @@ class APIv3Connector implements IConnector
         foreach($responses as $index => $response)
         {
             $requestIndex = $recordIndexes[$index];
-            if($response->getStatusCode() !== 200)
+            if($response instanceof \RuntimeException)
+            {
+                $records[$requestIndex] = new ClientException('Network error: '.$response->getMessage());
+            }
+            elseif($response->getStatusCode() !== 200)
             {
                 $records[$requestIndex] = new ClientException('Response returned invalid status code ' .$response->getStatusCode());
             }

@@ -28,6 +28,21 @@ trait PlapiService
         return $path;
     }
 
+    /**
+     * extract all strings inside curly brackets as they will be used as the key to match with the parent service
+     * @param string $servicePath
+     * @return array
+     */
+    protected function parseKeysInPath($servicePath)
+    {
+        $results = preg_match_all('/\/{(.*?)}/', $servicePath, $matches);
+        if($results && isset($matches[1]))
+        {
+            return $matches[1];
+        }
+        return [];
+    }
+
     public function __toString()
     {
         return $this->service;

@@ -22,7 +22,7 @@ class ParentChildGetService implements IService
     /**
      * @var array
      */
-    private $prereqIds = [];
+    private $prereqIds;
 
     /**
      * Class that gets parent service to be able to fill the second service.
@@ -37,7 +37,7 @@ class ParentChildGetService implements IService
         $this->method = 'GET';
         $this->service = $this->cleanupPath($service);
         $this->prereqService = $this->cleanupPath($prereqService);
-        $this->parseKeysInPath();
+        $this->prereqIds = $this->parseKeysInPath($this->service);
     }
 
     /**
@@ -102,21 +102,6 @@ class ParentChildGetService implements IService
     }
 
     /**
-     * extract all strings inside curly brackets as they will be used as the key to match with the parent service
-     */
-    protected function parseKeysInPath()
-    {
-        $results = preg_match_all('/\/{(.*?)}/', $this->service, $matches);
-        if($results && isset($matches[1]))
-        {
-            foreach($matches[1] as $id)
-            {
-                $this->prereqIds[] = $id;
-            }
-        }
-    }
-
-    /**
      * Replace the primary keys in the service with actual values that are returned by the parent service results
      * @param string $serviceTemplate
      * @param object $data
@@ -138,5 +123,26 @@ class ParentChildGetService implements IService
     public function getKeysInPath(): array
     {
         return $this->prereqIds;
+    }
+
+    /**
+     * @param ApiClient $apiClient
+     * @return mixed
+     * @throws ClientException
+     */
+    public function getStructure(ApiClient $apiClient)
+    {
+        $prereqData = $apiClient->validateResponse($apiClient->request('GET', $this->prereqService, ['query' => [
+            'limit' => 1
+        ]]));
+
+        if(empty($prereqData->data))
+            throw new ClientException('Prerequisite service returned no data');
+
+        $data = is_array($prereqData->data) ? $prereqData->data[0] : $prereqData->data;
+
+        return $apiClient->validateResponse($apiClient->request($this->method, $this->buildService($this->service, $data), ['query' => [
+            'structure' => 1
+        ]]))->data->structure;
     }
 }

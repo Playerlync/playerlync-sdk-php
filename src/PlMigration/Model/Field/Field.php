@@ -158,7 +158,7 @@ abstract class Field
     protected function buildAlias($type, $aliasString)
     {
         if($aliasString === null)
-            return null;
+            return new ConstantAlias(null);
         if($type === self::CONSTANT)
         {
             return new ConstantAlias($aliasString);
