@@ -206,7 +206,7 @@ class PlayerlyncExport
     {
         foreach($this->recordValidator as $validation)
         {
-            if(!$validation->__invoke($record))
+            if(!$validation->__invoke($record, $this->logger))
                 return false;
         }
         return true;
