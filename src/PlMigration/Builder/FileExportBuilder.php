@@ -351,8 +351,8 @@ class FileExportBuilder extends ExportBuilder
             {
                 $field = in_array('system_create_date', $apiDateFields, true) ? 'system_create_date' : 'create_date';
             }
-
-            $this->queryParams['filter'] .= $field.'|gteq|'.$historyFile->$type;
+            //Using a between filter because the submission_date doesn't support gteq, other date fields may do the same so making standardized
+            $this->queryParams['filter'] .= $field.'|between|'.$historyFile->$type.'|'.time();
         }
         $historyFile->$type = time();
     }
