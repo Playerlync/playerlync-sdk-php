@@ -9,6 +9,7 @@ namespace PlMigration\Connectors;
 
 use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
+use PlMigration\Helper\IActivityTrackable;
 use PlMigration\Helper\LoggerTrait;
 use PlMigration\Helper\PlapiClient;
 use PlMigration\Service\IService;
@@ -84,7 +85,7 @@ class APIv3Connector implements IConnector
     {
         try
         {
-            $this->api = new PlapiClient($config);
+            $this->api = new PlapiClient($config, $config['logger'] ?? null);
         }
         catch (ClientException $e)
         {
@@ -104,7 +105,6 @@ class APIv3Connector implements IConnector
         {
             $this->setLogger($config['logger']);
         }
-        $this->debug('Connected to '.$this->api->getServerVersion().' server version.');
     }
 
     /**
@@ -130,16 +130,15 @@ class APIv3Connector implements IConnector
         if(!($this->getService instanceof SimpleService))
         {
             $this->hasNext = false;
-            $this->debug(count($response). ' records found');
+            $this->debug(count($response). ' records returned');
             return $response;
         }
         $this->hasNext = $this->moreRecordsExist($response);
         $this->page++;
 
-        if($this->page === 1)
-            $this->debug($response->totalitems. ' records found');
+        $this->debug($response->items. ' records returned');
 
-        return ($response->data !== null) ? $response->data : [];
+        return $response->data ?? [];
     }
 
     /**
@@ -214,10 +213,17 @@ class APIv3Connector implements IConnector
      */
     public function insertActivityRecord($data)
     {
-        $data['activity_id'] = self::createGUID();
-        $data['primary_org_id'] = $this->api->getPrimaryOrgId();
-        $data['member_id'] = $this->api->getMemberId();
-        return $this->post('/log/activities', [], $data);
+        if($this->api instanceof IActivityTrackable)
+        {
+            try
+            {
+                return $this->api->logActivity($data);
+            }
+            catch (ClientException $e)
+            {
+                throw new ConnectorException('API returned error: '.$e->getMessage());
+            }
+        }
     }
 
     /**
@@ -276,30 +282,6 @@ class APIv3Connector implements IConnector
     }
 
     /**
-     * @return string
-     */
-    private static function createGUID()
-    {
-        $guid = null;
-        if (function_exists('com_create_guid'))
-        {
-            $guid = str_replace(array('}', '{'), '', com_create_guid());
-        }
-        else
-        {
-            mt_srand((double)microtime() * 10000);
-            $charid = strtoupper(md5(uniqid(mt_rand(), true)));
-            $hyphen = chr(45); // "-"
-            $guid = substr($charid, 0, 8) . $hyphen
-                . substr($charid, 8, 4) . $hyphen
-                . substr($charid, 12, 4) . $hyphen . '4'
-                . substr($charid, 16, 3) . $hyphen
-                . substr($charid, 20, 12);
-        }
-        return strtolower($guid);
-    }
-
-    /**
      * @param $path
      * @param $query
      * @param $body
@@ -313,18 +295,6 @@ class APIv3Connector implements IConnector
             'json' => $body
         ];
         return $this->request('post', $path, $params);
-    }
-
-    /**
-     * @param $path
-     * @param $params
-     * @return object
-     * @throws ConnectorException
-     */
-    private function get($path,$params)
-    {
-        $this->debug('Running GET '.$path, $params);
-        return $this->request('get', $path, $params);
     }
 
     /**

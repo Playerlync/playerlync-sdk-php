@@ -44,6 +44,12 @@ class FileExportBuilder extends ExportBuilder
     private $historyFile;
 
     /**
+     * fs
+     * @var string
+     */
+    private $historyFileDateField;
+
+    /**
      * Whether or not the history file
      * @var bool
      */
@@ -126,11 +132,14 @@ class FileExportBuilder extends ExportBuilder
     /**
      * File that configures history file to prevent returning of previous runs.
      * @param string $file Filepath of the history file, including the file name
+     * @param string $dateField The API field that will be used to connect the time offset from the history file
      * @return FileExportBuilder
      */
-    public function runHistoryFile($file)
+    public function runHistoryFile($file, $dateField = null)
     {
         $this->historyFile = $file;
+        if(!empty($dateField))
+            $this->historyFileDateField = $dateField;
         return $this;
     }
 
@@ -253,7 +262,7 @@ class FileExportBuilder extends ExportBuilder
             }
             $api = $this->buildApi($this->errorLog);
             $model = new ExportModel($this->buildExportFields($api->getStructure(), $api->getTimeFields()));
-            $this->addLastRunTimeFilter($this->historyFileData, pathinfo($this->outputFile,PATHINFO_BASENAME), $api->getStructure());
+            $this->addLastRunTimeFilter($this->historyFileData, pathinfo($this->outputFile,PATHINFO_BASENAME), $api->getTimeFields());
             $api->setQueryParams($this->queryParams);
 
             $this->options['logger'] = $this->errorLog;
@@ -318,24 +327,32 @@ class FileExportBuilder extends ExportBuilder
      * Append the last run time query parameter to have GET service return a subset of records
      * @param object $historyFile
      * @param string $type
-     * @param array $structure
+     * @param array $apiDateFields
+     * @throws BuilderException
      */
-    private function addLastRunTimeFilter($historyFile, $type, $structure)
+    private function addLastRunTimeFilter($historyFile, $type, $apiDateFields)
     {
         if(isset($historyFile->$type))
         {
+            $field = '';
             if(!empty($this->queryParams['filter']))
             {
                 $this->queryParams['filter'] .= ',';
             }
-            if(array_key_exists('system_create_date', $structure))
+            if($this->historyFileDateField !== null)
             {
-                $this->queryParams['filter'] .= 'system_create_date|gteq|'.$historyFile->$type;
+                if(!in_array($this->historyFileDateField, $apiDateFields, true))
+                {
+                    throw new BuilderException("The \"{$this->historyFileDateField}\" date field was not found in the service used. It must be one of the fields: ".implode(',', $apiDateFields));
+                }
+                $field = $this->historyFileDateField;
             }
             else
             {
-                $this->queryParams['filter'] .= 'create_date|gteq|'.$historyFile->$type;
+                $field = in_array('system_create_date', $apiDateFields, true) ? 'system_create_date' : 'create_date';
             }
+
+            $this->queryParams['filter'] .= $field.'|gteq|'.$historyFile->$type;
         }
         $historyFile->$type = time();
     }
@@ -360,5 +377,6 @@ class FileExportBuilder extends ExportBuilder
     {
         parent::resetData();
         $this->updateHistoryFile = true;
+        $this->historyFileDateField = null;
     }
 }

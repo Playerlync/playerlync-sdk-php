@@ -13,11 +13,12 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Monolog\Logger;
 use PlMigration\Exceptions\ClientException;
-use Zend\Stdlib\ResponseInterface;
 
-class PlapiClient implements ApiClient
+class PlapiClient implements ApiClient, IAuthenticationable, IActivityTrackable
 {
+    use LoggerTrait;
     /**
      * @var Client
      */
@@ -47,14 +48,15 @@ class PlapiClient implements ApiClient
     /**
      * @var PlapiOauthManager
      */
-    private $oauthManager;
+    private $authenticater;
 
     /**
      * PlapiClient constructor.
      * @param array $config
+     * @param Logger|null $logger
      * @throws ClientException
      */
-    public function __construct(array $config = [])
+    public function __construct(array $config = [], $logger = null)
     {
         $required = ['host', 'client_id', 'client_secret', 'username', 'password'];
 
@@ -69,11 +71,12 @@ class PlapiClient implements ApiClient
         $this->apiVersion = $config['api_version'] ?? 'v3';
 
         $this->setupClient($config);
-        $this->ping();
-        $this->oauthManager = new PlapiOauthManager($this->client, $config);
-        $this->oauthManager->authenticate();
+        $this->setLogger($logger);
+        $this->authenticater = new PlapiOauthManager($this->client, $config);
+        $this->authenticate();
+        $this->primaryOrgId = $config['primary_org_id'] ?? $this->authenticater->getPrimaryOrgId();
 
-        $this->primaryOrgId = $config['primary_org_id'] ?? $this->oauthManager->getPrimaryOrgId();
+        $this->ping($config['host']);
     }
 
     /**
@@ -157,11 +160,6 @@ class PlapiClient implements ApiClient
         return Pool::batch($this->client, $requests($requestsArray), ['concurrency' => '25']);
     }
 
-    public function getMemberId()
-    {
-        return $this->oauthManager->getMemberId();
-    }
-
     public function getPrimaryOrgId()
     {
         return $this->primaryOrgId;
@@ -173,7 +171,7 @@ class PlapiClient implements ApiClient
     private function getDefaultHeaders()
     {
         return [
-            'Authorization' => 'Bearer '. $this->oauthManager->getAccessToken(),
+            'Authorization' => 'Bearer '. $this->authenticater->getAccessToken(),
             'Primary-Org-Id' => $this->primaryOrgId
         ];
     }
@@ -203,7 +201,9 @@ class PlapiClient implements ApiClient
         ],$options);
         try
         {
-            $response = $this->client->request($method, $this->buildPlapiPath($servicePath), $options);
+            $servicePath = $this->buildPlapiPath($servicePath);
+            $this->debug("Executing $method:$servicePath",$options['query'] ?? []);
+            $response = $this->client->request($method, $servicePath, $options);
         }
         catch (GuzzleException $e)
         {
@@ -246,9 +246,10 @@ class PlapiClient implements ApiClient
     }
 
     /**
+     * @param $host
      * @throws ClientException
      */
-    private function ping()
+    private function ping($host)
     {
         try
         {
@@ -262,12 +263,8 @@ class PlapiClient implements ApiClient
         if($header = $response->getHeader('Pl-Version'))
         {
             $this->serverInfo['version'] = $header[0];
+            $this->debug('Connected to ' . $host.' version: ' . $header[0]);
         }
-    }
-
-    public function getServerVersion()
-    {
-        return array_key_exists('version', $this->serverInfo) ? $this->serverInfo['version'] : 'Unknown';
     }
 
     /**
@@ -275,14 +272,69 @@ class PlapiClient implements ApiClient
      */
     private function checkToken()
     {
-        if($this->oauthManager->needsToRenew())
+        if($this->authenticater->needsToRenew())
         {
-            $this->oauthManager->authenticate();
+            $this->renew();
         }
     }
 
     public function getFileClient()
     {
         return new PlayerlyncFileClient($this->client);
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function authenticate()
+    {
+        $this->authenticater->authenticate();
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function renew()
+    {
+        $this->authenticater->authenticate();
+    }
+
+    /**
+     * @param array $data
+     * @return mixed|object
+     * @throws ClientException
+     */
+    public function logActivity($data)
+    {
+        $data['activity_id'] = self::createGUID();
+        $data['primary_org_id'] = $this->primaryOrgId;
+        $data['member_id'] = $this->authenticater->getMemberId();
+        return $this->post('/log/activities', [
+            'json' => $data
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    private static function createGUID()
+    {
+        $guid = null;
+        if (function_exists('com_create_guid'))
+        {
+            $guid = str_replace(array('}', '{'), '', com_create_guid());
+        }
+        else
+        {
+            mt_srand((double)microtime() * 10000);
+            $charid = strtoupper(md5(uniqid(mt_rand(), true)));
+            $hyphen = chr(45); // "-"
+            $guid = substr($charid, 0, 8) . $hyphen
+                . substr($charid, 8, 4) . $hyphen
+                . substr($charid, 12, 4) . $hyphen . '4'
+                . substr($charid, 16, 3) . $hyphen
+                . substr($charid, 20, 12);
+        }
+        return strtolower($guid);
     }
 }
