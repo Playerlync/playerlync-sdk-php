@@ -47,7 +47,7 @@ class FileExportBuilder extends ExportBuilder
      * fs
      * @var string
      */
-    private $historyFileDateField;
+    private $historyFileDateAppend;
 
     /**
      * Whether or not the history file
@@ -132,14 +132,31 @@ class FileExportBuilder extends ExportBuilder
     /**
      * File that configures history file to prevent returning of previous runs.
      * @param string $file Filepath of the history file, including the file name
-     * @param string $dateField The API field that will be used to connect the time offset from the history file
+     * @param string|\Closure $dateAppend The API field that will be used to connect the time offset from the history file. By default, a create_date between filter will be created
      * @return FileExportBuilder
      */
-    public function runHistoryFile($file, $dateField = null)
+    public function runHistoryFile($file, $dateAppend = null)
     {
         $this->historyFile = $file;
-        if(!empty($dateField))
-            $this->historyFileDateField = $dateField;
+        if(!empty($dateAppend))
+        {
+            if(is_string($dateAppend))
+            {
+                $this->historyFileDateAppend = function ($time) use ($dateAppend) {
+                    return $dateAppend.'|between|'.$time.'|'.time();
+                };
+            }
+            else
+            {
+                $this->historyFileDateAppend = $dateAppend;
+            }
+        }
+        else
+        {
+            $this->historyFileDateAppend = function ($time) {
+                return 'create_date|between|'.$time.'|'.time();
+            };
+        }
         return $this;
     }
 
@@ -262,7 +279,7 @@ class FileExportBuilder extends ExportBuilder
             }
             $api = $this->buildApi($this->errorLog);
             $model = new ExportModel($this->buildExportFields($api->getStructure(), $api->getTimeFields()));
-            $this->addLastRunTimeFilter($this->historyFileData, pathinfo($this->outputFile,PATHINFO_BASENAME), $api->getTimeFields());
+            $this->addLastRunTimeFilter($this->historyFileData, pathinfo($this->outputFile,PATHINFO_BASENAME));
             $api->setQueryParams($this->queryParams);
 
             $this->options['logger'] = $this->errorLog;
@@ -327,32 +344,17 @@ class FileExportBuilder extends ExportBuilder
      * Append the last run time query parameter to have GET service return a subset of records
      * @param object $historyFile
      * @param string $type
-     * @param array $apiDateFields
-     * @throws BuilderException
      */
-    private function addLastRunTimeFilter($historyFile, $type, $apiDateFields)
+    private function addLastRunTimeFilter($historyFile, $type)
     {
         if(isset($historyFile->$type))
         {
-            $field = '';
             if(!empty($this->queryParams['filter']))
             {
                 $this->queryParams['filter'] .= ',';
             }
-            if($this->historyFileDateField !== null)
-            {
-                if(!in_array($this->historyFileDateField, $apiDateFields, true))
-                {
-                    throw new BuilderException("The \"{$this->historyFileDateField}\" date field was not found in the service used. It must be one of the fields: ".implode(',', $apiDateFields));
-                }
-                $field = $this->historyFileDateField;
-            }
-            else
-            {
-                $field = in_array('system_create_date', $apiDateFields, true) ? 'system_create_date' : 'create_date';
-            }
-            //Using a between filter because the submission_date doesn't support gteq, other date fields may do the same so making standardized
-            $this->queryParams['filter'] .= $field.'|between|'.$historyFile->$type.'|'.time();
+
+            $this->queryParams['filter'] .= $this->historyFileDateAppend->__invoke($historyFile->$type);
         }
         $historyFile->$type = time();
     }
@@ -377,6 +379,6 @@ class FileExportBuilder extends ExportBuilder
     {
         parent::resetData();
         $this->updateHistoryFile = true;
-        $this->historyFileDateField = null;
+        $this->historyFileDateAppend = null;
     }
 }
