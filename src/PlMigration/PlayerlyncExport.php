@@ -14,6 +14,8 @@ use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
 use PlMigration\Exceptions\ExportException;
 use PlMigration\Model\ExportModel;
+use PlMigration\Service\ISyncService;
+use PlMigration\Service\Plapi\PlapiSyncDateService;
 use PlMigration\Writer\IWriter;
 use PlMigration\Helper\LoggerTrait;
 
@@ -58,14 +60,17 @@ class PlayerlyncExport
      */
     protected $recordValidator = [];
 
+    protected $syncServiceCollector;
+
     /**
      * Instantiate a new exporter.
      * @param IConnector $api
      * @param IWriter $writer
      * @param ExportModel $model
      * @param array $options
+     * @param ISyncService|null $syncServiceCollector
      */
-    public function __construct(IConnector $api, IWriter $writer, ExportModel $model, array $options = [])
+    public function __construct(IConnector $api, IWriter $writer, ExportModel $model, array $options = [], ISyncService $syncServiceCollector = null)
     {
         $this->api = $api;
         $this->writer = $writer;
@@ -90,6 +95,10 @@ class PlayerlyncExport
         {
             $this->recordValidator[] = $options['recordValidator'];
         }
+
+        $this->syncServiceCollector = $syncServiceCollector;
+        if($this->syncServiceCollector instanceof PlapiSyncDateService && $api instanceof APIv3Connector)
+            $this->syncServiceCollector->setClient($api->getClient());
     }
 
     /**
@@ -105,6 +114,9 @@ class PlayerlyncExport
 
                 foreach($records as $record)
                 {
+                    if($this->syncServiceCollector !== null)
+                        $this->syncServiceCollector->addRecord($record);
+
                     if($this->isValid($record) && !$this->isDuplicate($record))
                     {
                         $this->writeRow((array)$record);
@@ -162,44 +174,6 @@ class PlayerlyncExport
                 return true;
         }
         return false;
-    }
-
-    /**
-     * @param $apiRecord
-     * @param $additionalType
-     * @param $joinKey
-     * @return false|\stdClass
-     */
-    protected function getAdditionalData($apiRecord, $additionalType, $joinKey)
-    {
-        $additionalData = false;
-        if(!array_key_exists($additionalType, $this->dataCache))
-        {
-            $this->dataCache[$additionalType] = [];
-        }
-
-        if(array_key_exists($apiRecord[$joinKey], $this->dataCache[$additionalType]))
-        {
-            $additionalData = $this->dataCache[$additionalType][$apiRecord[$joinKey]];
-        }
-        else
-        {
-            try
-            {
-                $additionalData = $this->api->getClient()->get("/$additionalType/".$apiRecord[$joinKey],[])->data;
-                $this->dataCache[$additionalType][$apiRecord[$joinKey]] = $additionalData;
-            }
-            catch(ClientException $e)
-            {
-                $this->dataCache[$additionalType][$apiRecord[$joinKey]] = false;
-            }
-        }
-
-        if($additionalData === false)
-        {
-            $this->warning("Unable to find additional data on $additionalType $joinKey: ".$apiRecord[$joinKey].'.', $apiRecord);
-        }
-        return $additionalData;
     }
 
     protected function isValid($record): bool

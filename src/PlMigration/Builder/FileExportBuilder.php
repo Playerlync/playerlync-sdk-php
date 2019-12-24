@@ -21,6 +21,7 @@ use PlMigration\Helper\Notifications\Attachable;
 use PlMigration\Model\ExportModel;
 use PlMigration\Model\Field\ExportField;
 use PlMigration\PlayerlyncExport;
+use PlMigration\Service\Plapi\PlapiSyncDateService;
 
 /**
  * Builder to configure and execute the export process. Once configurations are ready, execute the process with the export() function
@@ -84,6 +85,11 @@ class FileExportBuilder extends ExportBuilder
      * @var string
      */
     private $destination;
+
+    /**
+     * @var PlapiSyncDateService
+     */
+    private $syncDateService;
 
     /**
      * ExportBuilder constructor.
@@ -210,6 +216,16 @@ class FileExportBuilder extends ExportBuilder
     }
 
     /**
+     * @param string $method
+     * @param string $service
+     * @param \Closure $bodyBuild
+     */
+    public function syncDatesToServer($method, $service, $bodyBuild)
+    {
+        $this->syncDateService = new PlapiSyncDateService($method, $service, $bodyBuild);
+    }
+
+    /**
      * Function that will export the api data to an output file and then send the file to another server if configured
      * @return mixed
      * @throws BuilderException
@@ -219,7 +235,7 @@ class FileExportBuilder extends ExportBuilder
     {
         try
         {
-            $output = $this->build()->export(); //export from the API into a local file destination
+            $this->build()->export(); //export from the API into a local file destination
         }
         catch(BuilderException $e)
         {
@@ -254,8 +270,7 @@ class FileExportBuilder extends ExportBuilder
         {
             $this->sendNotifications();
         }
-
-        return $output;
+        $this->syncDateService->sendUpdate();
     }
 
     /**
@@ -285,7 +300,7 @@ class FileExportBuilder extends ExportBuilder
             $this->options['logger'] = $this->errorLog;
 
             $this->resetData();
-            return new PlayerlyncExport($api, $writer, $model, $this->options);
+            return new PlayerlyncExport($api, $writer, $model, $this->options, $this->syncDateService);
         }
         catch(ConnectorException $e)
         {
@@ -378,6 +393,7 @@ class FileExportBuilder extends ExportBuilder
     protected function resetData()
     {
         parent::resetData();
+        $this->syncDateService = null;
         $this->updateHistoryFile = true;
         $this->historyFileDateAppend = null;
     }

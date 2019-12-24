@@ -11,10 +11,10 @@ class SimpleService implements IService
 {
     use PlapiService;
 
-    public function __construct($method, $service)
+    public function __construct($method, $servicePath)
     {
         $this->method = $method;
-        $this->service = $this->cleanupPath($service);
+        $this->service = $this->cleanupPath($servicePath);
     }
 
     /**

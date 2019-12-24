@@ -58,7 +58,7 @@ class ParentChildGetService implements IService
 
         foreach($parentRecords as $parentRecord)
         {
-            $childRecords = $this->getAll($apiConnection, $this->buildService($this->service, $parentRecord), $options);
+            $childRecords = $this->getAll($apiConnection, $this->buildServicePath($this->service, $parentRecord, $this->prereqIds), $options);
             foreach($childRecords as $record)
             {
                 $records[] = $record;
@@ -107,30 +107,6 @@ class ParentChildGetService implements IService
     }
 
     /**
-     * Replace the primary keys in the service with actual values that are returned by the parent service results
-     * @param string $serviceTemplate
-     * @param object $data
-     * @return string
-     */
-    protected function buildService($serviceTemplate, $data)
-    {
-        foreach($this->prereqIds as $id)
-        {
-            if(isset($data->$id))
-                $serviceTemplate = str_replace('{'.$id.'}', $data->$id, $serviceTemplate);
-        }
-        return $serviceTemplate;
-    }
-
-    /**
-     * @return array
-     */
-    public function getKeysInPath(): array
-    {
-        return $this->prereqIds;
-    }
-
-    /**
      * @param ApiClient $apiClient
      * @return mixed
      * @throws ClientException
@@ -146,7 +122,7 @@ class ParentChildGetService implements IService
 
         $data = is_array($prereqData->data) ? $prereqData->data[0] : $prereqData->data;
 
-        return $apiClient->validateResponse($apiClient->request($this->method, $this->buildService($this->service, $data), ['query' => [
+        return $apiClient->validateResponse($apiClient->request($this->method, $this->buildServicePath($this->service, $data, $this->prereqIds), ['query' => [
             'structure' => 1
         ]]))->data->structure;
     }

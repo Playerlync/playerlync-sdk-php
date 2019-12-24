@@ -43,6 +43,23 @@ trait PlapiService
         return [];
     }
 
+    /**
+     * Replace the primary keys in the service with actual values that are returned by the parent service results
+     * @param string $serviceTemplate
+     * @param object $data
+     * @param array $keys
+     * @return string
+     */
+    protected function buildServicePath($serviceTemplate, $data, $keys)
+    {
+        foreach($keys as $id)
+        {
+            if(isset($data->$id))
+                $serviceTemplate = str_replace('{'.$id.'}', $data->$id, $serviceTemplate);
+        }
+        return $serviceTemplate;
+    }
+
     public function __toString()
     {
         return $this->service;

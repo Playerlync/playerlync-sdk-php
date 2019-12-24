@@ -28,6 +28,13 @@ interface ApiClient
     public function request($method, $servicePath, $options = []);
 
     /**
+     * @param $requests
+     * @param int $concurrency
+     * @return mixed
+     */
+    public function batchRequests($requests, $concurrency = 1);
+
+    /**
      * Validate that the response returns valid data.
      * If the API returns an error, throw a ClientException
      * @param Response $response

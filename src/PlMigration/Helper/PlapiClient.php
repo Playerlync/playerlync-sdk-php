@@ -160,6 +160,28 @@ class PlapiClient implements ApiClient, IAuthenticationable, IActivityTrackable
         return Pool::batch($this->client, $requests($requestsArray), ['concurrency' => '25']);
     }
 
+    public function batchRequests($requestBuilder, $concurrency = 1)
+    {
+        $this->checkToken();
+        return Pool::batch($this->client, $requestBuilder($this), [
+            'concurrency' => $concurrency,
+            'fulfilled' => function ($response, $index) {
+                $responseBody = json_decode($response->getBody());
+                if($responseBody === null && json_last_error())
+                {
+                    $this->warning('Malformed JSON response '.json_last_error_msg());
+                }
+                elseif ($responseBody->status === 'INVALID_REQUEST')
+                {
+                    $this->warning('Service returned INVALID_REQUEST status ' . $responseBody->errors[0]->message);
+                }
+            },
+            'rejected' => function ($response, $index) {
+                $this->error('Service Failed: '. $response->getMessage());
+            }
+        ]);
+    }
+
     public function getPrimaryOrgId()
     {
         return $this->primaryOrgId;
@@ -168,7 +190,7 @@ class PlapiClient implements ApiClient, IAuthenticationable, IActivityTrackable
     /**
      * @return array
      */
-    private function getDefaultHeaders()
+    public function getDefaultHeaders()
     {
         return [
             'Authorization' => 'Bearer '. $this->authenticater->getAccessToken(),
@@ -176,7 +198,7 @@ class PlapiClient implements ApiClient, IAuthenticationable, IActivityTrackable
         ];
     }
 
-    private function buildPlapiPath($path)
+    public function buildPlapiPath($path)
     {
         if($path[0] !== '/')
             $path = '/'.$path;
