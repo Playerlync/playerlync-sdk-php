@@ -21,6 +21,7 @@ use PlMigration\Helper\Notifications\Attachable;
 use PlMigration\Model\ExportModel;
 use PlMigration\Model\Field\ExportField;
 use PlMigration\PlayerlyncExport;
+use PlMigration\Service\ISyncService;
 use PlMigration\Service\Plapi\PlapiSyncDateService;
 
 /**
@@ -216,13 +217,13 @@ class FileExportBuilder extends ExportBuilder
     }
 
     /**
-     * @param string $method
-     * @param string $service
-     * @param \Closure $bodyBuild
+     * @param ISyncService $syncService
+     * @return $this
      */
-    public function syncDatesToServer($method, $service, $bodyBuild)
+    public function syncDatesToServer(ISyncService $syncService)
     {
-        $this->syncDateService = new PlapiSyncDateService($method, $service, $bodyBuild);
+        $this->syncDateService = $syncService;
+        return $this;
     }
 
     /**
@@ -270,7 +271,8 @@ class FileExportBuilder extends ExportBuilder
         {
             $this->sendNotifications();
         }
-        $this->syncDateService->sendUpdate();
+        if($this->syncDateService !== null)
+            $this->syncDateService->sendUpdate();
     }
 
     /**
