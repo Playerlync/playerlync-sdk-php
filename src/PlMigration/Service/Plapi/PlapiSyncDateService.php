@@ -6,10 +6,10 @@ namespace PlMigration\Service\Plapi;
 use Closure;
 use GuzzleHttp\Psr7\Request;
 use PlMigration\Helper\ApiClient;
+use PlMigration\Helper\ISyncDataUpdate;
 use PlMigration\Helper\PlapiClient;
-use PlMigration\Service\ISyncService;
 
-class PlapiSyncDateService extends SimpleService implements ISyncService
+class PlapiSyncDateService extends SimpleService implements ISyncDataUpdate
 {
     /**
      * @var array
@@ -60,10 +60,11 @@ class PlapiSyncDateService extends SimpleService implements ISyncService
         return [];
     }
 
-    public function addRecord($data)
+    public function checkRawData($data, $logger = null): bool
     {
         if($encoded = $this->buildBody($data))
             $this->requests[] = [$this->method, $this->buildServicePath($this->service, $data, $this->keys), json_encode($encoded)];
+        return true;
     }
 
     private function buildBody($data)
@@ -71,7 +72,7 @@ class PlapiSyncDateService extends SimpleService implements ISyncService
         return $this->bodyBuilder->__invoke($data);
     }
 
-    public function sendUpdate()
+    public function tearDown($logger = null)
     {
         if(empty($this->requests))
             return [];

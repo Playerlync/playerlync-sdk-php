@@ -17,11 +17,12 @@ use PlMigration\Exceptions\ConnectorException;
 use PlMigration\Exceptions\BuilderException;
 use PlMigration\Exceptions\ExportException;
 use PlMigration\Helper\DataFunctions\DateFormatter;
+use PlMigration\Helper\ISyncDataUpdate;
 use PlMigration\Helper\Notifications\Attachable;
+use PlMigration\Helper\RawDataValidate;
 use PlMigration\Model\ExportModel;
 use PlMigration\Model\Field\ExportField;
 use PlMigration\PlayerlyncExport;
-use PlMigration\Service\ISyncService;
 use PlMigration\Service\Plapi\PlapiSyncDateService;
 
 /**
@@ -91,6 +92,11 @@ class FileExportBuilder extends ExportBuilder
      * @var PlapiSyncDateService
      */
     private $syncDateService;
+
+    /**
+     * @var RawDataValidate
+     */
+    private $recordValidator;
 
     /**
      * ExportBuilder constructor.
@@ -199,7 +205,7 @@ class FileExportBuilder extends ExportBuilder
      */
     public function inputValidator(Closure $func)
     {
-        $this->options['recordValidator'] = $func;
+        $this->recordValidator = new RawDataValidate($func);
         return $this;
     }
 
@@ -217,10 +223,10 @@ class FileExportBuilder extends ExportBuilder
     }
 
     /**
-     * @param ISyncService $syncService
+     * @param ISyncDataUpdate $syncService
      * @return $this
      */
-    public function syncDatesToServer(ISyncService $syncService)
+    public function syncDatesToServer($syncService)
     {
         $this->syncDateService = $syncService;
         return $this;
@@ -236,7 +242,8 @@ class FileExportBuilder extends ExportBuilder
     {
         try
         {
-            $this->build()->export(); //export from the API into a local file destination
+            $exporter = $this->build();
+            $exporter->export(); //export from the API into a local file destination
         }
         catch(BuilderException $e)
         {
@@ -271,8 +278,7 @@ class FileExportBuilder extends ExportBuilder
         {
             $this->sendNotifications();
         }
-        if($this->syncDateService !== null)
-            $this->syncDateService->sendUpdate();
+        $exporter->tearDown();
     }
 
     /**
@@ -300,9 +306,15 @@ class FileExportBuilder extends ExportBuilder
             $api->setQueryParams($this->queryParams);
 
             $this->options['logger'] = $this->errorLog;
+            if($this->syncDateService !== null)
+            {
+                $this->syncDateService->setClient($api->getClient());
+            }
 
+            $exporter = new PlayerlyncExport($api, $writer, $model, $this->options);
+            $this->addExportActions($exporter);
             $this->resetData();
-            return new PlayerlyncExport($api, $writer, $model, $this->options, $this->syncDateService);
+            return $exporter;
         }
         catch(ConnectorException $e)
         {
@@ -366,12 +378,13 @@ class FileExportBuilder extends ExportBuilder
     {
         if(isset($historyFile->$type))
         {
-            if(!empty($this->queryParams['filter']))
+            $additionalFilter = $this->historyFileDateAppend->__invoke($historyFile->$type);
+            if(!empty($additionalFilter))
             {
-                $this->queryParams['filter'] .= ',';
+                if(!empty($this->queryParams['filter']))
+                    $this->queryParams['filter'] .= ',';
+                $this->queryParams['filter'] .= $additionalFilter;
             }
-
-            $this->queryParams['filter'] .= $this->historyFileDateAppend->__invoke($historyFile->$type);
         }
         $historyFile->$type = time();
     }
@@ -392,9 +405,29 @@ class FileExportBuilder extends ExportBuilder
         }
     }
 
+    /**
+     * Add actions to manipulate raw data or tear down functions. Order of addition matters
+     * @param PlayerlyncExport $exporter
+     */
+    protected function addExportActions($exporter)
+    {
+        if($this->syncDateService !== null)
+        {
+            $cloneService = clone $this->syncDateService;
+            $exporter->addDataCheck($cloneService);
+            $exporter->addTearDown($cloneService);
+        }
+
+        if($this->recordValidator !== null)
+        {
+            $exporter->addDataCheck(clone $this->recordValidator);
+        }
+    }
+
     protected function resetData()
     {
         parent::resetData();
+        $this->recordValidator = null;
         $this->syncDateService = null;
         $this->updateHistoryFile = true;
         $this->historyFileDateAppend = null;

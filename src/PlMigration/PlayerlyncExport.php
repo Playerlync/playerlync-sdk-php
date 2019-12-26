@@ -8,14 +8,12 @@
 namespace PlMigration;
 
 use Closure;
-use PlMigration\Connectors\APIv3Connector;
 use PlMigration\Connectors\IConnector;
-use PlMigration\Exceptions\ClientException;
 use PlMigration\Exceptions\ConnectorException;
 use PlMigration\Exceptions\ExportException;
+use PlMigration\Helper\IRawDataCheck;
+use PlMigration\Helper\TearDownAction;
 use PlMigration\Model\ExportModel;
-use PlMigration\Service\ISyncService;
-use PlMigration\Service\Plapi\PlapiSyncDateService;
 use PlMigration\Writer\IWriter;
 use PlMigration\Helper\LoggerTrait;
 
@@ -46,21 +44,19 @@ class PlayerlyncExport
     protected $cache = [];
 
     /**
-     * @var array
-     */
-    protected $dataCache = [];
-
-    /**
      * @var string
      */
     protected $primaryKey;
 
     /**
-     * @var Closure[]
+     * @var IRawDataCheck[]
      */
-    protected $recordValidator = [];
+    protected $rawDataCheckActions = [];
 
-    protected $syncServiceCollector;
+    /**
+     * @var TearDownAction[]
+     */
+    protected $tearDownActions = [];
 
     /**
      * Instantiate a new exporter.
@@ -68,9 +64,8 @@ class PlayerlyncExport
      * @param IWriter $writer
      * @param ExportModel $model
      * @param array $options
-     * @param ISyncService|null $syncServiceCollector
      */
-    public function __construct(IConnector $api, IWriter $writer, ExportModel $model, array $options = [], ISyncService $syncServiceCollector = null)
+    public function __construct(IConnector $api, IWriter $writer, ExportModel $model, array $options = [])
     {
         $this->api = $api;
         $this->writer = $writer;
@@ -90,15 +85,6 @@ class PlayerlyncExport
         {
             $this->primaryKey = $options['primaryKey'];
         }
-
-        if(isset($options['recordValidator']) && is_callable($options['recordValidator']))
-        {
-            $this->recordValidator[] = $options['recordValidator'];
-        }
-
-        $this->syncServiceCollector = $syncServiceCollector;
-        if($this->syncServiceCollector instanceof PlapiSyncDateService && $api instanceof APIv3Connector)
-            $this->syncServiceCollector->setClient($api->getClient());
     }
 
     /**
@@ -114,10 +100,7 @@ class PlayerlyncExport
 
                 foreach($records as $record)
                 {
-                    if($this->syncServiceCollector !== null)
-                        $this->syncServiceCollector->addRecord($record);
-
-                    if($this->isValid($record) && !$this->isDuplicate($record))
+                    if($this->check($record) && !$this->isDuplicate($record))
                     {
                         $this->writeRow((array)$record);
                     }
@@ -134,12 +117,46 @@ class PlayerlyncExport
         return $this->writer->getFile();
     }
 
+    public function tearDown()
+    {
+        foreach($this->tearDownActions as $action)
+        {
+            $action->tearDown($this->logger);
+        }
+    }
+
+    protected function check($data): bool
+    {
+        foreach($this->rawDataCheckActions as $action)
+        {
+            if($action->checkRawData($data, $this->logger) === false)
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param IRawDataCheck $action
+     */
+    public function addDataCheck($action)
+    {
+        $this->rawDataCheckActions[] = $action;
+    }
+
+    /**
+     * @param TearDownAction $action
+     */
+    public function addTearDown($action)
+    {
+        $this->tearDownActions[] = $action;
+    }
+
     /**
      * @param bool $hasNext
      * @return array
      * @throws ConnectorException
      */
-    public function get(&$hasNext = false)
+    protected function get(&$hasNext = false)
     {
         $response = $this->api->getRecords();
 
@@ -151,7 +168,7 @@ class PlayerlyncExport
     /**
      * @param $record
      */
-    public function writeRow($record)
+    protected function writeRow($record)
     {
         $row = $this->model->fillModel($record);
 
@@ -174,15 +191,5 @@ class PlayerlyncExport
                 return true;
         }
         return false;
-    }
-
-    protected function isValid($record): bool
-    {
-        foreach($this->recordValidator as $validation)
-        {
-            if(!$validation->__invoke($record, $this->logger))
-                return false;
-        }
-        return true;
     }
 }
