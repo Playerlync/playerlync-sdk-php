@@ -4,32 +4,37 @@
 namespace PlMigration\Service\Plapi;
 
 use Closure;
-use GuzzleHttp\Psr7\Request;
+use PlMigration\Exceptions\ClientException;
 use PlMigration\Helper\ApiClient;
 use PlMigration\Helper\ISyncDataUpdate;
 use PlMigration\Helper\PlapiClient;
 
+/**
+ * Class to append to export process to update data on records once after the main process has finished.
+ * Class PlapiSyncDateService
+ * @package PlMigration\Service\Plapi
+ */
 class PlapiSyncDateService extends SimpleService implements ISyncDataUpdate
 {
     /**
      * @var array
      */
-    private $requests;
+    protected $requests;
 
     /**
      * @var array
      */
-    private $keys;
+    protected $keys;
 
     /**
      * @var Closure
      */
-    private $bodyBuilder;
+    protected $bodyBuilder;
 
     /**
      * @var PlapiClient
      */
-    private $client;
+    protected $client;
 
     /**
      * SyncService constructor.
@@ -62,14 +67,9 @@ class PlapiSyncDateService extends SimpleService implements ISyncDataUpdate
 
     public function checkRawData($data, $logger = null): bool
     {
-        if($encoded = $this->buildBody($data))
-            $this->requests[] = [$this->method, $this->buildServicePath($this->service, $data, $this->keys), json_encode($encoded)];
+        if($body = $this->bodyBuilder->__invoke($data))
+            $this->requests[] = [$this->method, $this->buildServicePath($this->service, $data, $this->keys), $body];
         return true;
-    }
-
-    private function buildBody($data)
-    {
-        return $this->bodyBuilder->__invoke($data);
     }
 
     public function tearDown($logger = null)
@@ -77,11 +77,14 @@ class PlapiSyncDateService extends SimpleService implements ISyncDataUpdate
         if(empty($this->requests))
             return [];
         
-        $this->client->batchRequests(function(PlapiClient $client) {
-            $client->debug('Running ' . count($this->requests) . ' batch requests');
-            foreach($this->requests as list($method, $path, $body))
-                yield new Request($method, $client->buildPlapiPath($path), $client->getDefaultHeaders(), $body);
-        }, 25);
+        foreach($this->requests as list($method, $path, $body))
+        {
+            try {
+                $this->client->request($method, $path, ['json' => $body]);
+            } catch (ClientException $e) {
+                $this->client->warning('Service failed: '. $e->getMessage());
+            }
+        }
     }
 
     public function setClient($client)

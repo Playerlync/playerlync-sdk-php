@@ -23,7 +23,6 @@ use PlMigration\Helper\RawDataValidate;
 use PlMigration\Model\ExportModel;
 use PlMigration\Model\Field\ExportField;
 use PlMigration\PlayerlyncExport;
-use PlMigration\Service\Plapi\PlapiSyncDateService;
 
 /**
  * Builder to configure and execute the export process. Once configurations are ready, execute the process with the export() function
@@ -89,7 +88,7 @@ class FileExportBuilder extends ExportBuilder
     private $destination;
 
     /**
-     * @var PlapiSyncDateService
+     * @var ISyncDataUpdate
      */
     private $syncDateService;
 
