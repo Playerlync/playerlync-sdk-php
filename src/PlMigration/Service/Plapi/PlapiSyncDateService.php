@@ -80,9 +80,10 @@ class PlapiSyncDateService extends SimpleService implements ISyncDataUpdate
         foreach($this->requests as list($method, $path, $body))
         {
             try {
-                $this->client->request($method, $path, ['json' => $body]);
+                $this->client->validateResponse($this->client->request($method, $path, ['json' => $body]));
+                $this->client->debug('Updated record sync date', (array)$body);
             } catch (ClientException $e) {
-                $this->client->warning('Service failed: '. $e->getMessage());
+                $this->client->warning('Sync date service failed: '. $e->getMessage());
             }
         }
     }
