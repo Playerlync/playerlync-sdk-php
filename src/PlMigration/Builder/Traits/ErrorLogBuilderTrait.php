@@ -55,6 +55,14 @@ trait ErrorLogBuilderTrait
         }
     }
 
+    protected function addWarning($message)
+    {
+        if($this->errorLog !== null)
+        {
+            $this->errorLog->warning($message);
+        }
+    }
+
     /**
      * Add a debug message
      * @param string $message

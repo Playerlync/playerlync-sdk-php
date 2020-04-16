@@ -264,8 +264,7 @@ class FileExportBuilder extends ExportBuilder
             }
             catch (ClientException $e)
             {
-                $this->addError('Failed to send file: '.$e->getMessage());
-                throw new BuilderException($e->getMessage());
+                $this->addWarning('Failed to send file: '.$e->getMessage());
             }
         }
 
