@@ -153,7 +153,9 @@ class PlapiClient implements ApiClient, IAuthenticationable, IActivityTrackable
         $requests = function ($requests) {
             foreach($requests as $request)
             {
-                yield new Request($request['method'], $this->buildPlapiPath($request['path']).'?upsert=1', $this->getDefaultHeaders(), json_encode($request['body']));
+                $query = $request['isUpsert'] === true ? 'upsert=1' : '';
+
+                yield new Request($request['method'], $this->buildPlapiPath($request['path']).'?'.$query, $this->getDefaultHeaders(), json_encode($request['body']));
             }
         };
         $this->checkToken();

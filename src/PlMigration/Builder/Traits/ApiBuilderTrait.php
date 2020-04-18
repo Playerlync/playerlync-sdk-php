@@ -181,6 +181,16 @@ trait ApiBuilderTrait
     }
 
     /**
+     * Toggle to disable upsert feature of the API
+     * @param $upsert
+     */
+    public function isUpsert($upsert)
+    {
+        $this->hostSettings['isUpsert'] = $upsert;
+        return $this;
+    }
+
+    /**
      * Build the playerlync api connection with the desired settings.
      * @param string|null $logger
      * @return APIv3Connector

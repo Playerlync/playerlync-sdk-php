@@ -74,6 +74,11 @@ class APIv3Connector implements IConnector
     private $primaryKey;
 
     /**
+     * @var boolean
+     */
+    private $isUpsert = true;
+
+    /**
      * APIv3Connector constructor.
      * @param $getService
      * @param array $query
@@ -105,6 +110,9 @@ class APIv3Connector implements IConnector
         {
             $this->setLogger($config['logger']);
         }
+
+        if(isset($config['isUpsert']) && is_bool($config['isUpsert']))
+            $this->isUpsert = $config['isUpsert'];
     }
 
     /**
@@ -197,7 +205,9 @@ class APIv3Connector implements IConnector
      */
     public function insertRecord($data)
     {
-        $query = ['upsert' => 1];
+        $query = [];
+        if($this->isUpsert)
+            $query['upsert'] = 1;
         return $this->post((string)$this->postService, $query, $data);
     }
 
@@ -238,6 +248,7 @@ class APIv3Connector implements IConnector
             $requests[$i] = [
                 'method' => 'POST',
                 'path' => (string)$this->postService,
+                'isUpsert' => $this->isUpsert,
                 'body' => $record
             ];
         }
