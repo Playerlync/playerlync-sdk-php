@@ -4,6 +4,7 @@
 namespace PlMigration\Service;
 
 
+use PlMigration\Exceptions\ClientException;
 use PlMigration\Helper\ApiClient;
 
 interface IService
@@ -12,6 +13,7 @@ interface IService
      * @param ApiClient $apiConnection
      * @param array $options
      * @return mixed
+     * @throws ClientException
      */
     public function execute(ApiClient $apiConnection, $options = []);
 

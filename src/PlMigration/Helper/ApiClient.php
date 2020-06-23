@@ -24,6 +24,7 @@ interface ApiClient
      * @param string $servicePath
      * @param array $options
      * @return Response
+     * @throws ClientException
      */
     public function request($method, $servicePath, $options = []);
 

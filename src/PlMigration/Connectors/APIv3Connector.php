@@ -133,7 +133,13 @@ class APIv3Connector implements IConnector
                 $queryParams['filter'] = 'source|eq|'.$config['source'];
         }
 
-        $response = $this->getService->execute($this->getClient(), ['query' => $queryParams]);
+        try
+        {
+            $response = $this->getService->execute($this->getClient(), ['query' => $queryParams]);
+        } catch (ClientException $e)
+        {
+            throw new ConnectorException($e->getMessage());
+        }
 
         if(!($this->getService instanceof SimpleService))
         {
