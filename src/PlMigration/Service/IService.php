@@ -17,7 +17,15 @@ interface IService
      */
     public function execute(ApiClient $apiConnection, $options = []);
 
+    /**
+     * @param ApiClient $apiClient
+     * @throws ClientException
+     * @return mixed
+     */
     public function getStructure(ApiClient $apiClient);
 
+    /**
+     * @return string
+     */
     public function __toString();
 }

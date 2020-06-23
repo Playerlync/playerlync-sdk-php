@@ -191,7 +191,14 @@ class APIv3Connector implements IConnector
     {
         if(!$this->structure)
         {
-            $this->structure = (array)$this->getService->getStructure($this->api);
+            try
+            {
+                $this->structure = (array)$this->getService->getStructure($this->api);
+            }
+            catch (ClientException $e)
+            {
+                throw new ConnectorException($e->getMessage());
+            }
         }
         return $this->structure;
     }
