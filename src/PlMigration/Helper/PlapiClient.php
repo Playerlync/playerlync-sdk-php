@@ -196,7 +196,8 @@ class PlapiClient implements ApiClient, IAuthenticationable, IActivityTrackable
     {
         return [
             'Authorization' => 'Bearer '. $this->authenticater->getAccessToken(),
-            'Primary-Org-Id' => $this->primaryOrgId
+            'Primary-Org-Id' => $this->primaryOrgId,
+            'Selected-Org-Id' => $this->primaryOrgId,
         ];
     }
 
