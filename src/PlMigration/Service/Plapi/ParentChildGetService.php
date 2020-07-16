@@ -26,6 +26,8 @@ class ParentChildGetService implements IService
 
     private $prereqOptions;
 
+    private $options;
+
     /**
      * Class that gets parent service to be able to fill the second service.
      * For example: to be able to get group members from playerlync API, we need a GET groups to get all groups,
@@ -35,7 +37,7 @@ class ParentChildGetService implements IService
      * @param string $prereqService
      * @param array $prereqServiceOptions
      */
-    public function __construct($service, $prereqService, $prereqServiceOptions = [])
+    public function __construct($service, $prereqService, $prereqServiceOptions = [], $options = [])
     {
         $this->method = 'GET';
         $this->service = $this->cleanupPath($service);
@@ -43,6 +45,8 @@ class ParentChildGetService implements IService
         $this->prereqIds = $this->parseKeysInPath($this->service);
         if(is_array($prereqServiceOptions))
             $this->prereqOptions = $prereqServiceOptions;
+        if(is_array($options))
+            $this->options = $options;
     }
 
     /**
@@ -55,6 +59,8 @@ class ParentChildGetService implements IService
     {
         $records = [];
         $parentRecords = $this->getAll($apiConnection, $this->prereqService, $this->prereqOptions);
+
+        $this->mergeOptions($options, $this->options);
 
         foreach($parentRecords as $parentRecord)
         {
@@ -125,5 +131,18 @@ class ParentChildGetService implements IService
         return $apiClient->validateResponse($apiClient->request($this->method, $this->buildServicePath($this->service, $data, $this->prereqIds), ['query' => [
             'structure' => 1
         ]]))->data->structure;
+    }
+
+    public function mergeOptions($options, $otherOptions)
+    {
+        if(isset($options['query'],$otherOptions['query']) && is_array($options['query']) && is_array($otherOptions['query']))
+        {
+            foreach($otherOptions['query'] as $queryParam => $value)
+            {
+                if(!isset($options['query'][$queryParam]))
+                    $options['query'][$queryParam] = $otherOptions['query'][$queryParam];
+            }
+        }
+        return $options;
     }
 }

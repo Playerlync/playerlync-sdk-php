@@ -2,10 +2,8 @@
 
 namespace PlMigration\test\UnitTest;
 
-use PlMigration\Exceptions\NotificationException;
 use PlMigration\Helper\Notifications\EmailNotificationManager;
 use PlMigration\Helper\Notifications\EmailRequest;
-use PlMigration\test\UnitTest;
 
 class EmailNotificationManagerTest extends UnitTest
 {
@@ -54,7 +52,7 @@ class EmailNotificationManagerTest extends UnitTest
     {
         $manager = $this->instance();
         $mail = $this->dummyEmail();
-        $mail->addAttachment(__DIR__.'/../UnitTest.php');
+        $mail->addAttachment(__DIR__ . '/../UnitTest.php');
         $manager->addRequest($mail);
         $manager->send();
     }
