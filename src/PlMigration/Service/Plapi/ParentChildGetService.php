@@ -60,7 +60,7 @@ class ParentChildGetService implements IService
         $records = [];
         $parentRecords = $this->getAll($apiConnection, $this->prereqService, $this->prereqOptions);
 
-        $this->mergeOptions($options, $this->options);
+        $options = $this->mergeOptions($options, $this->options);
 
         foreach($parentRecords as $parentRecord)
         {
