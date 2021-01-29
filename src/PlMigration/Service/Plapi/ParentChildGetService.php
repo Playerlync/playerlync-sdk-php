@@ -119,9 +119,10 @@ class ParentChildGetService implements IService
      */
     public function getStructure(ApiClient $apiClient)
     {
-        $prereqData = $apiClient->validateResponse($apiClient->request('GET', $this->prereqService, ['query' => [
-            'limit' => 1
-        ]]));
+        $qp = $this->prereqOptions['query'] ?? [];
+        $qp['limit'] = 1;
+        $prereqData = $apiClient->validateResponse($apiClient->request('GET', $this->prereqService,
+            ['query' => $qp]));
 
         if(empty($prereqData->data))
             throw new ClientException('Prerequisite service returned no data');
