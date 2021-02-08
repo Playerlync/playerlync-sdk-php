@@ -76,6 +76,18 @@ trait ErrorLogBuilderTrait
     }
 
     /**
+     * Add a notice message
+     * @param string $message
+     */
+    protected function addNotice($message)
+    {
+        if($this->errorLog !== null)
+        {
+            $this->errorLog->notice($message);
+        }
+    }
+
+    /**
      * Set the location of where the file error/debug log will reside
      * @param string $file
      * @param int $logLevel

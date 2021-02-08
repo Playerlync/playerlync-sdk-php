@@ -256,10 +256,13 @@ class FileExportBuilder extends ExportBuilder
 
         if($this->protocol)
         {
+            $this->addDebug('Sending generated file to: '. $this->destination);
             try
             {
                 $this->protocol->connect();
                 $this->protocol->upload($this->outputFile, $this->destination);
+                $files = $this->protocol->getDirectoryFiles($this->destination);
+                $this->addNotice("Files in {$this->destination}: " . print_r($files, true));
                 $this->protocol->close();
             }
             catch (ClientException $e)
